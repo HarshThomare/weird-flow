@@ -1,0 +1,11 @@
+Reply with only JSON. Use only these keys. If unsure use "unknown".
+
+Rank these already-verified interpretations of the typed relation subgraph. Do not invent derived forms, merges, or event ids.
+
+Subgraph:
+{ir}
+
+Candidates:
+{candidates}
+
+Return: {"ranking": ["<candidate id>", ...], "note": "<short or unknown>"}

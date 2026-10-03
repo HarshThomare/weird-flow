@@ -1,0 +1,8 @@
+Reply with only JSON. Use only these keys. If unsure use "unknown".
+
+Cluster events that already exist in this verified relation subgraph. Do not invent events or derived forms.
+
+Subgraph:
+{ir}
+
+Return: {"clusters": [{"name": "<identifier or unknown>", "members": ["<event id>", ...]}]}

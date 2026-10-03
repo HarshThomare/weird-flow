@@ -1,0 +1,15 @@
+WM,Test window iterations,Measure trials,Measure timeout (minutes),Measure trials with EC,Measure timeout with EC (minutes)
+ALU,1000,1000,5,1000,5
+sha1_round_composed,1000,1000,10,1000,10
+aes_round,100,300,15,100,60
+simon32,50,300,30,20,120
+sha1_2blocks_composed,50,0,0,50,60
+aes_block,40,0,0,20,120
+ALU9,1000,100,5,100,0
+ALU10,1000,100,5,100,3000
+ALU11,1000,100,10,100,3000
+ALU12,1000,100,10,100,3000
+ALU14,1000,100,0,50,3000
+ALU16,1000,100,0,10,3000
+ALU24,1000,100,0,10,3000
+ALU32,1000,100,0,10,3000

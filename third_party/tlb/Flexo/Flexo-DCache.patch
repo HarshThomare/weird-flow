@@ -1,0 +1,2099 @@
+diff --git a/.devcontainer/Dockerfile b/.devcontainer/Dockerfile
+new file mode 100644
+index 0000000..0750026
+--- /dev/null
++++ b/.devcontainer/Dockerfile
+@@ -0,0 +1,31 @@
++FROM ubuntu:latest
++
++ARG DEBIAN_FRONTEND=noninteractive
++
++RUN apt-get update \
++    && apt-get install -y cmake build-essential ninja-build \
++    clang bison flex libreadline-dev gawk \
++    tcl-dev libffi-dev git graphviz xdot pkg-config \
++    libboost-system-dev libboost-filesystem-dev zlib1g-dev \
++    lsb-release software-properties-common gnupg wget
++
++WORKDIR /
++
++RUN wget https://apt.llvm.org/llvm.sh \
++    && chmod +x llvm.sh \
++    && ./llvm.sh 17 \
++    && rm llvm.sh
++ENV PATH="/usr/lib/llvm-17/bin/:${PATH}"
++
++RUN git clone https://github.com/YosysHQ/yosys
++
++WORKDIR /yosys
++
++RUN git checkout c7d7cfeaca6c79b871aca39c0878cf189390c497 \
++    && make config-clang \
++    && printf "ENABLE_LIBYOSYS := 1\n" >> Makefile.conf \
++    && make -j$(nproc) \
++    && make install
++
++# a workaround for yosys' abc path problem
++RUN ln -s "/yosys/yosys-abc" /usr/lib/llvm-17/bin/yosys-abc
+diff --git a/.devcontainer/devcontainer.json b/.devcontainer/devcontainer.json
+new file mode 100644
+index 0000000..6bb8aad
+--- /dev/null
++++ b/.devcontainer/devcontainer.json
+@@ -0,0 +1,32 @@
++// For format details, see https://aka.ms/devcontainer.json. For config options, see the
++// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
++{
++	"name": "Existing Dockerfile",
++	"build": {
++		// Sets the run context to one level up instead of the .devcontainer folder.
++		"context": "..",
++		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
++		"dockerfile": "../Dockerfile"
++	},
++	"workspaceMount": "source=${localWorkspaceFolder},target=/flexo,type=bind",
++	"workspaceFolder": "/flexo",
++
++	// Features to add to the dev container. More info: https://containers.dev/features.
++	// "features": {},
++
++	// Use 'forwardPorts' to make a list of ports inside the container available locally.
++	// "forwardPorts": [],
++
++	// Uncomment the next line to run commands after the container is created.
++	// "postCreateCommand": "cat /etc/os-release",
++
++	// Configure tool-specific properties.
++	"customizations": {
++		"vscode": {
++        "extensions":["ms-vscode.cpptools", "Gruntfuggly.todo-tree", "donjayamanne.githistory"]
++    }
++	}
++
++	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
++	// "remoteUser": "devcontainer"
++}
+diff --git a/.gitignore b/.gitignore
+index 73c7bf9..94192aa 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -4,3 +4,5 @@ build/
+ *.ll
+ abc.history
+ __pycache__
++
++reproduce/results*
+diff --git a/.gitmodules b/.gitmodules
+index 79c7a58..5b2a14d 100644
+--- a/.gitmodules
++++ b/.gitmodules
+@@ -1,23 +1,3 @@
+ [submodule "yosys"]
+ 	path = yosys
+ 	url = https://github.com/YosysHQ/yosys
+-[submodule "vendor/doctest"]
+-	path = UPFlexo/vendor/doctest
+-	url = https://github.com/upx/upx-vendor-doctest.git
+-	branch = upx-vendor
+-[submodule "vendor/lzma-sdk"]
+-	path = UPFlexo/vendor/lzma-sdk
+-	url = https://github.com/upx/upx-vendor-lzma-sdk.git
+-	branch = upx-vendor
+-[submodule "vendor/ucl"]
+-	path = UPFlexo/vendor/ucl
+-	url = https://github.com/upx/upx-vendor-ucl.git
+-	branch = upx-vendor
+-[submodule "vendor/valgrind"]
+-	path = UPFlexo/vendor/valgrind
+-	url = https://github.com/upx/upx-vendor-valgrind.git
+-	branch = upx-vendor
+-[submodule "vendor/zlib"]
+-	path = UPFlexo/vendor/zlib
+-	url = https://github.com/upx/upx-vendor-zlib.git
+-	branch = upx-vendor
+diff --git a/Dockerfile b/Dockerfile
+index 8bd0aac..0750026 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -15,6 +15,7 @@ RUN wget https://apt.llvm.org/llvm.sh \
+     && chmod +x llvm.sh \
+     && ./llvm.sh 17 \
+     && rm llvm.sh
++ENV PATH="/usr/lib/llvm-17/bin/:${PATH}"
+ 
+ RUN git clone https://github.com/YosysHQ/yosys
+ 
+diff --git a/README.md b/README.md
+index f1016f0..dcb3c79 100644
+--- a/README.md
++++ b/README.md
+@@ -1,12 +1,14 @@
+ # Flexo
+ 
+-A new design for microarchitectural weird machines, along with a compiler and a proof-of-concept packer application.
++## Direct usage
++To test just some circuits, the script `run.sh` can be used.
++This uses the `compile.sh`The environment variables script, where the environment variables can be configured.
++It accepts the location of the circuit and executes the `build.sh` inside the directory to build the circuits.
++Example usage: `./run.sh circuits/gates`
++  It passes additional arguments to the executables, so one can adjust the number of iterations by passing `-t xxx` with `xxx` the number of iterations, or enabling the error correction with the `-r` flag.
+ 
+-For more details, please refer to our paper:
++  **The reproduce scripts are independent and need to get configured differently**
+ 
+-> Ping-Lun Wang, Riccardo Paccagnella, Riad S. Wahby, Fraser Brown.
+-> "Bending microarchitectural weird machines towards practicality."
+-> USENIX Security, 2024.
+ 
+ ## Table of contents
+ 
+@@ -18,9 +20,7 @@ For more details, please refer to our paper:
+ - [Example: basic logic gates](#example-basic-logic-gates)
+ - [Configure the Flexo compiler](#configure-the-flexo-compiler)
+ - [Create a new weird machine with C/C++](#create-a-new-weird-machine-with-cc)
+-- [UPFlexo: UPX packer with Flexo weird machines](#upflexo-upx-packer-with-flexo-weird-machines)
+ - [Run Flexo on an unsupported processor](#run-flexo-on-an-unsupported-processor)
+-- [Contacts](#contacts)
+ 
+ ## What are microarchitectural weird machines?
+ 
+@@ -43,19 +43,6 @@ Therefore, they are a great candidate for program obfuscation and potentially ma
+ 
+ ## Hardware requirements
+ 
+-The following list is the AWS EC2 instances that we used to run our Flexo weird machines.
+-
+-| Microarchitecture | Instance type | Processor         |
+-| ----------------- | ------------- | ----------------- |
+-| Zen 1             | t3a.xlarge    | AMD EPYC 7571     |
+-| Zen 2             | c5a.xlarge    | AMD EPYC 7R32     |
+-| Zen 3             | c6a.xlarge    | AMD EPYC 7R13     |
+-| Zen 4             | m7a.xlarge    | AMD EPYC 9R14     |
+-| Skylake           | c5n.xlarge    | Intel Xeon 8124M  |
+-| Cascade Lake      | m5n.xlarge    | Intel Xeon 8259CL |
+-| Icelake           | m6in.xlarge   | Intel Xeon 8375C  |
+-| Sapphire Rapids   | m7i.xlarge    | Intel Xeon 8488C  |
+-
+ > [!WARNING]
+ > When using a processor not included in this list, the weird machines may fail to generate correct results.
+ > While a processor with similar microarchitecture may be able to run our weird machines, we cannot guarantee the accuracy and performance when using other processors.
+@@ -229,12 +216,6 @@ As some functionality of LLVM IR is not supported by a Verilog circuit, some LLV
+ For example, the function body should not contain any branch or function call, and memory operations are not allowed except for the inputs and outputs.
+ To see what LLVM IR instructions are supported, please refer to [`lib/Circuits/IRParser.cpp`](./lib/Circuits/IRParser.cpp).
+ 
+-## UPFlexo: UPX packer with Flexo weird machines
+-
+-As a proof-of-concept application, we obfuscated [the UPX packer](https://upx.github.io/) with Flexo.
+-We encrypt the packed binary using AES or Simon encryption, and at runtime, a Flexo weird machine decrypts the packed binary.
+-Please refer to the [readme](./UPFlexo/README.md) of UPFlexo for more information about how to install and use this packer.
+-
+ ## Run Flexo on an unsupported processor
+ 
+ Microarchitectural weird machines are very sensitive to the nuances of a microarchitecture.
+@@ -261,6 +242,3 @@ I.e., set `WR_OFFSET` to 192, 320, 448, 576, 960, 1088, ...
+ Some processors may have smaller transient windows, and thus they can only support small weird gates.
+ In this case, reduce `DUAL_WM_MAX_INPUT` to `3` or `2` to reduce the size of weird gates.
+ 
+-## Contacts
+-
+-For any question, contact the first author: Ping-Lun Wang (pinglunw \[at\] andrew \[dot\] cmu \[dot\] edu).
+diff --git a/circuits/AES/Makefile b/circuits/AES/Makefile
+index cf03ff8..20a1818 100644
+--- a/circuits/AES/Makefile
++++ b/circuits/AES/Makefile
+@@ -1,7 +1,7 @@
+ CXX = clang-17
+ CXXFLAGS = -fno-discard-value-names -O1 -S -emit-llvm
+ 
+-SOURCES = sbox.c aes_sep_round.c aes_round.c aes_block.c
++SOURCES = sbox.c aes_round.c aes_block.c
+ TARGETS = $(SOURCES:.c=.ll)
+ 
+ all: $(TARGETS)
+diff --git a/circuits/AES/aes.h b/circuits/AES/aes.h
+index 67c020f..98f96c5 100644
+--- a/circuits/AES/aes.h
++++ b/circuits/AES/aes.h
+@@ -19,7 +19,7 @@ typedef unsigned char byte;
+ #define THRESHOLD 2
+ #define SIZE 128
+ 
+-uint64_t time_elasped(struct timespec* begin, struct timespec* end) {
++uint64_t time_elapsed(struct timespec* begin, struct timespec* end) {
+     int64_t output = end->tv_sec - begin->tv_sec;
+     output *= 1000000000;
+     output += end->tv_nsec - begin->tv_nsec;
+diff --git a/circuits/AES/aes_block.c b/circuits/AES/aes_block.c
+index 421222b..0487345 100644
+--- a/circuits/AES/aes_block.c
++++ b/circuits/AES/aes_block.c
+@@ -213,7 +213,7 @@ int main(int argc, char* argv[]) {
+         clock_gettime(CLOCK_MONOTONIC, &ts_start);
+         bool has_error = aes_encrypt(input, key, output);
+         clock_gettime(CLOCK_MONOTONIC, &ts_end);
+-        tot_ns += time_elasped(&ts_start, &ts_end);
++        tot_ns += time_elapsed(&ts_start, &ts_end);
+ 
+         if (has_error) {
+             ++detected;
+diff --git a/circuits/AES/aes_round.c b/circuits/AES/aes_round.c
+index b4d0f1d..ee5d6c1 100644
+--- a/circuits/AES/aes_round.c
++++ b/circuits/AES/aes_round.c
+@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
+         } while (retry && has_error);
+         merge_output(output, votes);
+         clock_gettime(CLOCK_MONOTONIC, &ts_end);
+-        tot_ns += time_elasped(&ts_start, &ts_end);
++        tot_ns += time_elapsed(&ts_start, &ts_end);
+ 
+         if (has_error) {
+             ++detected;
+diff --git a/circuits/AES/build.sh b/circuits/AES/build.sh
+new file mode 100755
+index 0000000..2b42567
+--- /dev/null
++++ b/circuits/AES/build.sh
+@@ -0,0 +1,8 @@
++#!/bin/sh
++
++make -C circuits/AES/ clean && \
++make -C circuits/AES/ && \
++./compile.sh circuits/AES/aes_round.ll circuits/AES/aes_round-wm.ll && \
++clang-17 circuits/AES/aes_round-wm.ll -o circuits/AES/aes_round.elf -lm -lstdc++ && \
++./compile.sh circuits/AES/aes_block.ll circuits/AES/aes_block-wm.ll && \
++clang-17 circuits/AES/aes_block-wm.ll -o circuits/AES/aes_block.elf -lm -lstdc++
+diff --git a/circuits/AES/sbox.c b/circuits/AES/sbox.c
+index 89011ea..88e7d13 100644
+--- a/circuits/AES/sbox.c
++++ b/circuits/AES/sbox.c
+@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
+         bool has_error = __weird__sbox(input, output);
+         while (retry && (has_error = __weird__sbox(input, output)));
+         clock_gettime(CLOCK_MONOTONIC, &ts_end);
+-        tot_ns += time_elasped(&ts_start, &ts_end);
++        tot_ns += time_elapsed(&ts_start, &ts_end);
+ 
+         #ifdef DEBUG
+         printf("Input: 0x%X\n", val);
+diff --git a/circuits/ALU/ALU.cpp b/circuits/ALU/ALU.cpp
+index 3c44363..3a6d2a9 100644
+--- a/circuits/ALU/ALU.cpp
++++ b/circuits/ALU/ALU.cpp
+@@ -14,7 +14,7 @@ typedef unsigned char byte;
+ unsigned tot_trials = 1000000;
+ bool retry = false;
+ 
+-uint64_t time_elasped(struct timespec* begin, struct timespec* end) {
++uint64_t time_elapsed(struct timespec* begin, struct timespec* end) {
+     int64_t output = end->tv_sec - begin->tv_sec;
+     output *= 1000000000;
+     output += end->tv_nsec - begin->tv_nsec;
+@@ -108,7 +108,7 @@ void test_acc(
+         } while (retry && has_error);
+         merge_output(out, votes);
+         clock_gettime(CLOCK_MONOTONIC, &ts_end);
+-        tot_ns += time_elasped(&ts_start, &ts_end);
++        tot_ns += time_elapsed(&ts_start, &ts_end);
+ 
+         // execute the reference ALU
+         ref_alu(x_ref, y_ref, control_ref, out_ref);
+diff --git a/circuits/ALU/ALUx.cpp b/circuits/ALU/ALUx.cpp
+new file mode 100644
+index 0000000..ae4cd4f
+--- /dev/null
++++ b/circuits/ALU/ALUx.cpp
+@@ -0,0 +1,192 @@
++#include <stdio.h>
++#include <stdint.h>
++#include <math.h>
++#include <argp.h>
++#include <time.h>
++#include <vector>
++
++#define THRESHOLD 2
++#ifndef SIZE
++#define SIZE 10
++#endif
++#define SIZE_TYPE uint64_t
++
++typedef unsigned char byte;
++
++#define ROL(x, k, n) (((x) << (n)) | ((x) >> (k - (n))))
++
++#define RUN_WEIRD_WITH_ERROR(output, err_out, votes, size, unit_size, f, ...) \
++    do { \
++        has_error = f(__VA_ARGS__, output, err_out); \
++        if (update_votes_general(size, unit_size, output, err_out, votes)) has_error = false; \
++    } while (retry && has_error); \
++    merge_output_general(size, unit_size, output, votes);
++
++bool update_votes_general(unsigned _SIZE, unsigned _UNIT_SIZE, SIZE_TYPE* output, byte* error_output, char* votes) {
++    bool all_done = true;
++    for (int j = 0; j < _SIZE * _UNIT_SIZE; ++j) {
++        bool out_bit = (output[j / _UNIT_SIZE] >> (j % _UNIT_SIZE)) & 1;
++        bool err_bit = (error_output[j / _UNIT_SIZE] >> (j % _UNIT_SIZE)) & 1;
++
++        if (!err_bit) {
++            if (out_bit && votes[j] < 126) ++votes[j];
++            else if (!out_bit && votes[j] > -126) --votes[j];
++        }
++        if (votes[j] < THRESHOLD && votes[j] > -THRESHOLD) all_done = false;
++    }
++    return all_done;
++}
++
++void merge_output_general(unsigned _SIZE, unsigned _UNIT_SIZE, SIZE_TYPE* output, char* votes) {
++    for (unsigned j = 0; j < _SIZE * _UNIT_SIZE; ++j) {
++        if (votes[j] >= THRESHOLD) {
++            output[j / _UNIT_SIZE] |= 1 << (j % _UNIT_SIZE);
++        }
++        else if (votes[j] <= -THRESHOLD) {
++            output[j / _UNIT_SIZE] &= ~(1 << (j % _UNIT_SIZE));
++        }
++        votes[j] = 0;
++    }
++}
++
++/* Config */
++unsigned tot_trials = 1000000;
++bool retry = false;
++
++uint64_t time_elapsed(struct timespec* begin, struct timespec* end) {
++    int64_t output = end->tv_sec - begin->tv_sec;
++    output *= 1000000000;
++    output += end->tv_nsec - begin->tv_nsec;
++    return output;
++}
++
++// reference ALU as ground truth
++// x, y: 4 bits
++// control: 6 bits - zx, nx, zy, ny, f, no
++// out: 6 bits - out1, out2, out3, out4, zr, ng
++void ref_alu(SIZE_TYPE x, SIZE_TYPE y, byte control, SIZE_TYPE *out) {
++    x &= (1ULL << SIZE) - 1;
++    y &= (1ULL << SIZE) - 1;
++    switch (control) {
++        case 1:
++            *out = x + y;
++            break;
++        case 1<<1:
++            *out = x - y;
++            break;
++        case 1<<2:
++            *out = x & y;
++            break;
++        case 1<<3:
++            *out = x | y;
++            break;
++        case 1<<4:
++            *out = x ^ y;
++            break;
++        case 1<<5:
++            *out = x << y;
++            break;
++        case 1<<6:
++            *out = x >> y;
++            break;
++        case 1<<7:
++            *out = ~x;
++            break;
++        default:
++            *out = 0;
++            break;
++    }
++
++    // *out = 0;
++    // if (control & (1<<0)) *out |= (x + y);     // ADD
++    // if (control & (1<<1)) *out |= (x - y);     // SUB
++    // if (control & (1<<2)) *out |= (x & y);     // AND
++    // if (control & (1<<3)) *out |= (x | y);     // OR
++    // if (control & (1<<4)) *out |= (x ^ y);     // XOR
++    // if (control & (1<<5)) *out |= (x << y);    // SHL
++    // if (control & (1<<6)) *out |= (x >> y);    // SHR
++    // if (control & (1<<7)) *out |= (~x);        // NOT
++    *out &= (1ULL << SIZE) - 1;
++}
++
++bool __weird__alu(
++    SIZE_TYPE x, SIZE_TYPE y, byte control, SIZE_TYPE* out, byte* error_out
++) { return false; }
++
++/* Test accuracy and time usage */
++void test_acc(
++    bool (*gate_fn)(SIZE_TYPE, SIZE_TYPE, byte, SIZE_TYPE*, byte*)
++) {
++    unsigned tot_correct_counts = 0, tot_detected_counts = 0, tot_error_counts = 0;
++    uint64_t tot_ns = 0;
++
++    for (unsigned seed = 0; seed < tot_trials; seed++) {
++        // inputs and outputs
++        SIZE_TYPE x, y, out = 0;
++				byte control, control_ref;
++        byte err_out[SIZE] = {0};
++        char votes[SIZE] = {0};
++        SIZE_TYPE x_ref, y_ref, out_ref = 0;
++        bool has_error;
++
++        x_ref = x = rand();
++        y_ref = y = rand();
++        control_ref = control = 1 << (seed % 7);
++
++        // execute the circuit
++        struct timespec ts_start;
++        struct timespec ts_end;
++        clock_gettime(CLOCK_MONOTONIC, &ts_start);
++        RUN_WEIRD_WITH_ERROR(&out, err_out, votes, 1, SIZE, gate_fn, x, y, control);
++        clock_gettime(CLOCK_MONOTONIC, &ts_end);
++        tot_ns += time_elapsed(&ts_start, &ts_end);
++
++        // execute the reference ALU
++        ref_alu(x_ref, y_ref, control_ref, &out_ref);
++        // printf("%2x, %2x\n", out_ref, out);
++
++        if (has_error) {
++            ++tot_detected_counts;
++        }
++        else if (out == out_ref) {
++            ++tot_correct_counts;
++        }
++        else {
++            ++tot_error_counts;
++        }
++    }
++
++    uint64_t time_per_run = tot_ns / tot_trials;
++
++    printf("=== ALU%d ===\n", SIZE);
++    printf("Accuracy: %.5f%%, ", (double)tot_correct_counts / tot_trials * 100);
++    printf("Error detected: %.5f%%, ", (double)tot_detected_counts / tot_trials * 100);
++    printf("Undetected error: %.5f%%\n", (double)tot_error_counts / tot_trials * 100);
++    printf("Time usage: %lu.%lu (us)\n", time_per_run / 1000, time_per_run % 1000);
++    printf("over %d iterations.\n", tot_trials);
++}
++
++/* Arguments */
++static char doc[] = "Test the accuracy and run time of weird machines.";
++static char args_doc[] = "";
++static struct argp_option options[] = {
++    { "retry", 'r', 0, 0, "Retry when an error is detected"},
++    { "trial", 't', "TRIAL", 0, "Number of trials."},
++    { 0 } 
++};
++static error_t parse_opt(int key, char *arg, struct argp_state *state) {
++    switch (key) {
++        case 'r': retry = true; break;
++        case 't': tot_trials = atoi(arg); break;
++        case ARGP_KEY_ARG: return 0;
++        default: return ARGP_ERR_UNKNOWN;
++    }   
++    return 0;
++}
++static struct argp argp = { options, parse_opt, args_doc, doc, 0, 0, 0 };
++
++int main(int argc, char* argv[]) {
++    argp_parse(&argp, argc, argv, 0, 0, 0);
++    srand(time(NULL));
++    test_acc(__weird__alu);
++}
+diff --git a/circuits/ALU/ALUx.v b/circuits/ALU/ALUx.v
+new file mode 100644
+index 0000000..7529cb0
+--- /dev/null
++++ b/circuits/ALU/ALUx.v
+@@ -0,0 +1,32 @@
++module ALU #(parameter SIZE = 10) (
++    input  [SIZE-1:0] x,       // x-bit input
++    input  [SIZE-1:0] y,       // x-bit input
++    input  [7:0]  control,     // 8-bit control
++    output reg [SIZE-1:0] out  // x-bit output
++);
++
++always @(*) begin
++    case (control)
++        8'b00000001: out = x + y;                 // ADD
++        8'b00000010: out = x - y;                 // SUB
++        8'b00000100: out = x & y;                 // AND
++        8'b00001000: out = x | y;                 // OR
++        8'b00010000: out = x ^ y;                 // XOR
++        8'b00100000: out = x << y;                // SHL (shift left by value in y)
++        8'b01000000: out = x >> y;                // SHR (shift right by value in y)
++        8'b10000000: out = ~x;                // SHR (shift right by value in y)
++        default:     out = 8'b0;                 // Default to zero
++    endcase
++
++		/* ALU that performs multiple things at the same time */
++		// out = 8'b0;
++    // if (control[0]) out = out | (x + y);        // ADD
++    // if (control[1]) out = out | (x - y);        // SUB
++    // if (control[2]) out = out | (x & y);        // AND
++    // if (control[3]) out = out | (x | y);        // OR
++    // if (control[4]) out = out | (x ^ y);        // XOR
++    // if (control[5]) out = out | (x << y);       // SHL
++    // if (control[6]) out = out | (x >> y);       // SHR
++end
++
++endmodule
+diff --git a/circuits/ALU/Makefile b/circuits/ALU/Makefile
+index 0a3c5c3..a3e20e4 100644
+--- a/circuits/ALU/Makefile
++++ b/circuits/ALU/Makefile
+@@ -4,10 +4,20 @@ CXXFLAGS = -fno-discard-value-names -O1 -fno-inline-functions -S -emit-llvm
+ SOURCES = ALU.cpp
+ TARGETS = $(SOURCES:.cpp=.ll)
+ 
+-all: $(TARGETS)
++SIZE_VALUES ?= 8 9 10 11 12 14 16 24 32 34 36 40 48
++ALUx_LL = $(foreach S,$(SIZE_VALUES),ALU$(S).ll)
++
++all: $(TARGETS) $(ALUx_LL)
+ 
+ %.ll: %.cpp
+ 	$(CXX) $(CXXFLAGS) $< -o $@
+ 
+-clean:
+-	$(RM) $(TARGETS)
++ALU%.ll: ALUx.cpp
++	sed "s/parameter SIZE = [0-9]\+/parameter SIZE = $(*)/" ALUx.v > ALU$(*).v  && \
++	$(CXX) $(CXXFLAGS) -DSIZE=$* $< -o $@
++
++clean-v:
++	find . -maxdepth 1 -type f -regextype posix-extended -regex './ALU[0-9]+' -delete
++
++clean: clean-v
++	$(RM) $(TARGETS) $(ALUx_LL) *.ll *.elf ALU+.v
+diff --git a/circuits/ALU/build.sh b/circuits/ALU/build.sh
+new file mode 100755
+index 0000000..428e49e
+--- /dev/null
++++ b/circuits/ALU/build.sh
+@@ -0,0 +1,20 @@
++#!/bin/sh
++
++compile_alux() {
++    local SIZE="$1"
++		local NAME="ALU$SIZE"
++
++		export WM_CIRCUIT_FILE=circuits/ALU/"$NAME".v && \
++		./compile.sh circuits/ALU/"$NAME".ll circuits/ALU/"$NAME"-wm.ll && \
++		clang-17 circuits/ALU/"$NAME"-wm.ll -o circuits/ALU/"$NAME".elf -lm -lstdc++
++}
++
++SIZE_VALUES="8 9 10 11 12 14 16 24 32 34 36 40"
++
++make -C circuits/ALU/ SIZE_VALUES="$SIZE_VALUES" clean && \
++make -C circuits/ALU/ SIZE_VALUES="$SIZE_VALUES" && \
++(
++	for SIZE in $SIZE_VALUES; do
++		compile_alux $SIZE
++	done
++)
+diff --git a/circuits/SHA1/build.sh b/circuits/SHA1/build.sh
+new file mode 100755
+index 0000000..cbe4228
+--- /dev/null
++++ b/circuits/SHA1/build.sh
+@@ -0,0 +1,8 @@
++#!/bin/sh
++
++make -C circuits/SHA1/ clean && \
++make -C circuits/SHA1/ && \
++./compile.sh circuits/SHA1/sha1_round.ll circuits/SHA1/sha1_round-wm.ll && \
++clang-17 circuits/SHA1/sha1_round-wm.ll -o circuits/SHA1/sha1_round.elf -lm -lstdc++ && \
++./compile.sh circuits/SHA1/sha1_2blocks.ll circuits/SHA1/sha1_2blocks-wm.ll && \
++clang-17 circuits/SHA1/sha1_2blocks-wm.ll -o circuits/SHA1/sha1_2blocks.elf -lm -lstdc++
+diff --git a/circuits/Simon/build.sh b/circuits/Simon/build.sh
+new file mode 100755
+index 0000000..2750578
+--- /dev/null
++++ b/circuits/Simon/build.sh
+@@ -0,0 +1,6 @@
++#!/bin/sh
++
++make -C circuits/Simon/ clean && \
++make -C circuits/Simon/ && \
++./compile.sh circuits/Simon/simon32.ll circuits/Simon/simon32-wm.ll && \
++clang-17 circuits/Simon/simon32-wm.ll -o circuits/Simon/simon32.elf -lm -lstdc++
+diff --git a/circuits/arithmetic/build.sh b/circuits/arithmetic/build.sh
+new file mode 100755
+index 0000000..f67ea59
+--- /dev/null
++++ b/circuits/arithmetic/build.sh
+@@ -0,0 +1,8 @@
++#!/bin/sh
++
++make -C circuits/arithmetic/ clean && \
++make -C circuits/arithmetic/ && \
++./compile.sh circuits/arithmetic/adder.ll circuits/arithmetic/adder-wm.ll && \
++clang-17 circuits/arithmetic/adder-wm.ll -o circuits/arithmetic/adder.elf -lm -lstdc++ && \
++./compile.sh circuits/arithmetic/mul.ll circuits/arithmetic/mul-wm.ll && \
++clang-17 circuits/arithmetic/mul-wm.ll -o circuits/arithmetic/mul.elf -lm -lstdc++
+diff --git a/circuits/gates/build.sh b/circuits/gates/build.sh
+new file mode 100755
+index 0000000..62bbf80
+--- /dev/null
++++ b/circuits/gates/build.sh
+@@ -0,0 +1,6 @@
++#!/bin/sh
++
++make -C circuits/gates/ clean && \
++make -C circuits/gates/ && \
++./compile.sh circuits/gates/test.ll circuits/gates/test-wm.ll && \
++clang-17 circuits/gates/test-wm.ll -o circuits/gates/test.elf -lm -lstdc++
+diff --git a/circuits/gates/test.cpp b/circuits/gates/test.cpp
+index cd631be..4f61b9a 100644
+--- a/circuits/gates/test.cpp
++++ b/circuits/gates/test.cpp
+@@ -10,7 +10,7 @@ unsigned tot_trials = 100000;
+ 
+ // compile with clang -O1 -fno-inline-functions -S -emit-llvm -o test.ll test.cpp
+ 
+-uint64_t time_elasped(struct timespec* begin, struct timespec* end) {
++uint64_t time_elapsed(struct timespec* begin, struct timespec* end) {
+     int64_t output = end->tv_sec - begin->tv_sec;
+     output *= 1000000000;
+     output += end->tv_nsec - begin->tv_nsec;
+@@ -71,29 +71,38 @@ void test_acc(
+     clock_gettime(CLOCK_MONOTONIC, &ts_start);
+ 
+     for (unsigned seed = 0; seed < tot_trials; seed++) {
++        /**
++         * Bit 0: incorrect result
++         * Bit 1: error detected
++         * Bit 2: output
++         */
+         unsigned result = gate_fn(seed);
+ 
+-        if (result == 0) {
++        if ((result & 3) == 0) {
+             ++tot_correct_counts;
+-        }
+-        else if (result & 2) {
++        } else if (result & 2) {
++            if (result & 4) {
++                all1_errors++;
++            } else {
++                all0_errors++;
++            }
+             ++tot_detected_counts;
+-        }
+-        else {
++        } else {
+             ++tot_error_counts;
+         }
+     }
+ 
+     clock_gettime(CLOCK_MONOTONIC, &ts_end);
+-    uint64_t tot_ns = time_elasped(&ts_start, &ts_end);
++    uint64_t tot_ns = time_elapsed(&ts_start, &ts_end);
+ 
+     printf("=== %s gate ===\n", name);
+     printf("Accuracy: %.5f%%, ", (double)tot_correct_counts / tot_trials * 100);
+     printf("Error detected: %.5f%%, ", (double)tot_detected_counts / tot_trials * 100);
+     printf("Undetected error: %.5f%%\n", (double)tot_error_counts / tot_trials * 100);
++    printf("all 0: %.5f%%, all 1: %.5f%%\n", (double)all0_errors / tot_detected_counts * 100, (double)all1_errors / tot_detected_counts * 100);
+     uint64_t time_per_run = tot_ns / tot_trials;
+     printf("Time usage: %lu.%lu (us)\n", time_per_run / 1000, time_per_run % 1000);
+-    printf("over %d iterations.\n", tot_trials);
++    printf("over %d iterations.\n\n", tot_trials);
+ }
+ 
+ /* Arguments */
+@@ -119,31 +128,31 @@ int main(int argc, char* argv[]) {
+     test_acc("AND", 2, [](unsigned in) { 
+         bool out;
+         bool errorDetected = __weird__and(in & 1, (in & 2) >> 1, out);
+-        unsigned result = (errorDetected << 1) | (((in & 3) == 3) != out);
++        unsigned result = (out << 2) | (errorDetected << 1) | (((in & 3) == 3) != out);
+         return result;
+     });
+     test_acc("OR", 2, [](unsigned in) {
+         bool out;
+         bool errorDetected = __weird__or(in & 1, (in & 2) >> 1, out);
+-        unsigned result = (errorDetected << 1) | (((in & 3) != 0) != out);
++        unsigned result = (out << 2) | (errorDetected << 1) | (((in & 3) != 0) != out);
+         return result;
+     });
+     test_acc("NOT", 1, [](unsigned in) {
+         bool out;
+         bool errorDetected = __weird__not(in & 1, out);
+-        unsigned result = (errorDetected << 1) | (((in & 1) == 0) != out);
++        unsigned result = (out << 2) | (errorDetected << 1) | (((in & 1) == 0) != out);
+         return result;
+     });
+     test_acc("NAND", 2, [](unsigned in) { 
+         bool out;
+         bool errorDetected = __weird__nand(in & 1, (in & 2) >> 1, out);
+-        unsigned result = (errorDetected << 1) | (((in & 3) != 3) != out);
++        unsigned result = (out << 2) | (errorDetected << 1) | (((in & 3) != 3) != out);
+         return result;
+     });
+     test_acc("XOR", 2, [](unsigned in) {
+         bool out;
+         bool errorDetected = __weird__xor(in & 1, (in & 2) >> 1, out);
+-        unsigned result = (errorDetected << 1);
++        unsigned result = (out << 2) | (errorDetected << 1);
+         result |= ((in & 3) == 1 | (in & 3) == 2) != out;
+         return result;
+     });
+@@ -153,7 +162,7 @@ int main(int argc, char* argv[]) {
+         bool in3 = in & 4;
+         bool out;
+         bool errorDetected = __weird__mux(in1, in2, in3, out);
+-        unsigned result = (errorDetected << 1);
++        unsigned result = (out << 2) | (errorDetected << 1);
+         result |= ((in1 & !(in3)) | (in2 & in3)) != out;
+         return result;
+     });
+@@ -163,7 +172,7 @@ int main(int argc, char* argv[]) {
+         bool in3 = in & 4;
+         bool out;
+         bool errorDetected = __weird__xor3(in1, in2, in3, out);
+-        unsigned result = (errorDetected << 1);
++        unsigned result = (out << 2) | (errorDetected << 1);
+         result |= (in1 ^ in2 ^ in3) != out;
+         return result;
+     });
+@@ -174,7 +183,7 @@ int main(int argc, char* argv[]) {
+         bool in4 = in & 8;
+         bool out;
+         bool errorDetected = __weird__xor4(in1, in2, in3, in4, out);
+-        unsigned result = (errorDetected << 1);
++        unsigned result = (out << 2) | (errorDetected << 1);
+         result |= (in1 ^ in2 ^ in3 ^ in4) != out;
+         return result;
+     });
+diff --git a/compile.sh b/compile.sh
+index 9ce9cd2..bbaa765 100755
+--- a/compile.sh
++++ b/compile.sh
+@@ -12,5 +12,5 @@ else
+ fi
+ 
+ # Config and run the Flexo compiler
+-export RET_WM_DIV_ROUNDS=5 WR_OFFSET=576
++export RET_WM_DIV_ROUNDS=12 WR_HIT_THRESHOLD=400 RET_WM_DIV_SIZE=64 DUAL_WM_MAX_INPUT=4
+ opt-17 -load-pass-plugin ./build/lib/libFlexo.so -passes="create-WMs" "$1" -S -o "$output"
+diff --git a/gate.asm b/gate.asm
+new file mode 100644
+index 0000000..c6d86bb
+--- /dev/null
++++ b/gate.asm
+@@ -0,0 +1,187 @@
++mod_ret_addr:
++	movq	$15001, %rcx                    # imm = 0x3A99
++	movq	$60221, %rax
++	movq	$10664, %rdx
++	divw	%cx # long division
++	... # repeats $RET_WM_DIV_ROUNDS times
++
++	# adds padding of NOPs after weird computations to return address (e.g. 512)
++	addq	%rdx, (%rsp)
++	retq
++# XOR Gate
++	.globl	__DualGate__2_1_xor           # -- Begin function __DualGate__2_21_xxx
++	.p2align	4, 0x90
++	.type	__DualGate__2_1_xor,@function
++__DualGate__2_1_xor:                  # @__DualGate__2_1_xxx
++	call mod_ret_addr										# trigger speculation with long running task
++	# load all values
++	movzbq (in1_0), in1_0
++	movzbq (in1_1), in1_1
++	movzbq (in2_0), in2_0
++	movzbq (in2_1), in2_1
++	# xor computation:
++
++	# out_1 = in2_1 & in1_0
++	lea (out_1,in1_0), %r10
++	mov (%r10, in2_1), %r10b
++	# out_1 = in2_0 & in1_1
++	lea (out_1, in1_1), %r10
++	mov (%r10, in2_0), %r10b
++
++	# out_0 = in2_0 & in1_0
++	lea (out_0,in1_0), %r10
++	mov (%r10, in2_0), %r10b
++	# out_0 = in2_1 & in1_1
++	lea (out_0,in1_1), %r10
++	mov (%r10, in2_1), %r10b
++	
++# AND Gate
++	.globl	__DualGate__2_1_and           # -- Begin function __DualGate__2_1_xxx
++	.p2align	4, 0x90
++	.type	__DualGate__2_1_and,@function
++__DualGate__2_1_and:                  # @__DualGate__2_1_xxx
++	call mod_ret_addr										# trigger speculation with long running task
++	# load all values
++	movzbq (in1_0), in1_0
++	movzbq (in1_1), in1_1
++	movzbq (in2_0), in2_0
++	movzbq (in2_1), in2_1
++	# And computation:
++
++	# out_1 = in1_0 & in2_0
++	lea (out_1,in2_0), %r10
++	mov (%r10, in1_0), %r10b
++
++	# out_0 = in1_1
++	lea (out_0, in1_1), %r10
++	# out_0 = in2_1
++	lea (out_0,in2_1), %r10
++
++# Some 4->1 gate
++	.globl	__DualGate__4_1_38505           # -- Begin function __DualGate__4_1_38505
++	.p2align	4, 0x90
++	.type	__DualGate__4_1_38505,@function
++__DualGate__4_1_38505:                  # @__DualGate__4_1_38505
++	.cfi_startproc
++# %bb.0:                                # %entry
++# prepare function by pushing registers
++	pushq	%r15
++	.cfi_def_cfa_offset 16
++	pushq	%r14
++	.cfi_def_cfa_offset 24
++	pushq	%r13
++	.cfi_def_cfa_offset 32
++	pushq	%r12
++	.cfi_def_cfa_offset 40
++	pushq	%rbx
++	# debugging boilerplate
++	.cfi_def_cfa_offset 48
++	.cfi_offset %rbx, -48
++	.cfi_offset %r12, -40
++	.cfi_offset %r13, -32
++	.cfi_offset %r14, -24
++	.cfi_offset %r15, -16
++	# put all parameters into registers (rbx, r11, r9, r8, r13, r12, r15, r14)
++	movq	%r9, %rbx
++	movq	%r8, %r11
++	movq	%rcx, %r9
++	movq	%rdx, %r8
++	movq	72(%rsp), %r13
++	movq	64(%rsp), %r12
++	movq	56(%rsp), %r15
++	movq	48(%rsp), %r14
++	#APP
++	# call long running function (many div)
++	callq	mod_ret_addr
++	# load inputs -> simple and of values
++	movzbq	(%rdi), %rdi
++	movzbq	(%rsi), %rsi
++	movzbq	(%r8), %r8
++	movzbq	(%r9), %r9
++	movzbq	(%r11), %r11
++	movzbq	(%rbx), %rbx
++	movzbq	(%r14), %r14
++	movzbq	(%r15), %r15
++	# 
++	leaq	(%r13,%rdi), %r10
++	addq	%r11, %r10
++	addq	%r14, %r10
++	movb	256(%r10,%r8), %r10b
++	leaq	(%r13,%rdi), %r10
++	addq	%rbx, %r10
++	addq	%r15, %r10
++	movb	256(%r10,%r8), %r10b
++	leaq	(%r13,%rdi), %r10
++	addq	%r11, %r10
++	addq	%r15, %r10
++	movb	256(%r10,%r9), %r10b
++	leaq	(%r13,%rdi), %r10
++	addq	%rbx, %r10
++	addq	%r14, %r10
++	movb	256(%r10,%r9), %r10b
++	leaq	(%r13,%rsi), %r10
++	addq	%r11, %r10
++	addq	%r15, %r10
++	movb	256(%r10,%r8), %r10b
++	leaq	(%r13,%rsi), %r10
++	addq	%rbx, %r10
++	addq	%r14, %r10
++	movb	256(%r10,%r8), %r10b
++	leaq	(%r13,%rsi), %r10
++	addq	%r11, %r10
++	addq	%r14, %r10
++	movb	256(%r10,%r9), %r10b
++	leaq	(%r13,%rsi), %r10
++	addq	%rbx, %r10
++	addq	%r15, %r10
++	movb	256(%r10,%r9), %r10b
++	leaq	(%r12,%rdi), %r10
++	addq	%r11, %r10
++	addq	%r15, %r10
++	movb	256(%r10,%r8), %r10b
++	leaq	(%r12,%rdi), %r10
++	addq	%rbx, %r10
++	addq	%r14, %r10
++	movb	256(%r10,%r8), %r10b
++	leaq	(%r12,%rdi), %r10
++	addq	%r11, %r10
++	addq	%r14, %r10
++	movb	256(%r10,%r9), %r10b
++	leaq	(%r12,%rdi), %r10
++	addq	%rbx, %r10
++	addq	%r15, %r10
++	movb	256(%r10,%r9), %r10b
++	leaq	(%r12,%rsi), %r10
++	addq	%r11, %r10
++	addq	%r14, %r10
++	movb	256(%r10,%r8), %r10b
++	leaq	(%r12,%rsi), %r10
++	addq	%rbx, %r10
++	addq	%r15, %r10
++	movb	256(%r10,%r8), %r10b
++	leaq	(%r12,%rsi), %r10
++	addq	%r11, %r10
++	addq	%r15, %r10
++	movb	256(%r10,%r9), %r10b
++	leaq	(%r12,%rsi), %r10
++	addq	%rbx, %r10
++	addq	%r14, %r10
++	movb	256(%r10,%r9), %r10b
++
++	#NO_APP
++	#APP
++	.byte	144 # 0x90 -> NOP
++	... # repeats 512 times
++
++	#NO_APP
++	popq	%rbx
++	.cfi_def_cfa_offset 40
++	popq	%r12
++	.cfi_def_cfa_offset 32
++	popq	%r13
++	.cfi_def_cfa_offset 24
++	popq	%r14
++	.cfi_def_cfa_offset 16
++	popq	%r15
++	.cfi_def_cfa_offset 8
++	retq
+diff --git a/include/Flexo.h b/include/Flexo.h
+index 91e8d55..34fb260 100644
+--- a/include/Flexo.h
++++ b/include/Flexo.h
+@@ -32,7 +32,10 @@ public:
+ 
+   LLVMContext& getContext() { return this->module->getContext(); }
+   FunctionCallee getFunc(StringRef funcName);
+-  FunctionCallee addFunc(StringRef funcName, FunctionType* funcTy);  
++  FunctionCallee addFunc(StringRef funcName, FunctionType *funcTy);
++  GlobalVariable* getGlobal(StringRef globName);
++  GlobalVariable *addGlobal(StringRef globName, Type *value);
++  GlobalVariable *addGlobal(StringRef globName, Constant *init);
+   void setModuleAsm(StringRef moduleAsm);
+ 
+   // debug  
+@@ -41,9 +44,11 @@ public:
+ private:
+   void translateFunc(Function* F, StringRef circuitFile);
+   BasicBlock* removeExistingIR(Function* F);
++  void padMain(Function *main);
+ 
+   Module* module;
+   StringMap<FunctionCallee> FuncMap;
++  StringMap<GlobalVariable *> GlobMap;
+   bool randomizeWR = true;
+   WeirdMachine* wm;
+ };
+diff --git a/include/Utils.h b/include/Utils.h
+index 969fd1d..52e4b39 100644
+--- a/include/Utils.h
++++ b/include/Utils.h
+@@ -11,6 +11,7 @@ string get_str_env(const char* varname, string default_val);
+ int get_int_env(const char* varname, int default_val);
+ void open_file(ofstream &infile, string filename);
+ void write_file(string filename, string &content);
++uint64_t mod(int64_t a, int64_t b);
+ 
+ template <class T, class V>
+ void vecRemove(vector<T>* vec, V val) {
+diff --git a/include/WeirdMachines/WeirdMachine.h b/include/WeirdMachines/WeirdMachine.h
+index a7a3e8b..0fb5f46 100644
+--- a/include/WeirdMachines/WeirdMachine.h
++++ b/include/WeirdMachines/WeirdMachine.h
+@@ -31,7 +31,6 @@ class WeirdMachine {
+ public:
+   WeirdMachine(Flexo* f):flexo(f), circ(nullptr) {
+     useFence = get_str_env("WM_USE_FENCE", "") != "false";
+-    WR_HIT_THRESHOLD = get_int_env("WR_HIT_THRESHOLD", 180);
+   };
+   virtual ~WeirdMachine() = default;
+ 
+@@ -40,6 +39,7 @@ public:
+   virtual Value* createCircuit(
+     Function* F, IRBuilder<> &builder, StringRef circuitFile, WeirdRegisters* WR
+   );
++  void defineGlobalFuncLate();
+ 
+   bool verbose = false;
+ 
+@@ -68,12 +68,17 @@ protected:
+ 
+ private:
+   void declareLibIntrinsic();
++  void defineGlobalVariables();
+   void defineGlobalFunc();
+   void defineDelay(Function* F);
+   void defineTimer(Function* F);
+   void defineSyscallRand(Function* F);
+   void defineMmap(Function* F);
+   void defineMunmap(Function* F);
++  void defineOpen(Function *F);
++  void defineClose(Function *F);
++  void defineExit(Function *F);
++  void defineMaccess(Function *F);
+   virtual void defineModuleAsm() = 0;
+   virtual void defineGates() = 0;
+ 
+diff --git a/include/WeirdRegisters/WeirdRegisters.h b/include/WeirdRegisters/WeirdRegisters.h
+index 1592de3..277ea71 100644
+--- a/include/WeirdRegisters/WeirdRegisters.h
++++ b/include/WeirdRegisters/WeirdRegisters.h
+@@ -27,10 +27,17 @@ public:
+   virtual void allocate(int count);
+   virtual void assignArch(Value* archVal, int regId, bool invert = false);
+   void assignConst(int val, int regId);
+-  Value* loadReg(int regId, int threshold);
++  Value* loadReg(int regId);
+   Value* getReg(int regId);
+   Value* getFakeReg(int regId);
+ 
++  // separation between registers
++  static int regOffset;
++  // distance between a real WR and its fake location
++  static int fakeOffset;
++  // the first register index
++  static const int firstIdx = 1;
++
+ protected:
+   void preventCOW();
+   virtual Value* getCreateReg(int regId);
+@@ -41,10 +48,6 @@ protected:
+   IRBuilder<>& builder;
+   // number of weird registers
+   int count;
+-  // separation between registers
+-  int regOffset;
+-  // the first register index
+-  int firstIdx = 1;
+   // total memory size
+   int size;
+   // memory var in LLVM
+@@ -55,8 +58,6 @@ protected:
+   std::vector<Value*> WRegIdxArr;
+   // WR index -> WR offsets
+   std::vector<Value*> WRegOffsets;
+-  // distance between a real WR and its fake location
+-  int fakeOffset;
+   // WR index -> fake WR variable in LLVM
+   std::vector<Value*> FWRegIdxArr;
+   // WR index -> fake WR offsets
+diff --git a/include/tlb_ioctl.h b/include/tlb_ioctl.h
+new file mode 100644
+index 0000000..eb48f86
+--- /dev/null
++++ b/include/tlb_ioctl.h
+@@ -0,0 +1,9 @@
++#include <linux/ioctl.h>
++
++#define TLB_DEVICE_NAME "tlb_device"
++#define TLB_DEVICE_NAME_FULL "/dev/tlb_device"
++#define IOCTL_FLUSH_TLB_PT_CACHES _IOW(43, 0, void *)
++#define IOCTL_FLUSH_TLB_NO_PT_CACHES _IOW(43, 1, void *)
++#define IOCTL_FLUSH_TLB_ADDR_NO_PT_CACHES _IOW(43, 2, uint64_t *)
++#define IOCTL_FLUSH_TLB_INVLPG _IOW(43, 3, uint64_t *)
++#define IOCTL_FLUSH_NOTHING _IOW(43, 4, uint64_t *)
+diff --git a/lib/Circuits/TruthTbl.cpp b/lib/Circuits/TruthTbl.cpp
+index c3633b0..ace21a4 100644
+--- a/lib/Circuits/TruthTbl.cpp
++++ b/lib/Circuits/TruthTbl.cpp
+@@ -71,6 +71,10 @@ string gen_gate_asm(unsigned inputs, unsigned outputs, unsigned truthTbl) {
+   }
+ 
+   // load inputs
++  /**
++   * Because it is an simple truth table, every IN has to be true (in cache) to compute OUT
++   * When In should be false, just the inverted term is used as true
++   */
+   for (unsigned i = 0; i < 2 * inputs; ++i) {
+     if (usedIn & (1 << i)) {
+       gateAsm += "movzbq ($" + to_string(i) + "), $" + to_string(i) + "\n";
+diff --git a/lib/Flexo.cpp b/lib/Flexo.cpp
+index dfe4bc5..556c3b8 100644
+--- a/lib/Flexo.cpp
++++ b/lib/Flexo.cpp
+@@ -55,6 +55,29 @@ FunctionCallee Flexo::addFunc(StringRef funcName, FunctionType* funcTy){
+   return func;
+ }
+ 
++// public interface - get a global from global map
++GlobalVariable* Flexo::getGlobal(StringRef globName) {
++  assert(this->GlobMap.contains(globName));
++  return this->GlobMap[globName];
++}
++
++// public interface - add a global to module and global map
++GlobalVariable* Flexo::addGlobal(StringRef globName, Constant *init){
++  this->module->getOrInsertGlobal(
++    globName, init->getType()
++  );
++  GlobalVariable *glob = this->module->getNamedGlobal(globName);
++  glob->setLinkage(GlobalValue::ExternalLinkage);
++  glob->setInitializer(init);
++  this->GlobMap[globName] = glob;
++  return glob;
++}
++
++
++GlobalVariable* Flexo::addGlobal(StringRef globName, Type *globTy){
++  return addGlobal(globName, ConstantInt::get(globTy, 0));
++}
++
+ // public interface - define module asm
+ void Flexo::setModuleAsm(StringRef moduleAsm) {
+   this->module->setModuleInlineAsm(moduleAsm);
+@@ -88,7 +111,7 @@ void Flexo::translateFunc(Function* F, StringRef circuitFile) {
+   // delete the original IR code
+   IRBuilder<> builder(removeExistingIR(F));
+ 
+-  // Use stack memory to alloc weird registers
++  // Use memory to alloc weird registers
+   WeirdRegisters* WR;
+   std::string WR_TYPE = get_str_env("WR_TYPE", "Dual");
+ 
+@@ -158,6 +181,10 @@ void Flexo::runOnModule(Module &M) {
+   bool useCircuitFile = circuitFile != "";
+ 
+   for (Function &F : M) {
++    // Add memory allocation for weird functions to the start
++    if (F.getName() == "main") {
++      this->padMain(&F);
++    }
+     if (F.isDeclaration() || F.getName().find(keyword) == StringRef::npos) continue;
+ 
+     outs() << "Found weird function: " << F.getName() << "\n";
+@@ -186,6 +213,9 @@ void Flexo::runOnModule(Module &M) {
+     this->translateFunc(&F, filename);
+   }
+ 
++  // Init function after processing all weird functions
++  wm->defineGlobalFuncLate();
++
+   // clean up
+   Yosys::yosys_shutdown();
+   yosys_log.close();
+@@ -193,6 +223,23 @@ void Flexo::runOnModule(Module &M) {
+   delete wm;
+ }
+ 
++void Flexo::padMain(Function *main) {
++  llvm::BasicBlock &entry = main->getEntryBlock();
++  // insert allocation at the start of main
++  llvm::Instruction *firstInst = &*entry.begin();
++  llvm::IRBuilder<> entryBuilder(firstInst);
++
++  // cleanup before each ret of main
++  for (auto &BB : *main) {
++    for (auto it = BB.begin(), end = BB.end(); it != end; ++it) {
++      if (llvm::isa<llvm::ReturnInst>(&*it)) {
++          llvm::IRBuilder<> builder(&*it);
++      }
++    }
++  }
++}
++
++
+ PreservedAnalyses Flexo::run(
+   llvm::Module &M, llvm::ModuleAnalysisManager &
+ ) {
+diff --git a/lib/Utils.cpp b/lib/Utils.cpp
+index 36aa5de..8c1d80f 100644
+--- a/lib/Utils.cpp
++++ b/lib/Utils.cpp
+@@ -30,3 +30,7 @@ void write_file(string filename, string &content) {
+   infile << content;
+   infile.close();
+ }
++
++uint64_t mod(int64_t a, int64_t b) {
++  return ( (a % (int64_t)b) + b ) % b;
++}
+diff --git a/lib/WeirdMachines/WeirdMachine.cpp b/lib/WeirdMachines/WeirdMachine.cpp
+index 9703db5..c6e2465 100644
+--- a/lib/WeirdMachines/WeirdMachine.cpp
++++ b/lib/WeirdMachines/WeirdMachine.cpp
+@@ -25,6 +25,7 @@ using namespace llvm;
+ void WeirdMachine::create() {
+   this->defineModuleAsm();
+   this->declareLibIntrinsic();
++  this->defineGlobalVariables();
+   this->defineGlobalFunc();
+   this->defineGates();
+ }
+@@ -87,6 +88,11 @@ void WeirdMachine::declareLibIntrinsic() {
+   }
+ }
+ 
++void WeirdMachine::defineGlobalVariables() {
++  LLVMContext &CTX = this->flexo->getContext();
++  this->flexo->addGlobal("WR_HIT_THRESHOLD", ConstantInt::get(IntegerType::getInt64Ty(CTX), get_int_env("WR_HIT_THRESHOLD", 180)));
++}
++
+ // define delay and timer
+ void WeirdMachine::defineGlobalFunc() {
+   // void @delay()
+@@ -95,16 +101,26 @@ void WeirdMachine::defineGlobalFunc() {
+   FunctionType *DelayTy = FunctionType::get(VoidTy, false);
+   FunctionCallee Delay = this->flexo->addFunc("delay", DelayTy);
+   Function *DelayF = dyn_cast<Function>(Delay.getCallee());
++  DelayF->addFnAttr(llvm::Attribute::AlwaysInline);
+   this->defineDelay(DelayF);
+ 
+-  // i64 @timer(ptr %ptr)
++  // define printf
+   Type *I64Ty = IntegerType::getInt64Ty(CTX);
++  Type *charPtrTy = PointerType::getInt8PtrTy(CTX);
++  FunctionType *PrintfTy = FunctionType::get(I64Ty, {charPtrTy}, true);
++  FunctionCallee Printf = this->flexo->addFunc("printf", PrintfTy);
++  Function *PrintfF = dyn_cast<Function>(Printf.getCallee());
++  PrintfF->addParamAttr(0, Attribute::NoUndef);
++  PrintfF->getArg(0)->setName("str");
++
++  // i64 @timer(ptr %ptr)
+   PointerType *OpaquePtrTy = PointerType::getUnqual(CTX);
+   FunctionType *TimerTy = FunctionType::get(I64Ty, {OpaquePtrTy}, false);
+   FunctionCallee Timer = this->flexo->addFunc("timer", TimerTy);
+   Function *TimerF = dyn_cast<Function>(Timer.getCallee());
+   TimerF->addParamAttr(0, Attribute::NoUndef);
+   TimerF->getArg(0)->setName("ptr");
++  TimerF->addFnAttr(llvm::Attribute::AlwaysInline);
+   this->defineTimer(TimerF);
+ 
+   // define mfence
+@@ -121,28 +137,71 @@ void WeirdMachine::defineGlobalFunc() {
+     this->defineSyscallRand(SyscallRandF);
+   }
+ 
+-  bool useMmap = get_str_env("WR_USE_MMAP", "false") == "true";
+   // define mmap
+-  if (useMmap) {
+-    FunctionType *MmapTy = FunctionType::get(OpaquePtrTy, {I64Ty}, false);
+-    FunctionCallee Mmap = this->flexo->addFunc("mmap", MmapTy);
+-    Function *MmapF = dyn_cast<Function>(Mmap.getCallee());
+-    MmapF->addParamAttr(0, Attribute::NoUndef);
+-    MmapF->getArg(0)->setName("len");
+-    this->defineMmap(MmapF);
+-  }
++  FunctionType *MmapTy = FunctionType::get(OpaquePtrTy, {I64Ty}, false);
++  FunctionCallee Mmap = this->flexo->addFunc("mmap", MmapTy);
++  Function *MmapF = dyn_cast<Function>(Mmap.getCallee());
++  MmapF->addParamAttr(0, Attribute::NoUndef);
++  MmapF->getArg(0)->setName("len");
++  this->defineMmap(MmapF);
+ 
+   // define munmap
+-  if (useMmap) {
+-    FunctionType *MunmapTy = FunctionType::get(VoidTy, {OpaquePtrTy, I64Ty}, false);
+-    FunctionCallee Munmap = this->flexo->addFunc("munmap", MunmapTy);
+-    Function *MunmapF = dyn_cast<Function>(Munmap.getCallee());
+-    MunmapF->addParamAttr(0, Attribute::NoUndef);
+-    MunmapF->getArg(0)->setName("addr");
+-    MunmapF->addParamAttr(1, Attribute::NoUndef);
+-    MunmapF->getArg(1)->setName("len");
+-    this->defineMunmap(MunmapF);
+-  }
++  FunctionType *MunmapTy = FunctionType::get(VoidTy, {OpaquePtrTy, I64Ty}, false);
++  FunctionCallee Munmap = this->flexo->addFunc("munmap", MunmapTy);
++  Function *MunmapF = dyn_cast<Function>(Munmap.getCallee());
++  MunmapF->addParamAttr(0, Attribute::NoUndef);
++  MunmapF->getArg(0)->setName("addr");
++  MunmapF->addParamAttr(1, Attribute::NoUndef);
++  MunmapF->getArg(1)->setName("len");
++  this->defineMunmap(MunmapF);
++
++
++  // define open
++  PointerType *I8PtrTy = PointerType::getInt8PtrTy(CTX);
++  FunctionType *OpenTy = FunctionType::get(I64Ty, {I8PtrTy, I64Ty, I64Ty}, false);
++  FunctionCallee Open = this->flexo->addFunc("open", OpenTy);
++  Function *OpenF = dyn_cast<Function>(Open.getCallee());
++  OpenF->addParamAttr(0, Attribute::NoUndef);
++  OpenF->getArg(0)->setName("path");
++  OpenF->addParamAttr(1, Attribute::NoUndef);
++  OpenF->getArg(1)->setName("oflag");
++  OpenF->addParamAttr(2, Attribute::NoUndef);
++  OpenF->getArg(2)->setName("mode");
++  this->defineOpen(OpenF);
++
++  // define close
++  FunctionType *CloseTy = FunctionType::get(I64Ty, {I64Ty}, false);
++  FunctionCallee Close = this->flexo->addFunc("close", CloseTy);
++  Function *CloseF = dyn_cast<Function>(Close.getCallee());
++  CloseF->addParamAttr(0, Attribute::NoUndef);
++  CloseF->getArg(0)->setName("fildis");
++  this->defineClose(CloseF);
++
++
++  // define exit
++  FunctionType *ExitTy = FunctionType::get(VoidTy, {I64Ty}, false);
++  FunctionCallee Exit = this->flexo->addFunc("exit", ExitTy);
++  Function *ExitF = dyn_cast<Function>(Exit.getCallee());
++  ExitF->addParamAttr(0, Attribute::NoUndef);
++  ExitF->getArg(0)->setName("code");
++  this->defineExit(ExitF);
++
++  // define maccess
++  FunctionType *MaccessTy = FunctionType::get(VoidTy, {I8PtrTy}, false);
++  FunctionCallee Maccess = this->flexo->addFunc("maccess", MaccessTy);
++  Function *MaccessF = dyn_cast<Function>(Maccess.getCallee());
++  MaccessF->addParamAttr(0, Attribute::NoUndef);
++  MaccessF->getArg(0)->setName("addr");
++  MaccessF->addFnAttr(llvm::Attribute::AlwaysInline);
++  this->defineMaccess(MaccessF);
++
++  /**
++   * Late defined functions
++   */
++
++}
++
++void WeirdMachine::defineGlobalFuncLate() {
+ }
+ 
+ // Define delay (wait for mem op)
+@@ -333,6 +392,127 @@ void WeirdMachine::defineMunmap(Function *F) {
+   EntryBuilder.CreateRetVoid();
+ }
+ 
++// Define syscall rand (random w/o stdlib)
++void WeirdMachine::defineOpen(Function *F) {
++  LLVMContext &CTX = this->flexo->getContext();
++
++  // build entry block
++  // FunctionType *OpenTy = FunctionType::get(I64Ty, {charPtrTy, I64Ty, I64Ty}, false);
++  BasicBlock *EntryBlk = BasicBlock::Create(CTX, "entry", F);
++  IRBuilder<> EntryBuilder(EntryBlk);
++  IntegerType *I64Ty = IntegerType::getInt64Ty(CTX);
++  Type *charPtrTy = PointerType::getInt8PtrTy(CTX);
++  FunctionType *SyscallAsmTy = FunctionType::get(I64Ty, {charPtrTy, I64Ty, I64Ty}, false);
++
++  // syscall asm code
++  const char syscallAsmCode[] = (
++    "mov $1, %rdi\n"  // path
++    "mov $2, %rsi\n"  // flags
++    "mov $3, %rdx\n"  // mode
++    "mov $$2, %rax\n"
++    "syscall\n"
++    "mov %rax, $0"
++  );  
++  const char syscallAsmConstraints[] = (
++    "=r,r,r,r,~{rdx},~{rdi},~{rsi},~{rax},~{dirflag},~{fpsr},~{flags}"
++  );
++  InlineAsm *SyscallAsm = InlineAsm::get(
++    SyscallAsmTy, syscallAsmCode, syscallAsmConstraints, /*hasSideEffects*/true
++  );
++  auto path = F->getArg(0);
++  auto flags = F->getArg(1);
++  auto mode = F->getArg(2);
++  auto got = EntryBuilder.CreateCall(SyscallAsm, {path, flags, mode});
++  EntryBuilder.CreateRet(got);
++}
++
++// Define syscall rand (random w/o stdlib)
++void WeirdMachine::defineClose(Function *F) {
++  LLVMContext &CTX = this->flexo->getContext();
++
++  // build entry block
++  BasicBlock *EntryBlk = BasicBlock::Create(CTX, "entry", F);
++  IRBuilder<> EntryBuilder(EntryBlk);
++  IntegerType *I64Ty = IntegerType::getInt64Ty(CTX);
++  FunctionType *SyscallAsmTy = FunctionType::get(I64Ty, {I64Ty}, false);
++
++  // syscall asm code
++  const char syscallAsmCode[] = (
++    "mov $1, %rdi\n"  // fildis
++    "mov $$3, %rax\n"
++    "syscall\n"
++    "mov %rax, $0"
++  );  
++  const char syscallAsmConstraints[] = (
++    "=r,r,~{rdi},~{rax},~{dirflag},~{fpsr},~{flags}"
++  );
++  InlineAsm *SyscallAsm = InlineAsm::get(
++    SyscallAsmTy, syscallAsmCode, syscallAsmConstraints, /*hasSideEffects*/true
++  );
++  auto fildis = F->getArg(0);
++  auto got = EntryBuilder.CreateCall(SyscallAsm, {fildis});
++  EntryBuilder.CreateRet(got);
++}
++
++
++// Define syscall rand (random w/o stdlib)
++void WeirdMachine::defineExit(Function *F) {
++  LLVMContext &CTX = this->flexo->getContext();
++
++  // build entry block
++  BasicBlock *EntryBlk = BasicBlock::Create(CTX, "entry", F);
++  IRBuilder<> EntryBuilder(EntryBlk);
++  Type *VoidTy = Type::getVoidTy(CTX);
++  IntegerType *I64Ty = IntegerType::getInt64Ty(CTX);
++  FunctionType *SyscallAsmTy = FunctionType::get(VoidTy, {I64Ty}, false);
++
++  // syscall asm code
++  const char syscallAsmCode[] = (
++    "mov $0, %rdi\n" // code
++    "mov $$60, %rax\n"
++    "syscall\n"
++  );  
++  const char syscallAsmConstraints[] = (
++    "r,~{rdi},~{rax},~{dirflag},~{fpsr},~{flags}"
++  );
++  InlineAsm *SyscallAsm = InlineAsm::get(
++    SyscallAsmTy, syscallAsmCode, syscallAsmConstraints, /*hasSideEffects*/true
++  );
++  auto code = F->getArg(0);
++  EntryBuilder.CreateCall(SyscallAsm, {
++    code
++  });
++  EntryBuilder.CreateRetVoid();
++}
++
++// Define syscall rand (random w/o stdlib)
++void WeirdMachine::defineMaccess(Function *F) {
++  LLVMContext &CTX = this->flexo->getContext();
++
++  // build entry block
++  BasicBlock *EntryBlk = BasicBlock::Create(CTX, "entry", F);
++  IRBuilder<> EntryBuilder(EntryBlk);
++  Type *VoidTy = Type::getVoidTy(CTX);
++  PointerType *I8PtrTy = PointerType::getInt8PtrTy(CTX);
++  FunctionType *SyscallAsmTy = FunctionType::get(VoidTy, {I8PtrTy}, false);
++
++  // syscall asm code
++  const char syscallAsmCode[] = (
++    "mov ($0), %rdi\n"
++  );  
++  const char syscallAsmConstraints[] = (
++    "r,~{rdi},~{dirflag},~{fpsr},~{flags}"
++  );
++  InlineAsm *SyscallAsm = InlineAsm::get(
++    SyscallAsmTy, syscallAsmCode, syscallAsmConstraints, /*hasSideEffects*/true
++  );
++  auto addr = F->getArg(0);
++  EntryBuilder.CreateCall(SyscallAsm, {
++    addr
++  });
++  EntryBuilder.CreateRetVoid();
++}
++
+ // insert NOP instructions
+ void WeirdMachine::addNOP(IRBuilder<> &builder, int size) {
+   assert(size > 0);
+@@ -421,7 +601,7 @@ Value* WeirdMachine::getInputArchValue(IRBuilder<> &builder, Wire* wire) {
+ Value* WeirdMachine::getRegValue(int regId) {
+   if (regValues.find(regId) != regValues.end()) return regValues[regId];
+ 
+-  Value* output = WR->loadReg(regId, WR_HIT_THRESHOLD);
++  Value* output = WR->loadReg(regId);
+   regValues[regId] = output;
+   return output;
+ }
+diff --git a/lib/WeirdRegisters/WeirdRegisters.cpp b/lib/WeirdRegisters/WeirdRegisters.cpp
+index 819b7c5..5b8f416 100644
+--- a/lib/WeirdRegisters/WeirdRegisters.cpp
++++ b/lib/WeirdRegisters/WeirdRegisters.cpp
+@@ -16,11 +16,12 @@
+ 
+ using namespace llvm;
+ 
++int WeirdRegisters::regOffset = get_int_env("WR_OFFSET", 960);
++int WeirdRegisters::fakeOffset = get_int_env("WR_FAKE_OFFSET", 256);
++
+ WeirdRegisters::WeirdRegisters(
+   Flexo* flexo, IRBuilder<>& builder, int align
+ ): flexo(flexo), builder(builder), count(-1), align(Align(align)) {
+-  regOffset = get_int_env("WR_OFFSET", 960);
+-  fakeOffset = get_int_env("WR_FAKE_OFFSET", 256);
+ 
+   string mappingType = get_str_env("WR_MAPPING", "Shuffle");
+   if (mappingType == "Baseline") {
+@@ -170,12 +171,13 @@ void WeirdRegisters::assignConst(int val, int regId) {
+ }
+ 
+ // return 1 if WR in cache, else return 0
+-Value* WeirdRegisters::loadReg(int regId, int threshold) {
++Value* WeirdRegisters::loadReg(int regId) {
+   auto cycles = builder.CreateCall(
+     flexo->getFunc("timer"), {getReg(regId)}
+   );
++  auto threshold = builder.CreateLoad(builder.getInt64Ty(), flexo->getGlobal("WR_HIT_THRESHOLD"));
+   // cache hit if cycles <= threshold
+-  auto archVal = builder.CreateICmpULT(cycles, builder.getInt64(threshold + 1));
++  auto archVal = builder.CreateICmpULT(cycles, threshold);
+   return archVal;
+ };
+ 
+diff --git a/reproduce/README.md b/reproduce/README.md
+index bd9566c..e5fd235 100644
+--- a/reproduce/README.md
++++ b/reproduce/README.md
+@@ -45,14 +45,6 @@ The config file has the following fields:
+ 5. `Measure trials with EC`: after measuring the accuracy and runtime of a circuit without error correction, the script continues to measure the accuracy and runtime for the same circuit with error correction enabled. Similar to `Measure trials`, this field controls the number of times a circuit is executed during this measurement.
+ 6. `Measure timeout with EC (minutes)`: configures the timeout (in minutes) when measuring the accuracy and runtime of a circuit (with error correction). When a timeout expires, the script saves the current results and stops executing this circuit.
+ 
+-## Run the packed programs (section 6)
+-
+-We provide a Python script ([run_packed.py](./scripts/run_packed.py)) to run and collect the results of each packer.
+-
+-```sh
+-python3 ./scripts/run_packed.py
+-```
+-
+ __Command line options__
+ 
+ - `--aes-timeout`: set the timeout (in minutes) when running the AES circuit. (Default to 120 minutes)
+diff --git a/reproduce/ls b/reproduce/ls
+deleted file mode 100755
+index 9786ef1..0000000
+Binary files a/reproduce/ls and /dev/null differ
+diff --git a/reproduce/scripts/build-all.sh b/reproduce/scripts/build-all.sh
+index 4843da2..ce74786 100755
+--- a/reproduce/scripts/build-all.sh
++++ b/reproduce/scripts/build-all.sh
+@@ -3,7 +3,7 @@
+ PROJECT_ROOT=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/../../
+ 
+ # build the Flexo compiler
+-podman build -t flexo $PROJECT_ROOT
++# podman build -t flexo $PROJECT_ROOT
+ podman run -i -t --rm \
+   --mount type=bind,source="$PROJECT_ROOT"/,target=/flexo \
+   flexo \
+@@ -14,18 +14,3 @@ podman run -i -t --rm \
+   --mount type=bind,source="$PROJECT_ROOT"/,target=/flexo \
+   flexo \
+   bash -c "cd /flexo/reproduce && ./scripts/compile-circuits.sh"
+-
+-# build circuits for UPFlexo
+-podman run -i -t --rm \
+-  --mount type=bind,source="$PROJECT_ROOT"/,target=/flexo \
+-  flexo \
+-  bash -c "cd /flexo/UPFlexo && ./compile-circuits.sh"
+-
+-# build the packers
+-$PROJECT_ROOT/UPFlexo/compile-packers.sh
+-
+-# pack the `ls` program
+-podman run -i -t --rm \
+-  --mount type=bind,source="$PROJECT_ROOT"/,target=/flexo \
+-  flexo \
+-  bash -c "cd /flexo/reproduce/scripts && ./pack-all.sh"
+diff --git a/reproduce/scripts/clean-all.sh b/reproduce/scripts/clean-all.sh
+index 59fb6d2..c7c16ec 100755
+--- a/reproduce/scripts/clean-all.sh
++++ b/reproduce/scripts/clean-all.sh
+@@ -7,5 +7,3 @@ rm -rf $PROJECT_ROOT/build
+ make -C $PROJECT_ROOT/circuits clean
+ rm -rf $PROJECT_ROOT/reproduce/build
+ rm -rf $PROJECT_ROOT/reproduce/results
+-rm -rf $PROJECT_ROOT/UPFlexo/build
+-rm -rf $PROJECT_ROOT/UPFlexo/WM/build
+diff --git a/reproduce/scripts/compile-circuits.sh b/reproduce/scripts/compile-circuits.sh
+index 75006af..08ac528 100755
+--- a/reproduce/scripts/compile-circuits.sh
++++ b/reproduce/scripts/compile-circuits.sh
+@@ -80,11 +80,23 @@ compile_circuit() {
+ 
+ # compile single circuits (5.1 & 5.2)
+ compile_circuit ALU $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU.v
+-compile_circuit sha1_round $PROJECT_ROOT/circuits/SHA1 576
++compile_circuit sha1_round_composed $PROJECT_ROOT/circuits/SHA1 576
+ compile_circuit aes_round $PROJECT_ROOT/circuits/AES 448
+ compile_circuit simon25 $PROJECT_ROOT/circuits/Simon 448
+ compile_circuit simon32 $PROJECT_ROOT/circuits/Simon 448
++compile_circuit ALU8 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU8.v
++compile_circuit ALU9 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU9.v
++compile_circuit ALU10 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU10.v
++compile_circuit ALU11 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU11.v
++compile_circuit ALU12 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU12.v
++compile_circuit ALU14 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU14.v
++compile_circuit ALU16 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU16.v
++compile_circuit ALU24 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU24.v
++compile_circuit ALU32 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU32.v
++compile_circuit ALU34 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU34.v
++compile_circuit ALU36 $PROJECT_ROOT/circuits/ALU  1088 $PROJECT_ROOT/circuits/ALU/ALU36.v
+ 
+ # compile composed circuits (5.3)
+-compile_circuit sha1_2blocks $PROJECT_ROOT/circuits/SHA1 576
++compile_circuit sha1_2blocks_composed $PROJECT_ROOT/circuits/SHA1 576
+ compile_circuit aes_block $PROJECT_ROOT/circuits/AES 448
++
+diff --git a/reproduce/scripts/config-fast.csv b/reproduce/scripts/config-fast.csv
+index 3ae93fa..e256bc8 100644
+--- a/reproduce/scripts/config-fast.csv
++++ b/reproduce/scripts/config-fast.csv
+@@ -1,7 +1,7 @@
+ WM,Test window iterations,Measure trials,Measure timeout (minutes),Measure trials with EC,Measure timeout with EC (minutes)
+ ALU,1000,1000,1,500,1
+-sha1_round,1000,1000,10,500,10
++sha1_round_composed,1000,1000,10,500,10
+ aes_round,100,500,15,100,20
+ simon32,40,300,20,10,30
+-sha1_2blocks,40,0,0,10,30
++sha1_2blocks_composed,40,0,0,10,30
+ aes_block,40,0,0,10,60
+diff --git a/reproduce/scripts/config.csv b/reproduce/scripts/config.csv
+index cf14b16..b25721a 100644
+--- a/reproduce/scripts/config.csv
++++ b/reproduce/scripts/config.csv
+@@ -1,7 +1,15 @@
+ WM,Test window iterations,Measure trials,Measure timeout (minutes),Measure trials with EC,Measure timeout with EC (minutes)
+ ALU,1000,1000,5,1000,5
+-sha1_round,1000,1000,10,1000,10
++sha1_round_composed,1000,1000,10,1000,10
+ aes_round,100,300,15,100,60
+ simon32,50,300,30,20,120
+-sha1_2blocks,50,0,0,50,60
++sha1_2blocks_composed,50,0,0,50,60
+ aes_block,40,0,0,20,120
++ALU9,1000,100,5,100,0
++ALU10,1000,100,5,100,3000
++ALU11,1000,100,10,100,3000
++ALU12,1000,100,10,100,3000
++ALU14,1000,100,0,50,3000
++ALU16,1000,100,0,10,3000
++ALU24,1000,100,0,10,3000
++ALU32,1000,100,0,10,3000
+diff --git a/reproduce/scripts/extract_data.py b/reproduce/scripts/extract_data.py
+new file mode 100644
+index 0000000..e007123
+--- /dev/null
++++ b/reproduce/scripts/extract_data.py
+@@ -0,0 +1,24 @@
++from util import median_result, dict_to_csv
++from pathlib import Path
++import re
++
++pattern = re.compile(r'.*-(\d+)\.csv$')
++
++def main():
++	all_dicts = dict()
++	directory = Path('./')
++	endpath = Path("./results")
++	for result_dir in directory.glob('results_*'):
++		if result_dir.is_dir():
++			results= dict()
++			for file in sorted(result_dir.glob('*-*.csv')):
++				if file.is_file() and pattern.match(file.name):
++					results['-'.join(file.stem.split("-")[:-1])] = median_result(str(file), 2)
++			all_dicts[result_dir.name] = results
++	for (k,d) in all_dicts.items():
++		dict_to_csv(d, f"{endpath / k}.csv")
++
++
++ 
++if __name__ == "__main__":
++	main()
+diff --git a/reproduce/scripts/pack-all.sh b/reproduce/scripts/pack-all.sh
+deleted file mode 100755
+index c722e42..0000000
+--- a/reproduce/scripts/pack-all.sh
++++ /dev/null
+@@ -1,53 +0,0 @@
+-#!/bin/bash
+-
+-PROJECT_ROOT=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/../../
+-
+-# configurations
+-min_div_rounds=1
+-max_div_rounds=50
+-binary="ls"
+-
+-# create a build dir if not exist
+-if ! test -d $PROJECT_ROOT/reproduce/build; then
+-    mkdir $PROJECT_ROOT/reproduce/build
+-fi
+-
+-pack_binary() {
+-    local circuit="$1"
+-    local dir="$2"
+-    local output_dir="$PROJECT_ROOT/reproduce/build/$binary-$circuit"
+-
+-    # create a dir for the circuit if not exist
+-    if ! test -d $output_dir; then
+-        mkdir $output_dir
+-    fi
+-
+-    # run packers with different transient window sizes
+-    for div_round in $(seq $min_div_rounds $max_div_rounds); do        
+-        name="upx-${circuit}-${div_round}.elf"
+-        packer=$dir/$circuit/$name
+-        output=$output_dir/$binary-$circuit-$div_round.elf
+-
+-        # ensure the packer exists
+-        if [ ! -f $packer ]; then
+-            echo "Packer ${name} does not exist!"
+-            echo "Please compile the packers before running this script."
+-            exit 1
+-        fi
+-
+-        # delete existing output files
+-        if [ -f $output ]; then
+-            rm $output
+-        fi
+-
+-        # run the packer
+-        $packer $PROJECT_ROOT/reproduce/$binary -o $output_dir/$binary-$circuit-$div_round.elf > /dev/null
+-
+-        echo -ne "Progress ($circuit): ${div_round}/${max_div_rounds}\r"
+-    done
+-    echo -ne '\n'
+-}
+-
+-pack_binary simon25_CTR $PROJECT_ROOT/UPFlexo/build
+-pack_binary simon32_CTR $PROJECT_ROOT/UPFlexo/build
+-pack_binary AES_CTR $PROJECT_ROOT/UPFlexo/build
+diff --git a/reproduce/scripts/run_WM.py b/reproduce/scripts/run_WM.py
+index a0b6889..5b442ae 100644
+--- a/reproduce/scripts/run_WM.py
++++ b/reproduce/scripts/run_WM.py
+@@ -12,8 +12,9 @@ file_path = os.path.dirname(os.path.abspath(__file__))
+ exp_path = os.path.join(file_path, "../results")
+ MIN_DIV_ROUNDS = 1
+ MAX_DIV_ROUNDS = 50
+-MEASURE_ITER = 1000
++MEASURE_ITER = 1050
+ MIN_EC_ACC = 0.95
++CPU = 7
+ 
+ 
+ def get_best_window(circuit: str, config: util.Config, fast: False) -> List[int]:
+@@ -39,7 +40,7 @@ def get_best_window(circuit: str, config: util.Config, fast: False) -> List[int]
+             accs, runtimes = [], []
+             for _ in range(5):
+                 got = util.run_circuit(
+-                    circuit_path + f"-{i}.elf", 200 if fast else MEASURE_ITER, False, -1
++                    CPU, circuit_path + f"-{i}.elf", 200 if fast else MEASURE_ITER, False, -1
+                 )
+                 [l.append(v) for l, v in zip([accs, runtimes], got)]
+ 
+@@ -79,14 +80,14 @@ def get_best_window(circuit: str, config: util.Config, fast: False) -> List[int]
+ 
+             # make sure the circuit is not extremely slow
+             try:
+-                util.run_circuit(filename, config.test_iter // 10, True, timeout / 10)
++                util.run_circuit(CPU, filename, config.test_iter // 10, True, timeout / 10)
+             except subprocess.TimeoutExpired:
+                 continue
+ 
+             # test the accuracy with full iterations
+             try:
+                 acc, runtime = util.run_circuit(
+-                    filename, config.test_iter, True, timeout
++                    CPU, filename, config.test_iter, True, timeout
+                 )
+             except subprocess.TimeoutExpired:
+                 continue
+@@ -141,7 +142,7 @@ def measure_acc_runtime(circuit: str, config: util.Config, window_size: int, ec:
+         )
+         try:
+             left = None if end is None else (end - time.time())
+-            acc, runtime = util.run_circuit(circuit_path, MEASURE_ITER, ec, left)
++            acc, runtime = util.run_circuit(CPU, circuit_path, MEASURE_ITER, ec, left)
+             with open(result_path, "a") as ofile:
+                 ofile.write(f"{int(time.time())},{acc:.2f},{runtime:.2f}\n")
+         except subprocess.TimeoutExpired:
+diff --git a/reproduce/scripts/run_packed.py b/reproduce/scripts/run_packed.py
+deleted file mode 100644
+index 2c4f0cb..0000000
+--- a/reproduce/scripts/run_packed.py
++++ /dev/null
+@@ -1,153 +0,0 @@
+-"""Run packed programs to reporduce the results on the paper (section 6)"""
+-
+-import argparse
+-import os
+-import subprocess
+-import time
+-import util
+-from typing import List, Dict, Tuple
+-
+-file_path = os.path.dirname(os.path.abspath(__file__))
+-exp_path = os.path.join(file_path, "../results")
+-MEASURE_ITER = 100
+-MAX_TIMEOUT = 3600
+-
+-
+-def measure_runtime(circuit: str, window_size: int, timeout: int):
+-    """Measure the runtime of a packed program"""
+-    circuit_path = (
+-        os.path.join(file_path, "../build", circuit, circuit) + f"-{window_size}.elf"
+-    )
+-    result_path = os.path.join(exp_path, circuit + f"-{window_size}.csv")
+-
+-    # create the result csv file if not exist
+-    if not os.path.exists(result_path):
+-        with open(result_path, "w") as ofile:
+-            ofile.write("Timestamp,Runtime (s)\n")
+-
+-    # stop measuring when the timeout expires
+-    end = (time.time() + timeout * 60) if timeout != -1 else None
+-
+-    # run the circuit and append results to `result_path`
+-    for t in range(MEASURE_ITER):
+-        util.rprint(f"Running {circuit}: {t + 1}/{MEASURE_ITER}")
+-        try:
+-            left = None if end is None else (end - time.time())
+-            single_timeout = left if left is None or left < MAX_TIMEOUT else MAX_TIMEOUT
+-            begin = time.time()
+-            subprocess.run(
+-                circuit_path,
+-                stdout=subprocess.DEVNULL,
+-                check=True,
+-                timeout=single_timeout,
+-            )
+-            with open(result_path, "a") as ofile:
+-                ofile.write(f"{int(time.time())},{time.time() - begin:.2f}\n")
+-        except subprocess.TimeoutExpired:
+-            print(f"[!] Timeout expires while measuring {circuit}")
+-            if left is not None and left < MAX_TIMEOUT:
+-                return
+-        except subprocess.CalledProcessError:
+-            print(f"[!] {circuit} unpacking failed".ljust(80))
+-
+-    print(f"[*] Done measuring {circuit}".ljust(80))
+-
+-
+-def output_median(circuit: str, window_size: int) -> str:
+-    """Output the median runtime of a packed program"""
+-    result_path = os.path.join(exp_path, circuit + f"-{window_size}.csv")
+-    if not os.path.exists(result_path):
+-        return ""
+-
+-    runtime = util.median_result(result_path, 1)[0]
+-    output = f"{circuit},".ljust(15)
+-    output += f"{runtime:.2f} s".rjust(15)
+-    return output + "\n"
+-
+-
+-def report(circuits: List[Tuple[str, int, str]], best_window: Dict[str, List[int]]):
+-    output = "Circuit,".ljust(15) + "Runtime".rjust(15) + "\n"
+-    for packer, _, ckt in circuits:
+-        if ckt not in best_window:
+-            print(f"[!] Missing experiment results for {ckt}")
+-            continue
+-
+-        output += output_median(binary + "-" + packer, best_window[ckt][1])
+-
+-    print(output)
+-
+-
+-if __name__ == "__main__":
+-    parser = argparse.ArgumentParser(
+-        description="Run packed: measure the runtime of a program packed by UPFlexo."
+-    )
+-    parser.add_argument(
+-        "--aes-timeout",
+-        action="store",
+-        help="Set the timeout of AES in minutes (default: 120)",
+-        default=120,
+-        type=int,
+-    )
+-    parser.add_argument(
+-        "--simon-timeout",
+-        action="store",
+-        help="Set the timeout of Simon in minutes (default: 120)",
+-        default=120,
+-        type=int,
+-    )
+-    parser.add_argument(
+-        "--simon25",
+-        action="store_true",
+-        help="Run Simon with 25 rounds instead of 32 rounds",
+-    )
+-    parser.add_argument(
+-        "-r",
+-        "--report",
+-        action="store_true",
+-        help="Report the existing results without running the circuits again",
+-    )
+-    args = parser.parse_args()
+-
+-    # create the result directory if not exists
+-    if not os.path.exists(exp_path):
+-        os.mkdir(exp_path)
+-
+-    fast = False
+-    binary = "ls"
+-    circuits = [
+-        (
+-            "AES_CTR",
+-            args.aes_timeout,
+-            "aes_block",
+-        ),
+-        (
+-            "simon25_CTR" if args.simon25 else "simon32_CTR",
+-            args.simon_timeout,
+-            "simon25" if args.simon25 else "simon32",
+-        ),
+-    ]
+-
+-    # get or measure the best transient window size for each circuit
+-    window_file = os.path.join(exp_path, "best_window.csv")
+-    if os.path.exists(window_file):
+-        best_window = util.csv_to_dict(window_file)
+-    else:
+-        print("[!] best_window.csv not found in results folder.")
+-        print("[!] Please run `run_WM.py` before running this script.")
+-        exit(1)
+-
+-    # report existing results without running experiments
+-    if args.report:
+-        report(circuits, best_window)
+-        exit()
+-
+-    # measure runtime
+-    for packer, timeout, ckt in circuits:
+-        if ckt not in best_window:
+-            print(f"[!] The best window size of circuit {ckt} is not recorded")
+-            print("[!] Please run `run_WM.py` to determine the best window size")
+-            continue
+-        measure_runtime(binary + "-" + packer, best_window[ckt][1], timeout)
+-
+-    # report median accuracy and runtime
+-    report(circuits, best_window)
+diff --git a/reproduce/scripts/test_install.py b/reproduce/scripts/test_install.py
+deleted file mode 100644
+index b8e7ae7..0000000
+--- a/reproduce/scripts/test_install.py
++++ /dev/null
+@@ -1,64 +0,0 @@
+-"""Test all circuits are generated correctly"""
+-
+-import os
+-from hashlib import sha256
+-
+-file_path = os.path.dirname(os.path.abspath(__file__))
+-base_path = os.path.join(file_path, "../../")
+-warnings = 0
+-
+-
+-def check_files(path: str, hashes: dict, ext=".elf"):
+-    """Ensure all 50 files exist for a circuit, and there is no hash collision"""
+-    global warnings
+-
+-    for i in range(50):
+-        filename = os.path.join(base_path, path + f"-{i+1}" + ext)
+-        filename = os.path.normpath(filename)
+-        if not os.path.exists(filename):
+-            print(f"[!] Installation incomplete. File {filename} does not exist!")
+-            exit()
+-
+-        with open(filename, "rb") as infile:
+-            data = infile.read()
+-        file_hash = sha256(data).hexdigest()
+-        if file_hash in hashes:
+-            print(
+-                f"[!] Warning: hash collision found for {filename} and {hashes[file_hash]}"
+-            )
+-            warnings += 1
+-        else:
+-            hashes[file_hash] = filename
+-
+-
+-if __name__ == "__main__":
+-    hashes = {}
+-
+-    # circuits
+-    check_files("reproduce/build/ALU/ALU", hashes)
+-    check_files("reproduce/build/sha1_round/sha1_round", hashes)
+-    check_files("reproduce/build/aes_round/aes_round", hashes)
+-    check_files("reproduce/build/simon25/simon25", hashes)
+-    check_files("reproduce/build/simon32/simon32", hashes)
+-    check_files("reproduce/build/sha1_2blocks/sha1_2blocks", hashes)
+-    check_files("reproduce/build/aes_block/aes_block", hashes)
+-
+-    # packer circuits
+-    check_files("UPFlexo/WM/build/simon25_CTR/simon25_CTR", hashes, ".S")
+-    check_files("UPFlexo/WM/build/simon32_CTR/simon32_CTR", hashes, ".S")
+-    check_files("UPFlexo/WM/build/AES_CTR/AES_CTR", hashes, ".S")
+-
+-    # packers
+-    check_files("UPFlexo/build/simon25_CTR/upx-simon25_CTR", hashes)
+-    check_files("UPFlexo/build/simon32_CTR/upx-simon32_CTR", hashes)
+-    check_files("UPFlexo/build/AES_CTR/upx-AES_CTR", hashes)
+-
+-    # packed executables
+-    check_files("reproduce/build/ls-simon25_CTR/ls-simon25_CTR", hashes)
+-    check_files("reproduce/build/ls-simon32_CTR/ls-simon32_CTR", hashes)
+-    check_files("reproduce/build/ls-AES_CTR/ls-AES_CTR", hashes)
+-
+-    if warnings == 0:
+-        print("[*] Test passed. Installed successfully.")
+-    else:
+-        print(f"[*] Test passed with {warnings} warnings.")
+diff --git a/reproduce/scripts/util.py b/reproduce/scripts/util.py
+index 5fc2696..504b672 100644
+--- a/reproduce/scripts/util.py
++++ b/reproduce/scripts/util.py
+@@ -84,7 +84,7 @@ def parse_output(output: str) -> Tuple[float, float]:
+ 
+ 
+ def run_circuit(
+-    circuit: str, iters: int, ec: bool, timeout: int | float = -1
++    cpu: int, circuit: str, iters: int, ec: bool, timeout: int | float = -1
+ ) -> Tuple[float, float]:
+     """
+     Measure the accuracy and runtime of a circuit.
+@@ -96,7 +96,7 @@ def run_circuit(
+     if timeout == 0:
+         return [0.0, 0.0]
+ 
+-    cmd = [circuit, "-t", str(iters)]
++    cmd = ["taskset", "-c", str(cpu), circuit, "-t", str(iters)]
+     if ec:
+         cmd.append("-r")
+ 
+diff --git a/run.sh b/run.sh
+new file mode 100755
+index 0000000..4887dee
+--- /dev/null
++++ b/run.sh
+@@ -0,0 +1,30 @@
++#!/bin/bash
++
++FOLDER="$1"
++shift
++
++(
++	podman run -i -t --rm \
++	--mount type=bind,source="$(pwd)"/,target=/flexo \
++	flexo \
++	bash -c "cd /flexo && \\
++		\"./build.sh\"
++	"
++) &&
++(
++	podman run -i -t --rm \
++	--mount type=bind,source="$(pwd)"/,target=/flexo \
++	flexo \
++	bash -c "cd /flexo && \\
++		\"/flexo/$FOLDER/build.sh\"
++	"
++) &&
++(
++	for file in $(ls -v "$FOLDER"/*.elf 2>/dev/null); do
++		if [[ -x "$file" ]]; then
++			taskset -c 7 ./"$file" "$@"
++		else
++			echo "Skipping $file (not executable)"
++		fi
++	done
++)
+diff --git a/yosys b/yosys
+deleted file mode 160000
+index c7d7cfe..0000000
+--- a/yosys
++++ /dev/null
+@@ -1 +0,0 @@
+-Subproject commit c7d7cfeaca6c79b871aca39c0878cf189390c497

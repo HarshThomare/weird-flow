@@ -1,0 +1,19 @@
+# Tools
+
+| Directory | Description |
+|---|---|
+| [`tlb-info/`](tlb-info/) | Reads TLB topology (levels, sets, ways, page sizes) from CPUID leaf 0x18 |
+| [`tlb-test/`](tlb-test/) | Tools for measuring TLB timing and transient window behavior |
+
+## tlb-info
+
+Queries **CPUID leaf 0x18** to report detailed TLB topology: levels, cache types (data/instruction/unified), number of entries, sets, ways, and supported page sizes. See [`tlb-info/README.md`](tlb-info/README.md).
+
+## tlb-test
+
+Two tools for characterizing TLB timing and transient execution windows. Both require the kernel module to be loaded. See [`tlb-test/README.md`](tlb-test/README.md).
+
+| Tool | Description |
+|---|---|
+| `threshold` | Measures L1/L2 TLB hit and PTW latencies; recommends a hit/miss threshold |
+| `test_window` | Sweeps transient window sizes and counts Page Table Walk completions per window |
