@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="876" viewBox="0 0 760 876">
+<rect width="100%" height="100%" fill="#fbfbfb"/>
+<style>text{font-family:ui-monospace,monospace;font-size:12px;fill:#222}</style>
+<text x="56" y="20">Register renaming (fraction of copies with a distinct rN rotation)</text>
+<line x1="56" y1="28" x2="56" y2="168" stroke="#999"/>
+<line x1="56" y1="168" x2="744" y2="168" stroke="#999"/>
+<line x1="56" y1="168.0" x2="744" y2="168.0" stroke="#eee"/>
+<text x="8" y="172.0">0.0</text>
+<line x1="56" y1="98.0" x2="744" y2="98.0" stroke="#eee"/>
+<text x="8" y="102.0">0.5</text>
+<line x1="56" y1="28.0" x2="744" y2="28.0" stroke="#eee"/>
+<text x="8" y="32.0">1.0</text>
+<text x="56" y="196">fraction altered</text>
+<text x="56" y="212">0 … 1</text>
+<polyline fill="none" stroke="#1b4f72" stroke-width="2" points="56.0,28.0 228.0,63.0 400.0,98.0 572.0,133.0 744.0,168.0"/>
+<circle cx="56.0" cy="28.0" r="2.5" fill="#1b4f72"/>
+<circle cx="228.0" cy="63.0" r="2.5" fill="#1b4f72"/>
+<circle cx="400.0" cy="98.0" r="2.5" fill="#1b4f72"/>
+<circle cx="572.0" cy="133.0" r="2.5" fill="#1b4f72"/>
+<circle cx="744.0" cy="168.0" r="2.5" fill="#1b4f72"/>
+<polyline fill="none" stroke="#b03a2e" stroke-width="2" points="56.0,28.0 228.0,28.0 400.0,28.0 572.0,28.0 744.0,28.0"/>
+<circle cx="56.0" cy="28.0" r="2.5" fill="#b03a2e"/>
+<circle cx="228.0" cy="28.0" r="2.5" fill="#b03a2e"/>
+<circle cx="400.0" cy="28.0" r="2.5" fill="#b03a2e"/>
+<circle cx="572.0" cy="28.0" r="2.5" fill="#b03a2e"/>
+<circle cx="744.0" cy="28.0" r="2.5" fill="#b03a2e"/>
+<polyline fill="none" stroke="#1e8449" stroke-width="2" stroke-dasharray="4 3" points="56.0,28.0 228.0,28.0 400.0,28.0 572.0,28.0 744.0,28.0"/>
+<circle cx="56.0" cy="28.0" r="2.5" fill="#1e8449"/>
+<circle cx="228.0" cy="28.0" r="2.5" fill="#1e8449"/>
+<circle cx="400.0" cy="28.0" r="2.5" fill="#1e8449"/>
+<circle cx="572.0" cy="28.0" r="2.5" fill="#1e8449"/>
+<circle cx="744.0" cy="28.0" r="2.5" fill="#1e8449"/>
+<rect x="480" y="32" width="10" height="10" fill="#1b4f72"/>
+<text x="496" y="42">ngram raw recall</text>
+<rect x="480" y="48" width="10" height="10" fill="#b03a2e"/>
+<text x="496" y="58">ngram abstract recall</text>
+<rect x="480" y="64" width="10" height="10" fill="#1e8449"/>
+<text x="496" y="74">ngram abstract non-nop</text>
+<text x="56" y="230">Instruction reordering (fraction of copies with a distinct full shuffle)</text>
+<line x1="56" y1="238" x2="56" y2="378" stroke="#999"/>
+<line x1="56" y1="378" x2="744" y2="378" stroke="#999"/>
+<line x1="56" y1="378.0" x2="744" y2="378.0" stroke="#eee"/>
+<text x="8" y="382.0">0.0</text>
+<line x1="56" y1="308.0" x2="744" y2="308.0" stroke="#eee"/>
+<text x="8" y="312.0">0.5</text>
+<line x1="56" y1="238.0" x2="744" y2="238.0" stroke="#eee"/>
+<text x="8" y="242.0">1.0</text>
+<text x="56" y="406">fraction altered</text>
+<text x="56" y="422">0 … 1</text>
+<polyline fill="none" stroke="#1b4f72" stroke-width="2" points="56.0,238.0 228.0,273.0 400.0,308.0 572.0,343.0 744.0,378.0"/>
+<circle cx="56.0" cy="238.0" r="2.5" fill="#1b4f72"/>
+<circle cx="228.0" cy="273.0" r="2.5" fill="#1b4f72"/>
+<circle cx="400.0" cy="308.0" r="2.5" fill="#1b4f72"/>
+<circle cx="572.0" cy="343.0" r="2.5" fill="#1b4f72"/>
+<circle cx="744.0" cy="378.0" r="2.5" fill="#1b4f72"/>
+<polyline fill="none" stroke="#b03a2e" stroke-width="2" points="56.0,238.0 228.0,273.0 400.0,308.0 572.0,343.0 744.0,378.0"/>
+<circle cx="56.0" cy="238.0" r="2.5" fill="#b03a2e"/>
+<circle cx="228.0" cy="273.0" r="2.5" fill="#b03a2e"/>
+<circle cx="400.0" cy="308.0" r="2.5" fill="#b03a2e"/>
+<circle cx="572.0" cy="343.0" r="2.5" fill="#b03a2e"/>
+<circle cx="744.0" cy="378.0" r="2.5" fill="#b03a2e"/>
+<polyline fill="none" stroke="#1e8449" stroke-width="2" stroke-dasharray="4 3" points="56.0,238.0 228.0,273.0 400.0,308.0 572.0,343.0 744.0,378.0"/>
+<circle cx="56.0" cy="238.0" r="2.5" fill="#1e8449"/>
+<circle cx="228.0" cy="273.0" r="2.5" fill="#1e8449"/>
+<circle cx="400.0" cy="308.0" r="2.5" fill="#1e8449"/>
+<circle cx="572.0" cy="343.0" r="2.5" fill="#1e8449"/>
+<circle cx="744.0" cy="378.0" r="2.5" fill="#1e8449"/>
+<rect x="480" y="242" width="10" height="10" fill="#1b4f72"/>
+<text x="496" y="252">ngram raw recall</text>
+<rect x="480" y="258" width="10" height="10" fill="#b03a2e"/>
+<text x="496" y="268">ngram abstract recall</text>
+<rect x="480" y="274" width="10" height="10" fill="#1e8449"/>
+<text x="496" y="284">ngram abstract non-nop</text>
+<text x="56" y="440">Junk insertion (fraction of copies with a distinct nop after every instruction)</text>
+<line x1="56" y1="448" x2="56" y2="588" stroke="#999"/>
+<line x1="56" y1="588" x2="744" y2="588" stroke="#999"/>
+<line x1="56" y1="588.0" x2="744" y2="588.0" stroke="#eee"/>
+<text x="8" y="592.0">0.0</text>
+<line x1="56" y1="518.0" x2="744" y2="518.0" stroke="#eee"/>
+<text x="8" y="522.0">0.5</text>
+<line x1="56" y1="448.0" x2="744" y2="448.0" stroke="#eee"/>
+<text x="8" y="452.0">1.0</text>
+<text x="56" y="616">fraction altered</text>
+<text x="56" y="632">0 … 1</text>
+<polyline fill="none" stroke="#1b4f72" stroke-width="2" points="56.0,448.0 228.0,448.0 400.0,448.0 572.0,448.0 744.0,448.0"/>
+<circle cx="56.0" cy="448.0" r="2.5" fill="#1b4f72"/>
+<circle cx="228.0" cy="448.0" r="2.5" fill="#1b4f72"/>
+<circle cx="400.0" cy="448.0" r="2.5" fill="#1b4f72"/>
+<circle cx="572.0" cy="448.0" r="2.5" fill="#1b4f72"/>
+<circle cx="744.0" cy="448.0" r="2.5" fill="#1b4f72"/>
+<polyline fill="none" stroke="#b03a2e" stroke-width="2" points="56.0,448.0 228.0,448.0 400.0,448.0 572.0,448.0 744.0,448.0"/>
+<circle cx="56.0" cy="448.0" r="2.5" fill="#b03a2e"/>
+<circle cx="228.0" cy="448.0" r="2.5" fill="#b03a2e"/>
+<circle cx="400.0" cy="448.0" r="2.5" fill="#b03a2e"/>
+<circle cx="572.0" cy="448.0" r="2.5" fill="#b03a2e"/>
+<circle cx="744.0" cy="448.0" r="2.5" fill="#b03a2e"/>
+<polyline fill="none" stroke="#1e8449" stroke-width="2" stroke-dasharray="4 3" points="56.0,448.0 228.0,448.0 400.0,448.0 572.0,448.0 744.0,448.0"/>
+<circle cx="56.0" cy="448.0" r="2.5" fill="#1e8449"/>
+<circle cx="228.0" cy="448.0" r="2.5" fill="#1e8449"/>
+<circle cx="400.0" cy="448.0" r="2.5" fill="#1e8449"/>
+<circle cx="572.0" cy="448.0" r="2.5" fill="#1e8449"/>
+<circle cx="744.0" cy="448.0" r="2.5" fill="#1e8449"/>
+<rect x="480" y="452" width="10" height="10" fill="#1b4f72"/>
+<text x="496" y="462">ngram raw recall</text>
+<rect x="480" y="468" width="10" height="10" fill="#b03a2e"/>
+<text x="496" y="478">ngram abstract recall</text>
+<rect x="480" y="484" width="10" height="10" fill="#1e8449"/>
+<text x="496" y="494">ngram abstract non-nop</text>
+<text x="56" y="650">Nop sled length on the eight real DualGate bodies</text>
+<line x1="56" y1="658" x2="56" y2="798" stroke="#999"/>
+<line x1="56" y1="798" x2="744" y2="798" stroke="#999"/>
+<line x1="56" y1="798.0" x2="744" y2="798.0" stroke="#eee"/>
+<text x="8" y="802.0">0.0</text>
+<line x1="56" y1="728.0" x2="744" y2="728.0" stroke="#eee"/>
+<text x="8" y="732.0">0.5</text>
+<line x1="56" y1="658.0" x2="744" y2="658.0" stroke="#eee"/>
+<text x="8" y="662.0">1.0</text>
+<text x="56" y="826">sled nops</text>
+<text x="56" y="842">0 … 256</text>
+<polyline fill="none" stroke="#b03a2e" stroke-width="2" points="56.0,675.5 77.5,658.0 142.0,658.0 400.0,658.0 744.0,658.0"/>
+<circle cx="56.0" cy="675.5" r="2.5" fill="#b03a2e"/>
+<circle cx="77.5" cy="658.0" r="2.5" fill="#b03a2e"/>
+<circle cx="142.0" cy="658.0" r="2.5" fill="#b03a2e"/>
+<circle cx="400.0" cy="658.0" r="2.5" fill="#b03a2e"/>
+<circle cx="744.0" cy="658.0" r="2.5" fill="#b03a2e"/>
+<polyline fill="none" stroke="#1e8449" stroke-width="2" stroke-dasharray="4 3" points="56.0,675.5 77.5,675.5 142.0,675.5 400.0,675.5 744.0,675.5"/>
+<circle cx="56.0" cy="675.5" r="2.5" fill="#1e8449"/>
+<circle cx="77.5" cy="675.5" r="2.5" fill="#1e8449"/>
+<circle cx="142.0" cy="675.5" r="2.5" fill="#1e8449"/>
+<circle cx="400.0" cy="675.5" r="2.5" fill="#1e8449"/>
+<circle cx="744.0" cy="675.5" r="2.5" fill="#1e8449"/>
+<polyline fill="none" stroke="#1b4f72" stroke-width="2" points="56.0,658.0 77.5,658.0 142.0,658.0 400.0,658.0 744.0,658.0"/>
+<circle cx="56.0" cy="658.0" r="2.5" fill="#1b4f72"/>
+<circle cx="77.5" cy="658.0" r="2.5" fill="#1b4f72"/>
+<circle cx="142.0" cy="658.0" r="2.5" fill="#1b4f72"/>
+<circle cx="400.0" cy="658.0" r="2.5" fill="#1b4f72"/>
+<circle cx="744.0" cy="658.0" r="2.5" fill="#1b4f72"/>
+<rect x="480" y="662" width="10" height="10" fill="#b03a2e"/>
+<text x="496" y="672">unique bodies recall</text>
+<rect x="480" y="678" width="10" height="10" fill="#1e8449"/>
+<text x="496" y="688">unique bodies non-nop</text>
+<rect x="480" y="694" width="10" height="10" fill="#1b4f72"/>
+<text x="496" y="704">same body recall</text>
+</svg>

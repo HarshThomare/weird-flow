@@ -1,0 +1,231 @@
+Repeat miner
+
+Core question: does repetition alone separate weird gates from everything else, and at what granularity?
+
+Ground truth is DualGate symbols in Flexo objects and jmpreg symbols in TAE binaries, recorded before strip --strip-all. The miner sees only the stripped .text bytes. A repeated cluster is an exact feature key with count >= 2. Recall is the fraction of ground-truth gates whose instructions are at least 50% covered. recall_nonop drops nop instructions from that fraction. recall_nonop_90 requires 90% of the non-nop instructions. Purity is the fraction of repeated-cluster members whose span overlaps a gate. FPR is the fraction of instructions outside every gate that still fall in a repeated cluster (on a binary with no gates, that is just instruction coverage).
+
+Ground truth
+Flexo objects: 18. TAE binaries: 6.
+Build failed: clang-14 on test-wm.ll: -opaque-pointers mode %struct.argp = type { ptr, ptr, ptr, ptr, ptr, ptr, ptr }                       ^ /u/hthomare/weird-flow/third_party/flexo/circuits/gates/test-wm.ll:19:23: er
+Build failed: tae-clang-14-O2-rerun1: /tmp/Util-8e9450.s: Assembler messages: /tmp/Util-8e9450.s:3: Warning: unrecognized section type /tmp/WeirdMachine-f1b581.s: Assembler messages: /tmp/WeirdMachine-f1b581.s:25: Warn
+Shipped TAE rerun1 and rerun3 gates.elf are byte-identical. RERUN does not change this pair of shipped images, so the parameter axis is the fresh rerun1 vs rerun3 rebuild plus the Flexo stock/dcache/tlb IR, which were produced with different weird-machine sizes.
+Gate alignment (symbol span contains at least one instruction):
+  flexo-and-and-clang-17-O0: gates=1 aligned=1 insns=948
+  flexo-and-and-clang-17-O1: gates=1 aligned=1 insns=1381
+  flexo-and-and-clang-17-O2: gates=1 aligned=1 insns=1442
+  flexo-and-and-clang-17-O3: gates=1 aligned=1 insns=1442
+  flexo-and-and-clang-17-Os: gates=1 aligned=1 insns=1442
+  flexo-test-stock-clang-17-O0: gates=8 aligned=8 insns=6296
+  flexo-test-stock-clang-17-O1: gates=8 aligned=8 insns=10138
+  flexo-test-stock-clang-17-O2: gates=8 aligned=8 insns=10407
+  flexo-test-stock-clang-17-O3: gates=8 aligned=8 insns=10658
+  flexo-test-stock-clang-17-Os: gates=8 aligned=8 insns=10407
+  flexo-alu-alu-clang-17-O0: gates=12 aligned=12 insns=9363
+  flexo-alu-alu-clang-17-O2: gates=12 aligned=12 insns=25782
+  flexo-alu-alu-clang-17-O3: gates=12 aligned=12 insns=25782
+  flexo-sbox-sbox-clang-17-O0: gates=28 aligned=28 insns=23920
+  flexo-sbox-sbox-clang-17-O2: gates=28 aligned=28 insns=88409
+  flexo-sbox-sbox-clang-17-O3: gates=28 aligned=28 insns=88474
+  flexo-test-dcache-clang-17-O2: gates=8 aligned=8 insns=10476
+  flexo-test-tlb-clang-17-O2: gates=9 aligned=9 insns=12399
+  tae-clang-17-O0-rerun1: gates=1024 aligned=1024 insns=136048
+  tae-clang-17-O2-rerun1: gates=1024 aligned=1024 insns=136760
+  tae-clang-17-O3-rerun1: gates=1024 aligned=1024 insns=136892
+  tae-clang-17-O2-rerun3: gates=1024 aligned=1024 insns=136760
+  tae-g++-11-O2-rerun1: gates=1024 aligned=1024 insns=136963
+  tae-shipped-rerun1: gates=1024 aligned=1024 insns=136691
+
+Granularity on Flexo test -O2 (clang-17, stock IR) and TAE gates -O2.
+kind        abs  recall  nonop  nonop90  mean_logic  purity  fpr    clusters
+[flexo-test-stock-clang-17-O2]
+bb     n=6  False 0.00    0.00   0.00     0.13       0.36    0.09   4
+bb     n=6  True  0.25    0.25   0.25     0.31       0.11    0.33   19
+ngram  n=4  False 1.00    0.62   0.00     0.57       0.44    0.91   383
+ngram  n=4  True  1.00    1.00   1.00     1.00       0.43    0.97   348
+ngram  n=6  False 1.00    0.62   0.00     0.56       0.44    0.89   364
+ngram  n=6  True  1.00    1.00   0.88     0.97       0.43    0.96   411
+cfg    n=6  False 0.00    0.00   0.00     0.00       0.00    0.00   1
+cfg    n=6  True  0.00    0.00   0.00     0.00       0.00    0.07   13
+ngram n=6 drop-nop abs=False recall=0.00 nonop=0.62 purity=0.06 fpr=0.23 clusters=363
+ngram n=6 drop-nop abs=True recall=0.00 nonop=1.00 purity=0.12 fpr=0.30 clusters=410
+[flexo-sbox-sbox-clang-17-O2]
+bb     n=6  False 0.00    0.00   0.00     0.19       1.00    0.00   6
+bb     n=6  True  0.36    0.36   0.29     0.46       0.35    0.35   31
+ngram  n=4  False 1.00    0.96   0.39     0.83       0.19    0.93   780
+ngram  n=4  True  1.00    1.00   1.00     1.00       0.18    0.99   379
+ngram  n=6  False 1.00    0.96   0.14     0.73       0.19    0.90   519
+ngram  n=6  True  1.00    1.00   1.00     1.00       0.18    0.99   553
+cfg    n=6  False 0.00    0.00   0.00     0.00       n/a     0.00   0
+cfg    n=6  True  0.14    0.14   0.00     0.13       0.17    0.21   13
+ngram n=6 drop-nop abs=False recall=0.00 nonop=0.96 purity=0.36 fpr=0.04 clusters=518
+ngram n=6 drop-nop abs=True recall=0.00 nonop=1.00 purity=0.13 fpr=0.14 clusters=552
+[tae-clang-17-O2-rerun1]
+bb     n=6  False 1.00    1.00   1.00     1.00       1.00    0.00   1
+bb     n=6  True  1.00    1.00   1.00     1.00       0.02    0.98   20
+ngram  n=4  False 1.00    1.00   1.00     1.00       0.74    0.01   63
+ngram  n=4  True  1.00    1.00   1.00     1.00       0.02    1.00   161
+ngram  n=6  False 1.00    1.00   1.00     1.00       0.77    0.01   59
+ngram  n=6  True  1.00    1.00   1.00     1.00       0.02    1.00   140
+cfg    n=6  False 1.00    1.00   1.00     1.00       0.95    0.00   3
+cfg    n=6  True  1.00    1.00   1.00     1.00       0.02    0.98   24
+ngram n=6 drop-nop abs=False recall=1.00 nonop=1.00 purity=0.89 fpr=0.00 clusters=57
+ngram n=6 drop-nop abs=True recall=1.00 nonop=1.00 purity=0.02 fpr=0.99 clusters=138
+
+Opt sweep, Flexo test, n-gram-6 abstract:
+opt  recall  nonop  nonop90  mean_logic  purity  fpr
+O0   1.00    0.88   0.88     0.91       0.73    0.90
+O1   1.00    1.00   0.88     0.97       0.44    0.97
+O2   1.00    1.00   0.88     0.97       0.43    0.96
+O3   1.00    1.00   0.88     0.97       0.42    0.97
+Os   1.00    1.00   0.88     0.97       0.43    0.96
+Build parameters, Flexo test -O2, n-gram-6 abstract:
+  stock    recall=1.00 nonop=1.00 purity=0.43 fpr=0.96 gates=8
+  dcache   recall=1.00 nonop=1.00 purity=0.43 fpr=0.96 gates=8
+  tlb      recall=1.00 nonop=1.00 purity=0.40 fpr=0.97 gates=9
+and.ll has a single DualGate and n-gram-6 abstract recall is still 1.00. The sled repeats inside that one function, so the miner does not need a second gate.
+ALU -O2 n-gram-6 abstract recall=1.00 nonop=1.00 mean_logic=1.00 purity=0.26.
+
+What the numbers say about granularity:
+On Flexo test -O2 the bodies are mostly a shared nop sled (recall 1.00 with nops in the denominator, non-nop recall 1.00, mean logic coverage 0.97, 90% bar 0.88).
+Dropping nops from the coverage test does not by itself erase recall, so some non-nop bytes are shared too.
+Deleting nop-only clusters moves all-insn recall from 1.00 to 0.00 and leaves non-nop recall at 1.00.
+The 50% bar over every byte, nops included, is what the sled was carrying. The non-nop instructions stay covered by repeated logic, and abstraction is what pushes that coverage to the whole gate.
+Same binary, abstract features: basic-block recall 0.25 non-nop 0.25; CFG-edge recall 0.00 non-nop 0.00; 4-gram recall 1.00 non-nop 1.00; 6-gram raw recall 1.00 non-nop 0.62 purity 0.44 versus abstract purity 0.43.
+Basic blocks are coarser than the repeated fragment: a whole gate-plus-fallthrough rarely matches another gate, so block keys miss gates that n-grams hit.
+Abstraction raises non-nop recall: gates share an instruction shape but not concrete registers or immediates.
+TAE -O2 n-gram-6 raw recall 1.00 non-nop 1.00 purity 0.77 fpr 0.01 clusters 59. Abstract: recall 1.00 non-nop 1.00 purity 0.02 fpr 1.00 clusters 140.
+Constant abstraction lowers TAE purity. The decode table is thousands of `mov immediate; ret` sites; once the immediate is erased they cluster, and they are not jmpreg gates.
+The jmpreg gates themselves are one repeated `jmp` plus a fixed pad, so raw repetition recalls them without any weirdness test. That is recall of a clone, not a test that the clone is weird.
+
+Obfuscation
+8 DualGate bodies from test.elf; direct calls rewritten to call *%r12 so copies do not embed distinct absolute targets. Rename rotates ['r8', 'r9', 'r10', 'r11', 'r12', 'r13', 'r14', 'r15']. Reorder is a distinct shuffle of the whole body. Junk inserts a copy-specific run of nops after every instruction.
+Eight copies of one DualGate body. A growing fraction is altered so those copies no longer match each other. Recall is n-gram-6.
+  rename:
+    x=0.0: raw recall 1.00 nonop 1.00; abstract recall 1.00 nonop 1.00
+    x=0.25: raw recall 0.75 nonop 0.75; abstract recall 1.00 nonop 1.00
+    x=0.5: raw recall 0.50 nonop 0.50; abstract recall 1.00 nonop 1.00
+    x=0.75: raw recall 0.25 nonop 0.25; abstract recall 1.00 nonop 1.00
+    x=1.0: raw recall 0.00 nonop 0.00; abstract recall 1.00 nonop 1.00
+  reorder:
+    x=0.0: raw recall 1.00 nonop 1.00; abstract recall 1.00 nonop 1.00
+    x=0.25: raw recall 0.75 nonop 0.75; abstract recall 0.75 nonop 0.75
+    x=0.5: raw recall 0.50 nonop 0.50; abstract recall 0.50 nonop 0.50
+    x=0.75: raw recall 0.25 nonop 0.25; abstract recall 0.25 nonop 0.25
+    x=1.0: raw recall 0.00 nonop 0.00; abstract recall 0.00 nonop 0.00
+  junk:
+    x=0.0: raw recall 1.00 nonop 1.00; abstract recall 1.00 nonop 1.00
+    x=0.25: raw recall 1.00 nonop 1.00; abstract recall 1.00 nonop 1.00
+    x=0.5: raw recall 1.00 nonop 1.00; abstract recall 1.00 nonop 1.00
+    x=0.75: raw recall 1.00 nonop 1.00; abstract recall 1.00 nonop 1.00
+    x=1.0: raw recall 1.00 nonop 1.00; abstract recall 1.00 nonop 1.00
+Sled length, eight distinct DualGate bodies in one object (abstract n-gram-6):
+  L=0: abstract recall 0.88 nonop 0.88; raw recall 0.62 nonop 0.62
+  L=8: abstract recall 1.00 nonop 0.88; raw recall 0.88 nonop 0.62
+  L=32: abstract recall 1.00 nonop 0.88; raw recall 0.88 nonop 0.62
+  L=128: abstract recall 1.00 nonop 0.88; raw recall 1.00 nonop 0.62
+  L=256: abstract recall 1.00 nonop 0.88; raw recall 1.00 nonop 0.62
+Same body, sled length, abstract recall (control; the logic already repeats):
+  L=0: recall 1.00 nonop 1.00
+  L=8: recall 1.00 nonop 1.00
+  L=32: recall 1.00 nonop 1.00
+  L=128: recall 1.00 nonop 1.00
+  L=256: recall 1.00 nonop 1.00
+Renaming every copy differently moves raw recall from 1.00 to 0.00 and leaves abstract recall at 1.00. A full shuffle of every copy leaves abstract recall at 0.00. Distinct per-instruction nops leave abstract recall at 1.00.
+Abstraction absorbs a register rotation: raw recall falls and abstract recall does not.
+A full shuffle drops abstract recall to 0.00. Reordering breaks the n-gram for raw and abstract keys alike.
+A regular nop after every instruction leaves abstract recall at 1.00. The padded shape still repeats inside the gate, so this kind of junk becomes part of the signature instead of hiding the clone.
+On distinct DualGate bodies, sled length 0 gives abstract recall 0.88 (non-nop 0.88); length 256 gives recall 1.00 (non-nop 0.88). Recall that rises with the sled while non-nop recall stays put is the miner matching nops.
+Curves: results/degradation.svg
+
+Hard negatives
+No ground-truth gates. Every repeated cluster is a false positive. FPR is instruction coverage.
+name            kind     abs  fpr    insn_rate  clusters  relocs
+unrolled-crypto ngram    False 0.17   0.17              2  
+unrolled-crypto ngram    True  0.73   0.73             17  -
+unrolled-crypto bb       True  0.57   0.57              3  
+simd            ngram    False 0.61   0.61              4  
+simd            ngram    True  1.00   1.00             15  -
+simd            bb       True  0.98   0.98              4  
+templates       ngram    False 0.00   0.00              0  
+templates       ngram    True  0.83   0.83             32  -
+templates       bb       True  0.00   0.00              0  
+inlined-libc    ngram    False 0.74   0.74              3  
+inlined-libc    ngram    True  0.83   0.83              9  .LCPI1_0,.LCPI2_0,.LCPI3_0,.LCPI4_0,.LCPI5_0,strlen
+inlined-libc    bb       True  0.68   0.68              1  
+Highest abstract n-gram-6 coverage on a negative is 1.00 (neg-simd). Flexo test -O2 false-positive rate on non-gate instructions is 0.96, with gate recall 1.00. TAE abstract fpr is 1.00.
+Template instantiations show where the prior has to push back on abstraction: raw 6-gram coverage is 0.00 and abstract coverage is 0.83.
+Repetition fires on ordinary repeated code (unrolled rounds, SIMD clones, template copies, or inlined library bodies) at a rate that is not a rare tail. A gate decision needs a weirdness prior on top of repetition: repetition proposes candidates, it does not define the class.
+
+Scaling
+Two synthetic families, 32 tokens, 10% token noise. Exact clustering groups identical keys. MinHash uses 16 permutations and 4 bands. LSH recall is the fraction of noisy copies that share a band with their clean prototype; cross-family is the fraction that share a band with the other prototype.
+n      exact_s  lsh_s  exact_near  lsh_recall  lsh_cross  distinct_keys
+16     0.0      0.0023 0.00        1.00        0.00       16
+256    0.0001   0.0369 0.05        0.91        0.00       243
+4096   0.0023   0.5887 0.04        0.90        0.00       3936
+65536  0.0386   9.4506 0.03        0.90        0.00       63257
+From 16 to 65536 gates, exact time goes from 0.0s to 0.0386s and LSH from 0.0023s to 9.4506s. Exact near-duplicate rate stays 0.03 because 10% noise almost never reproduces a full key. LSH prototype recall is 0.90 with cross-family rate 0.00.
+At this size the approximate method is the slower one. It earns its cost only when near-duplicates must count as the same gate. Identical clones do not need it.
+
+ISA transfer
+Flexo and TAE gadgets are x86 (cache timing, indirect jmp through rbx, nop sleds) and were not cross-compiled. The ISA run uses the same miner on a portable repeated function, the unrolled-crypto negative, and the template negative, compiled freestanding for x86-64, AArch64, and riscv64. Raw bytes are 6-byte shingles. The IR is this miner's normalization (mnemonic plus register and immediate abstraction). There is no separate lifter in this tree.
+arch    circuit     bytes_fpr  ngram_raw_recall  ngram_abs_recall  bb_abs_recall  ngram_abs_fpr
+x86     repeated    1.00       1.00              1.00              1.00           0.00
+x86     crypto      0.61       n/a               n/a               n/a            0.73
+x86     templates   0.45       n/a               n/a               n/a            0.83
+arm64   repeated    1.00       1.00              1.00              1.00           0.00
+arm64   crypto      0.34       n/a               n/a               n/a            0.69
+arm64   templates   0.86       n/a               n/a               n/a            0.82
+riscv   repeated    1.00       1.00              1.00              1.00           0.00
+riscv   crypto      0.50       n/a               n/a               n/a            0.81
+riscv   templates   0.90       n/a               n/a               n/a            1.00
+Cross-ISA Jaccard of repeated keys (count>=2):
+  repeated    bytes  abs=False x86/arm64      jaccard=0.000 shared=0 sizes=32/40
+  repeated    bytes  abs=False x86/riscv      jaccard=0.000 shared=0 sizes=32/34
+  repeated    bytes  abs=False arm64/riscv    jaccard=0.000 shared=0 sizes=40/34
+  repeated    ngram  abs=False x86/arm64      jaccard=0.000 shared=0 sizes=12/10
+  repeated    ngram  abs=False x86/riscv      jaccard=0.000 shared=0 sizes=12/13
+  repeated    ngram  abs=False arm64/riscv    jaccard=0.000 shared=0 sizes=10/13
+  repeated    ngram  abs=True  x86/arm64      jaccard=0.000 shared=0 sizes=12/10
+  repeated    ngram  abs=True  x86/riscv      jaccard=0.000 shared=0 sizes=12/13
+  repeated    ngram  abs=True  arm64/riscv    jaccard=0.000 shared=0 sizes=10/13
+  crypto      ngram  abs=False x86/arm64      jaccard=0.000 shared=0 sizes=2/1
+  crypto      ngram  abs=False x86/riscv      jaccard=0.000 shared=0 sizes=2/2
+  crypto      ngram  abs=False arm64/riscv    jaccard=0.000 shared=0 sizes=1/2
+  crypto      ngram  abs=True  x86/arm64      jaccard=0.000 shared=0 sizes=17/9
+  crypto      ngram  abs=True  x86/riscv      jaccard=0.000 shared=0 sizes=17/11
+  crypto      ngram  abs=True  arm64/riscv    jaccard=0.000 shared=0 sizes=9/11
+  templates   ngram  abs=False x86/arm64      jaccard=n/a shared=0 sizes=0/0
+  templates   ngram  abs=False x86/riscv      jaccard=n/a shared=0 sizes=0/0
+  templates   ngram  abs=False arm64/riscv    jaccard=n/a shared=0 sizes=0/0
+  templates   ngram  abs=True  x86/arm64      jaccard=0.000 shared=0 sizes=32/25
+  templates   ngram  abs=True  x86/riscv      jaccard=0.000 shared=0 sizes=32/33
+  templates   ngram  abs=True  arm64/riscv    jaccard=0.000 shared=0 sizes=25/33
+x86 vs AArch64 on the repeated function: raw-byte Jaccard 0.000, raw n-gram Jaccard 0.000, abstract n-gram Jaccard 0.000.
+Normalization does not carry an ISA-agnostic claim. Abstract keys still contain ISA mnemonics (`mov` versus `mov`/`ldr`/`add` spellings differ), so repeated clusters do not transfer. Within one ISA, repetition still finds the eight copies when the compiler emits them alike.
+
+Mode comparison
+Single-binary mining keeps keys that occur at least twice in the target. Cross-build keeps every key that occurs at least once in both binaries (a gate that is unique inside one build can still be stable across builds). Stable-repeated is the intersection of the two within-binary repeated sets. Scores are on the second binary of each pair.
+pair                      kind   abs  single_rec  single_nonop  single_fpr  cross_rec  cross_nonop  cross_fpr  stable_rec  stable_fpr
+flexo opt O0 vs O2       ngram  False 1.00        0.62          0.89        1.00       0.00         0.69       1.00        0.68
+flexo opt O0 vs O2       ngram  True  1.00        1.00          0.96        1.00       1.00         0.76       1.00        0.72
+flexo opt O0 vs O2       bb     True  0.25        0.25          0.33        1.00       1.00         0.01       0.25        0.01
+flexo stock vs dcache    ngram  False 1.00        0.62          0.88        1.00       1.00         0.86       1.00        0.81
+flexo stock vs dcache    ngram  True  1.00        1.00          0.96        1.00       1.00         0.93       1.00        0.90
+flexo stock vs dcache    bb     True  0.25        0.25          0.32        1.00       1.00         0.07       0.25        0.03
+flexo stock vs tlb       ngram  False 1.00        0.67          0.88        1.00       0.67         0.68       1.00        0.66
+flexo stock vs tlb       ngram  True  1.00        1.00          0.97        1.00       0.67         0.78       1.00        0.76
+flexo stock vs tlb       bb     True  0.67        0.67          0.29        0.00       0.00         0.03       0.00        0.01
+tae opt O0 vs O2         ngram  False 1.00        1.00          0.01        1.00       1.00         0.99       1.00        0.00
+tae opt O0 vs O2         ngram  True  1.00        1.00          1.00        1.00       1.00         0.99       1.00        0.98
+tae opt O0 vs O2         bb     True  1.00        1.00          0.98        1.00       1.00         0.98       1.00        0.98
+tae clang vs g++         ngram  False 1.00        1.00          0.01        0.00       0.00         0.99       0.00        0.01
+tae clang vs g++         ngram  True  1.00        1.00          1.00        0.00       0.00         0.99       0.00        0.99
+tae clang vs g++         bb     True  1.00        1.00          0.99        0.00       0.00         0.99       0.00        0.99
+Flexo test -O0 vs -O2, abstract 6-grams, scored on -O2: single recall 1.00 non-nop 1.00 fpr 0.96; cross recall 1.00 non-nop 1.00 fpr 0.76; stable recall 1.00 fpr 0.72.
+Cross-build diffing keeps the non-nop recall and cuts the false-positive rate. On this pair, diffing beats single-binary mining.
+TAE -O0 vs -O2, abstract 6-grams: single non-nop recall 1.00 fpr 1.00; cross non-nop 1.00 fpr 0.99.
+TAE clang-17 vs g++, abstract 6-grams, scored on g++: single recall 1.00 fpr 1.00; cross-build recall 0.00 fpr 0.99.
+The keys shared by the two compilers cover the non-gate code (the decode table, once immediates are abstracted) and miss the jmpreg bodies. Diffing across compilers keeps the false pattern and drops the gate.
+
+Answer
+Repetition alone does not separate weird gates from everything else. On Flexo test -O2, abstract 6-grams recall 1.00 of the DualGates and also cover 0.96 of the instructions outside them (purity 0.43). On TAE the same feature recalls 1.00 of the jmpreg clones, with purity 0.02 after constant abstraction versus 0.77 raw. The highest abstract 6-gram coverage on a hard negative is 1.00. The match that fires is an n-gram of the shared piece: a nop sled, a jmp pad, or an abstracted instruction shape. Basic blocks are coarser than that piece on Flexo, and CFG edges add little on this straight-line code. Register abstraction recovers renamed copies and also welds the TAE decode table and the template instantiations into false clusters. A shuffle breaks the n-gram. A regular nop gap does not: it becomes part of the repeated key. A shared sled does the same. Exact clustering is the right tool for identical clones. MinHash is what still joins a 10% edit, and it costs more at 65536 items. A second build is a filter on keys the first binary already repeats, not a weirdness test.
