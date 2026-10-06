@@ -1,0 +1,35 @@
+pipeline: [load, mine, judge, compose, emit_c]
+models:
+  judge:
+    provider: local_hf
+    model: models/Qwen3-8B
+    json_only: true
+  decompile:
+    provider: local_hf
+    model: models/Qwen3-8B
+miner:
+  strategy: diff
+  n: 6
+  abstract_regs: true
+  abstract_imms: false
+  drop_nop: true
+  min_count: 2
+  pair_only: true
+  snap: 16
+  jaccard: 0.4
+  min_gap: 64
+  max_gap: 2048
+  peer: null
+emit:
+  c: true
+  blif: false
+verify:
+  native:
+    enabled: true
+    families: [flexo, gitm, tlb]
+  abc:
+    enabled: false
+prompts:
+  judge: prompts/judge_jev.txt
+  decompile: prompts/decompile_c.txt
+results_dir: results

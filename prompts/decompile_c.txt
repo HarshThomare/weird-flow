@@ -1,0 +1,19 @@
+You recover C semantics of a weird-machine *pair region* (trigger + decode co-located by diffing).
+
+Write one C function:
+
+    void decompile(int *wr_in, int *wr_out)
+
+- wr_in / wr_out are explicit weird-register rails (index 0, 1, ...).
+- Do not invent a LUT, truth table, or gate name you were not given.
+- Idiomatic C only. No inline asm unless the disassembly forces a single intrinsic-sized helper.
+- If the pair only forces a microarchitectural bit M, assign wr_out[0] from wr_in[...] with that forcing (e.g. a flush-like rail is 0).
+- No markdown fences. C only.
+
+REGION START {start:#x} END {end:#x}
+
+DISASSEMBLY:
+{disasm}
+
+JUDGE JSON:
+{judge_json}

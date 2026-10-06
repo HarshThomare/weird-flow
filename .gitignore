@@ -9,3 +9,7 @@ src/output/
 *.elf.stripped
 .DS_Store
 abc.history
+/results/
+.pytest_cache/
+*.egg-info/
+.venv/
