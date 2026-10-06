@@ -1,0 +1,596 @@
+{
+  "flexo_test": {
+    "label": "flexo test",
+    "path": "/u/hthomare/weird-flow/third_party/flexo/circuits/gates/test.elf",
+    "n_insns": 6388,
+    "text_bytes": 12541,
+    "n_gates_annotated": 8,
+    "gt_period_bytes": 576.0,
+    "n_repeated_keys": 330,
+    "detected_period_bytes": 592.0,
+    "period_key_count": 1,
+    "autocorr_lag_bytes": 585,
+    "autocorr_R": 0.3787,
+    "fft_period_bytes": 606.81,
+    "fft_snr_vs_median": 7.6,
+    "n_families_total": 36,
+    "family_a_hits": 11,
+    "family_b_hits": 8,
+    "family_a_sample": "nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 pop REG",
+    "family_b_sample": "mov REG, byte ptr [REG + REG + 0x100] \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop",
+    "xcorr_lag_bytes": 515,
+    "xcorr_peak": 0.825,
+    "folded_lag_bytes": 77,
+    "single_family_trap": false,
+    "extra": {
+      "vote": {
+        "n_periodic": 157,
+        "buckets": [
+          {
+            "period": 592,
+            "score": 37888.0,
+            "n_keys": 1,
+            "max_copies": 8
+          },
+          {
+            "period": 544,
+            "score": 34816.0,
+            "n_keys": 9,
+            "max_copies": 8
+          },
+          {
+            "period": 664,
+            "score": 32536.0,
+            "n_keys": 1,
+            "max_copies": 7
+          },
+          {
+            "period": 688,
+            "score": 24768.0,
+            "n_keys": 4,
+            "max_copies": 6
+          },
+          {
+            "period": 16,
+            "score": 3600.0,
+            "n_keys": 4,
+            "max_copies": 15
+          },
+          {
+            "period": 112,
+            "score": 2800.0,
+            "n_keys": 3,
+            "max_copies": 5
+          }
+        ]
+      },
+      "n_families_near_period": 2,
+      "zoom_bytes": 5036,
+      "sigma": 18.0
+    }
+  },
+  "flexo_and": {
+    "label": "flexo and",
+    "path": "/u/hthomare/weird-flow/third_party/flexo/circuits/gates/and.elf",
+    "n_insns": 1040,
+    "text_bytes": 2605,
+    "n_gates_annotated": 1,
+    "gt_period_bytes": null,
+    "n_repeated_keys": 16,
+    "detected_period_bytes": null,
+    "period_key_count": 0,
+    "autocorr_lag_bytes": 11,
+    "autocorr_R": 0.7853,
+    "fft_period_bytes": 204.8,
+    "fft_snr_vs_median": 6.1,
+    "n_families_total": 0,
+    "family_a_hits": 0,
+    "family_b_hits": 0,
+    "family_a_sample": "",
+    "family_b_sample": "",
+    "xcorr_lag_bytes": null,
+    "xcorr_peak": null,
+    "folded_lag_bytes": null,
+    "single_family_trap": true,
+    "extra": {
+      "vote": {
+        "n_periodic": 0,
+        "buckets": []
+      },
+      "n_families_near_period": 0,
+      "zoom_bytes": 426,
+      "sigma": 8.0
+    }
+  },
+  "flexo_alu": {
+    "label": "flexo alu",
+    "path": "/u/hthomare/weird-flow/third_party/flexo/circuits/ALU/ALU.elf",
+    "n_insns": 9461,
+    "text_bytes": 20697,
+    "n_gates_annotated": 12,
+    "gt_period_bytes": 656.0,
+    "n_repeated_keys": 209,
+    "detected_period_bytes": 656.0,
+    "period_key_count": 2,
+    "autocorr_lag_bytes": 606,
+    "autocorr_R": 0.2603,
+    "fft_period_bytes": 712.35,
+    "fft_snr_vs_median": 9.5,
+    "n_families_total": 8,
+    "family_a_hits": 21,
+    "family_b_hits": 12,
+    "family_a_sample": "nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 pop REG",
+    "family_b_sample": "mov REG, byte ptr [REG + REG + 0x100] \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop",
+    "xcorr_lag_bytes": 515,
+    "xcorr_peak": 0.9237,
+    "folded_lag_bytes": 141,
+    "single_family_trap": false,
+    "extra": {
+      "vote": {
+        "n_periodic": 34,
+        "buckets": [
+          {
+            "period": 656,
+            "score": 94464.0,
+            "n_keys": 2,
+            "max_copies": 12
+          },
+          {
+            "period": 784,
+            "score": 63504.0,
+            "n_keys": 4,
+            "max_copies": 9
+          },
+          {
+            "period": 1968,
+            "score": 49200.0,
+            "n_keys": 1,
+            "max_copies": 5
+          },
+          {
+            "period": 392,
+            "score": 25088.0,
+            "n_keys": 6,
+            "max_copies": 8
+          },
+          {
+            "period": 1552,
+            "score": 24832.0,
+            "n_keys": 3,
+            "max_copies": 4
+          },
+          {
+            "period": 416,
+            "score": 20384.0,
+            "n_keys": 1,
+            "max_copies": 7
+          },
+          {
+            "period": 968,
+            "score": 15488.0,
+            "n_keys": 1,
+            "max_copies": 4
+          },
+          {
+            "period": 792,
+            "score": 12672.0,
+            "n_keys": 1,
+            "max_copies": 4
+          }
+        ]
+      },
+      "n_families_near_period": 2,
+      "zoom_bytes": 8308,
+      "sigma": 18.0
+    }
+  },
+  "flexo_sbox": {
+    "label": "flexo sbox",
+    "path": "/u/hthomare/weird-flow/third_party/flexo/circuits/AES/sbox.elf",
+    "n_insns": 24024,
+    "text_bytes": 58693,
+    "n_gates_annotated": 28,
+    "gt_period_bytes": 736.0,
+    "n_repeated_keys": 211,
+    "detected_period_bytes": 728.0,
+    "period_key_count": 2,
+    "autocorr_lag_bytes": 732,
+    "autocorr_R": 0.4415,
+    "fft_period_bytes": 728.18,
+    "fft_snr_vs_median": 11.5,
+    "n_families_total": 3,
+    "family_a_hits": 124,
+    "family_b_hits": 28,
+    "family_a_sample": "nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 pop REG",
+    "family_b_sample": "mov REG, byte ptr [REG + REG + 0x100] \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop",
+    "xcorr_lag_bytes": 522,
+    "xcorr_peak": 0.934,
+    "folded_lag_bytes": 206,
+    "single_family_trap": false,
+    "extra": {
+      "vote": {
+        "n_periodic": 33,
+        "buckets": [
+          {
+            "period": 728,
+            "score": 570752.0,
+            "n_keys": 2,
+            "max_copies": 28
+          },
+          {
+            "period": 736,
+            "score": 423936.0,
+            "n_keys": 4,
+            "max_copies": 24
+          },
+          {
+            "period": 2264,
+            "score": 183384.0,
+            "n_keys": 2,
+            "max_copies": 9
+          }
+        ]
+      },
+      "n_families_near_period": 2,
+      "zoom_bytes": 21072,
+      "sigma": 18.0
+    }
+  },
+  "flexo_tlb": {
+    "label": "flexo tlb",
+    "path": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/gates/test.elf",
+    "n_insns": 7610,
+    "text_bytes": 16577,
+    "n_gates_annotated": 9,
+    "gt_period_bytes": 584.0,
+    "n_repeated_keys": 397,
+    "detected_period_bytes": 784.0,
+    "period_key_count": 113,
+    "autocorr_lag_bytes": 783,
+    "autocorr_R": 0.3358,
+    "fft_period_bytes": 862.32,
+    "fft_snr_vs_median": 3.7,
+    "n_families_total": 43,
+    "family_a_hits": 8,
+    "family_b_hits": 5,
+    "family_a_sample": "nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 pop REG",
+    "family_b_sample": "rdtscp \u00b7 shl REG, 0x20 \u00b7 or REG, REG \u00b7 sub REG, REG \u00b7 mov REG, REG \u00b7 mo\u2026",
+    "xcorr_lag_bytes": 0,
+    "xcorr_peak": 0.0,
+    "folded_lag_bytes": 0,
+    "single_family_trap": true,
+    "extra": {
+      "vote": {
+        "n_periodic": 175,
+        "buckets": [
+          {
+            "period": 784,
+            "score": 50176.0,
+            "n_keys": 113,
+            "max_copies": 8
+          },
+          {
+            "period": 592,
+            "score": 47952.0,
+            "n_keys": 2,
+            "max_copies": 9
+          },
+          {
+            "period": 896,
+            "score": 43904.0,
+            "n_keys": 1,
+            "max_copies": 7
+          },
+          {
+            "period": 616,
+            "score": 39424.0,
+            "n_keys": 1,
+            "max_copies": 8
+          },
+          {
+            "period": 1928,
+            "score": 30848.0,
+            "n_keys": 1,
+            "max_copies": 4
+          },
+          {
+            "period": 2408,
+            "score": 21672.0,
+            "n_keys": 1,
+            "max_copies": 3
+          },
+          {
+            "period": 2120,
+            "score": 19080.0,
+            "n_keys": 1,
+            "max_copies": 3
+          },
+          {
+            "period": 760,
+            "score": 19000.0,
+            "n_keys": 1,
+            "max_copies": 5
+          }
+        ]
+      },
+      "n_families_near_period": 2,
+      "zoom_bytes": 6958,
+      "sigma": 18.0
+    }
+  },
+  "flexo_dcache": {
+    "label": "flexo dcache",
+    "path": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/gates/test.elf",
+    "n_insns": 6722,
+    "text_bytes": 13805,
+    "n_gates_annotated": 8,
+    "gt_period_bytes": 576.0,
+    "n_repeated_keys": 353,
+    "detected_period_bytes": 624.0,
+    "period_key_count": 10,
+    "autocorr_lag_bytes": 620,
+    "autocorr_R": 0.3135,
+    "fft_period_bytes": 682.67,
+    "fft_snr_vs_median": 5.0,
+    "n_families_total": 39,
+    "family_a_hits": 11,
+    "family_b_hits": 8,
+    "family_a_sample": "nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 pop REG",
+    "family_b_sample": "mfence \u00b7 rdtscp \u00b7 shl REG, 0x20 \u00b7 mov REG, REG \u00b7 or REG, REG \u00b7 mov REG,\u2026",
+    "xcorr_lag_bytes": 0,
+    "xcorr_peak": 0.0,
+    "folded_lag_bytes": 0,
+    "single_family_trap": true,
+    "extra": {
+      "vote": {
+        "n_periodic": 167,
+        "buckets": [
+          {
+            "period": 624,
+            "score": 39936.0,
+            "n_keys": 10,
+            "max_copies": 8
+          },
+          {
+            "period": 592,
+            "score": 37888.0,
+            "n_keys": 1,
+            "max_copies": 8
+          },
+          {
+            "period": 664,
+            "score": 32536.0,
+            "n_keys": 1,
+            "max_copies": 7
+          },
+          {
+            "period": 768,
+            "score": 27648.0,
+            "n_keys": 4,
+            "max_copies": 6
+          },
+          {
+            "period": 192,
+            "score": 6912.0,
+            "n_keys": 1,
+            "max_copies": 6
+          },
+          {
+            "period": 16,
+            "score": 3600.0,
+            "n_keys": 4,
+            "max_copies": 15
+          },
+          {
+            "period": 128,
+            "score": 3200.0,
+            "n_keys": 2,
+            "max_copies": 5
+          }
+        ]
+      },
+      "n_families_near_period": 2,
+      "zoom_bytes": 5365,
+      "sigma": 18.0
+    }
+  },
+  "gitm_and": {
+    "label": "gitm and",
+    "path": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/and_timing.elf",
+    "n_insns": 31005,
+    "text_bytes": 107457,
+    "n_gates_annotated": 19,
+    "gt_period_bytes": 656.0,
+    "n_repeated_keys": 1348,
+    "detected_period_bytes": 656.0,
+    "period_key_count": 2,
+    "autocorr_lag_bytes": 658,
+    "autocorr_R": 0.3627,
+    "fft_period_bytes": 655.36,
+    "fft_snr_vs_median": 22.0,
+    "n_families_total": 2,
+    "family_a_hits": 19,
+    "family_b_hits": 19,
+    "family_a_sample": "nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 pop REG",
+    "family_b_sample": "mov REG, byte ptr [REG + REG + 0x100] \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop",
+    "xcorr_lag_bytes": 515,
+    "xcorr_peak": 0.9982,
+    "folded_lag_bytes": 141,
+    "single_family_trap": false,
+    "extra": {
+      "vote": {
+        "n_periodic": 138,
+        "buckets": [
+          {
+            "period": 656,
+            "score": 236816.0,
+            "n_keys": 2,
+            "max_copies": 19
+          },
+          {
+            "period": 2232,
+            "score": 142848.0,
+            "n_keys": 3,
+            "max_copies": 8
+          }
+        ]
+      },
+      "n_families_near_period": 2,
+      "zoom_bytes": 15802,
+      "sigma": 18.0
+    }
+  },
+  "tae_gates": {
+    "label": "tae gates",
+    "path": "/u/hthomare/weird-flow/third_party/tae/elf/rerun1/gates.elf",
+    "n_insns": 136691,
+    "text_bytes": 376869,
+    "n_gates_annotated": 1024,
+    "gt_period_bytes": 32.0,
+    "n_repeated_keys": 51,
+    "detected_period_bytes": 32.0,
+    "period_key_count": 3,
+    "autocorr_lag_bytes": 32,
+    "autocorr_R": 0.9988,
+    "fft_period_bytes": 32.0,
+    "fft_snr_vs_median": 2746.7,
+    "n_families_total": 3,
+    "family_a_hits": 1021,
+    "family_b_hits": 3,
+    "family_a_sample": "nop word ptr cs:[REG + REG] \u00b7 jmp REG \u00b7 nop word ptr cs:[REG + REG] \u00b7 n\u2026",
+    "family_b_sample": "nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 nop \u00b7 mov REG, REG",
+    "xcorr_lag_bytes": 38330,
+    "xcorr_peak": 0.0494,
+    "folded_lag_bytes": 6,
+    "single_family_trap": true,
+    "extra": {
+      "vote": {
+        "n_periodic": 17,
+        "buckets": [
+          {
+            "period": 32,
+            "score": 33423488.0,
+            "n_keys": 3,
+            "max_copies": 1022
+          }
+        ]
+      },
+      "n_families_near_period": 2,
+      "zoom_bytes": 47746,
+      "sigma": 1.4
+    }
+  },
+  "neg_simd": {
+    "label": "neg simd",
+    "path": "/tmp/repeat-miner-build/neg-simd.o",
+    "n_insns": 89,
+    "text_bytes": 371,
+    "n_gates_annotated": 0,
+    "gt_period_bytes": null,
+    "n_repeated_keys": 4,
+    "detected_period_bytes": 64.0,
+    "period_key_count": 4,
+    "autocorr_lag_bytes": 64,
+    "autocorr_R": 0.8314,
+    "fft_period_bytes": 64.0,
+    "fft_snr_vs_median": 7.9,
+    "n_families_total": 1,
+    "family_a_hits": 12,
+    "family_b_hits": 12,
+    "family_a_sample": "nop dword ptr [REG] \u00b7 vmovups ymm0, ymmword ptr [REG + REG*4 - 0x20] \u00b7 \u2026",
+    "family_b_sample": "mov REG, REG \u00b7 mov REG, 8 \u00b7 nop dword ptr [REG] \u00b7 vmovups ymm0, ymmword\u2026",
+    "xcorr_lag_bytes": 8,
+    "xcorr_peak": 0.9106,
+    "folded_lag_bytes": 8,
+    "single_family_trap": false,
+    "extra": {
+      "vote": {
+        "n_periodic": 4,
+        "buckets": [
+          {
+            "period": 64,
+            "score": 2304.0,
+            "n_keys": 4,
+            "max_copies": 6
+          }
+        ]
+      },
+      "n_families_near_period": 2,
+      "zoom_bytes": 357,
+      "sigma": 2.24
+    }
+  },
+  "neg_crypto": {
+    "label": "neg crypto",
+    "path": "/tmp/repeat-miner-build/neg-unrolled-crypto.o",
+    "n_insns": 101,
+    "text_bytes": 371,
+    "n_gates_annotated": 0,
+    "gt_period_bytes": null,
+    "n_repeated_keys": 8,
+    "detected_period_bytes": 16.0,
+    "period_key_count": 2,
+    "autocorr_lag_bytes": 16,
+    "autocorr_R": 0.6749,
+    "fft_period_bytes": 15.75,
+    "fft_snr_vs_median": 52.3,
+    "n_families_total": 1,
+    "family_a_hits": 6,
+    "family_b_hits": 6,
+    "family_a_sample": "jmp 0 \u00b7 nop word ptr cs:[REG + REG] \u00b7 jmp 0 \u00b7 nop word ptr cs:[REG + RE\u2026",
+    "family_b_sample": "nop word ptr cs:[REG + REG] \u00b7 jmp 0 \u00b7 nop word ptr cs:[REG + REG] \u00b7 jmp\u2026",
+    "xcorr_lag_bytes": 14,
+    "xcorr_peak": 0.8767,
+    "folded_lag_bytes": 2,
+    "single_family_trap": false,
+    "extra": {
+      "vote": {
+        "n_periodic": 2,
+        "buckets": [
+          {
+            "period": 16,
+            "score": 576.0,
+            "n_keys": 2,
+            "max_copies": 6
+          }
+        ]
+      },
+      "n_families_near_period": 2,
+      "zoom_bytes": 142,
+      "sigma": 1.4
+    }
+  },
+  "neg_templates": {
+    "label": "neg templates",
+    "path": "/tmp/repeat-miner-build/neg-templates.o",
+    "n_insns": 134,
+    "text_bytes": 356,
+    "n_gates_annotated": 0,
+    "gt_period_bytes": null,
+    "n_repeated_keys": 0,
+    "detected_period_bytes": null,
+    "period_key_count": 0,
+    "autocorr_lag_bytes": 0,
+    "autocorr_R": 0.0,
+    "fft_period_bytes": null,
+    "fft_snr_vs_median": 0.0,
+    "n_families_total": 0,
+    "family_a_hits": 0,
+    "family_b_hits": 0,
+    "family_a_sample": "",
+    "family_b_sample": "",
+    "xcorr_lag_bytes": null,
+    "xcorr_peak": null,
+    "folded_lag_bytes": null,
+    "single_family_trap": true,
+    "extra": {
+      "vote": {
+        "n_periodic": 0,
+        "buckets": []
+      },
+      "n_families_near_period": 0,
+      "zoom_bytes": 356,
+      "sigma": 8.0
+    }
+  }
+}

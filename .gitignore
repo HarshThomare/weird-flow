@@ -9,7 +9,15 @@ src/output/
 *.elf.stripped
 .DS_Store
 abc.history
-/results/
+# Full per-ELF dumps stay local (~256MB). Track summaries + go/no-go plots.
+/results/*
+!/results/RUN.md
+!/results/corpus.json
+!/results/elf-summary.json
+!/results/run-symmetry/
+/results/run-symmetry/*
+!/results/run-symmetry/plots/
+!/results/run-symmetry/plots/**
 .pytest_cache/
 *.egg-info/
 .venv/

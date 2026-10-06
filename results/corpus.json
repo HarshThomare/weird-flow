@@ -1,0 +1,3649 @@
+{
+  "torch": "2.6.0+cu124",
+  "cuda": "12.4",
+  "cuda_available": false,
+  "gpu": "cpu",
+  "gpu_reason": "no GPU with >=22000 MiB free (others occupy leftover); live LLM on CPU",
+  "gpu_info": {
+    "gpus": [
+      {
+        "index": 0,
+        "used": 32039,
+        "total": 49140,
+        "util": 100,
+        "free": 17101
+      },
+      {
+        "index": 1,
+        "used": 27379,
+        "total": 49140,
+        "util": 100,
+        "free": 21761
+      },
+      {
+        "index": 2,
+        "used": 44118,
+        "total": 49140,
+        "util": 0,
+        "free": 5022
+      }
+    ],
+    "picked": null,
+    "reason": "no GPU with >=22000 MiB free (others occupy leftover); live LLM on CPU"
+  },
+  "live_policy": "Live local Qwen3-8B on Flexo test.elf + GITM main_and.elf + Flexo-TLB test.elf (WF_LIVE_MAX_PAIRS=2); MockLLM for every other ELF. CUDA only if a GPU has >=22 GiB free; otherwise CPU so we do not crowd mp_train / other jobs.",
+  "counts": {
+    "flexo": 29,
+    "dcache": 24,
+    "tlb": 26,
+    "tae": 8,
+    "gitm": 9,
+    "neg": 4
+  },
+  "run_a": [
+    {
+      "elf_id": "flexo.circuits.gates.test.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/gates/test.elf",
+      "family": "flexo",
+      "live_llm": true,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 662.2539891719935,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.gates.test.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/gates/test.elf",
+      "family": "tlb",
+      "live_llm": true,
+      "ok": true,
+      "n_pairs": 8,
+      "error": null,
+      "seconds": 449.19053011899814,
+      "n_yes": 0,
+      "gates": 9,
+      "hit": 8,
+      "recall": 0.8888888888888888,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "gitm.fixtures.main_and.elf",
+      "elf": "/u/hthomare/weird-flow/tests/fixtures/gitm/main_and.elf",
+      "family": "gitm",
+      "live_llm": true,
+      "ok": true,
+      "n_pairs": 12,
+      "error": null,
+      "seconds": 484.3261597919627,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.AES.aes_block.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/AES/aes_block.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 2917,
+      "error": null,
+      "seconds": 90.11876796500292,
+      "n_yes": 2,
+      "gates": 36,
+      "hit": 36,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.AES.aes_round.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/AES/aes_round.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 821,
+      "error": null,
+      "seconds": 8.178348494984675,
+      "n_yes": 2,
+      "gates": 30,
+      "hit": 30,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.AES.sbox.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/AES/sbox.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 62,
+      "error": null,
+      "seconds": 0.4330527050187811,
+      "n_yes": 2,
+      "gates": 28,
+      "hit": 28,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.ALU.ALU.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/ALU/ALU.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 12,
+      "error": null,
+      "seconds": 0.12069056299515069,
+      "n_yes": 2,
+      "gates": 12,
+      "hit": 12,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.SHA1.sha1_2blocks.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/SHA1/sha1_2blocks.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1450,
+      "error": null,
+      "seconds": 10.168661064992193,
+      "n_yes": 2,
+      "gates": 65,
+      "hit": 65,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.SHA1.sha1_round.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/SHA1/sha1_round.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 362,
+      "error": null,
+      "seconds": 1.3190363839967176,
+      "n_yes": 2,
+      "gates": 41,
+      "hit": 41,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.Simon.simon25.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/Simon/simon25.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 959,
+      "error": null,
+      "seconds": 10.813215683971066,
+      "n_yes": 2,
+      "gates": 15,
+      "hit": 15,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.Simon.simon32.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/Simon/simon32.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1242,
+      "error": null,
+      "seconds": 17.103261158976238,
+      "n_yes": 2,
+      "gates": 16,
+      "hit": 16,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.arithmetic.adder.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/arithmetic/adder.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 225,
+      "error": null,
+      "seconds": 0.5645650079823099,
+      "n_yes": 2,
+      "gates": 19,
+      "hit": 19,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.arithmetic.mul.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/arithmetic/mul.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 3230,
+      "error": null,
+      "seconds": 83.92608455300797,
+      "n_yes": 2,
+      "gates": 105,
+      "hit": 105,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.gates.and.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/gates/and.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.027528720966074616,
+      "n_yes": 0,
+      "gates": 1,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.AES.aes_block.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/AES/aes_block.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 2958,
+      "error": null,
+      "seconds": 94.1259270600276,
+      "n_yes": 2,
+      "gates": 36,
+      "hit": 36,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.AES.aes_round.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/AES/aes_round.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 828,
+      "error": null,
+      "seconds": 8.349842817988247,
+      "n_yes": 2,
+      "gates": 30,
+      "hit": 30,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.AES.sbox.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/AES/sbox.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 62,
+      "error": null,
+      "seconds": 0.43415337800979614,
+      "n_yes": 2,
+      "gates": 28,
+      "hit": 28,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 14,
+      "error": null,
+      "seconds": 0.12161018198821694,
+      "n_yes": 2,
+      "gates": 12,
+      "hit": 12,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU10.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU10.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 167,
+      "error": null,
+      "seconds": 0.9333536219783127,
+      "n_yes": 2,
+      "gates": 53,
+      "hit": 53,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU11.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU11.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 192,
+      "error": null,
+      "seconds": 0.9955576930078678,
+      "n_yes": 2,
+      "gates": 52,
+      "hit": 52,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU12.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU12.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 236,
+      "error": null,
+      "seconds": 1.209629173972644,
+      "n_yes": 2,
+      "gates": 52,
+      "hit": 52,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU14.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU14.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 262,
+      "error": null,
+      "seconds": 1.255186382040847,
+      "n_yes": 2,
+      "gates": 52,
+      "hit": 52,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU16.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU16.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 313,
+      "error": null,
+      "seconds": 1.5838250059750862,
+      "n_yes": 2,
+      "gates": 54,
+      "hit": 54,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU24.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU24.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 509,
+      "error": null,
+      "seconds": 2.6716915640281513,
+      "n_yes": 2,
+      "gates": 62,
+      "hit": 62,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU32.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU32.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 552,
+      "error": null,
+      "seconds": 3.8042499129660428,
+      "n_yes": 2,
+      "gates": 59,
+      "hit": 59,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU34.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU34.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 664,
+      "error": null,
+      "seconds": 4.407953304005787,
+      "n_yes": 2,
+      "gates": 58,
+      "hit": 58,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU36.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU36.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 778,
+      "error": null,
+      "seconds": 5.020374746003654,
+      "n_yes": 2,
+      "gates": 60,
+      "hit": 60,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU40.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU40.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 819,
+      "error": null,
+      "seconds": 5.880968899989966,
+      "n_yes": 2,
+      "gates": 60,
+      "hit": 60,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU48.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU48.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 882,
+      "error": null,
+      "seconds": 7.825440754997544,
+      "n_yes": 2,
+      "gates": 60,
+      "hit": 60,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU8.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU8.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 188,
+      "error": null,
+      "seconds": 0.8501304130186327,
+      "n_yes": 2,
+      "gates": 54,
+      "hit": 54,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU9.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU9.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 166,
+      "error": null,
+      "seconds": 0.8986049169907346,
+      "n_yes": 2,
+      "gates": 52,
+      "hit": 52,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.SHA1.sha1_2blocks.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/SHA1/sha1_2blocks.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1467,
+      "error": null,
+      "seconds": 10.512797717005014,
+      "n_yes": 2,
+      "gates": 65,
+      "hit": 65,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.SHA1.sha1_round.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/SHA1/sha1_round.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 362,
+      "error": null,
+      "seconds": 1.4682594040059485,
+      "n_yes": 2,
+      "gates": 41,
+      "hit": 41,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.Simon.simon25.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/Simon/simon25.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 958,
+      "error": null,
+      "seconds": 10.98152003402356,
+      "n_yes": 2,
+      "gates": 15,
+      "hit": 15,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.Simon.simon32.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/Simon/simon32.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1248,
+      "error": null,
+      "seconds": 17.491759135969914,
+      "n_yes": 2,
+      "gates": 16,
+      "hit": 16,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.arithmetic.adder.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/arithmetic/adder.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 228,
+      "error": null,
+      "seconds": 0.734972130972892,
+      "n_yes": 2,
+      "gates": 19,
+      "hit": 19,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.arithmetic.mul.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/arithmetic/mul.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 3353,
+      "error": null,
+      "seconds": 87.0314137529931,
+      "n_yes": 2,
+      "gates": 105,
+      "hit": 105,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.gates.test.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/gates/test.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.0946698909974657,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.AES.aes_block.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/AES/aes_block.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7856,
+      "error": null,
+      "seconds": 259.3228745329543,
+      "n_yes": 2,
+      "gates": 17,
+      "hit": 17,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.AES.aes_round.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/AES/aes_round.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 2344,
+      "error": null,
+      "seconds": 22.50330240203766,
+      "n_yes": 2,
+      "gates": 16,
+      "hit": 16,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.AES.sbox.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/AES/sbox.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 122,
+      "error": null,
+      "seconds": 1.9896537009626627,
+      "n_yes": 2,
+      "gates": 16,
+      "hit": 16,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 43,
+      "error": null,
+      "seconds": 1.8446806599968113,
+      "n_yes": 2,
+      "gates": 15,
+      "hit": 15,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU10.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU10.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 363,
+      "error": null,
+      "seconds": 2.5728431019815616,
+      "n_yes": 2,
+      "gates": 30,
+      "hit": 30,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU11.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU11.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 391,
+      "error": null,
+      "seconds": 2.9311911740223877,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 31,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU12.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU12.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 427,
+      "error": null,
+      "seconds": 2.9496228839852847,
+      "n_yes": 2,
+      "gates": 33,
+      "hit": 33,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU14.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU14.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 497,
+      "error": null,
+      "seconds": 3.296350546996109,
+      "n_yes": 2,
+      "gates": 33,
+      "hit": 33,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU16.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU16.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 566,
+      "error": null,
+      "seconds": 3.8099542150157504,
+      "n_yes": 2,
+      "gates": 33,
+      "hit": 33,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU24.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU24.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 840,
+      "error": null,
+      "seconds": 5.5168041010038,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 31,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU32.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU32.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1158,
+      "error": null,
+      "seconds": 7.966975022980478,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 31,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU34.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU34.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1282,
+      "error": null,
+      "seconds": 8.687262804014608,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 31,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU36.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU36.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1343,
+      "error": null,
+      "seconds": 9.040070947026834,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 31,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU40.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU40.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1494,
+      "error": null,
+      "seconds": 10.940380422980525,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 31,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU48.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU48.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1827,
+      "error": null,
+      "seconds": 14.679864090052433,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 31,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU8.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU8.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 285,
+      "error": null,
+      "seconds": 2.376260201970581,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 31,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU9.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU9.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 332,
+      "error": null,
+      "seconds": 2.737291924015153,
+      "n_yes": 2,
+      "gates": 32,
+      "hit": 32,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.SHA1.sha1_2blocks_composed.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/SHA1/sha1_2blocks_composed.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1995,
+      "error": null,
+      "seconds": 12.738342046970502,
+      "n_yes": 2,
+      "gates": 24,
+      "hit": 24,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.SHA1.sha1_round_composed.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/SHA1/sha1_round_composed.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1995,
+      "error": null,
+      "seconds": 11.36969073698856,
+      "n_yes": 2,
+      "gates": 24,
+      "hit": 24,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.Simon.simon25.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/Simon/simon25.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1932,
+      "error": null,
+      "seconds": 17.783148342976347,
+      "n_yes": 2,
+      "gates": 10,
+      "hit": 10,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.Simon.simon32.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/Simon/simon32.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 2490,
+      "error": null,
+      "seconds": 30.282693995977752,
+      "n_yes": 2,
+      "gates": 10,
+      "hit": 10,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.arithmetic.adder.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/arithmetic/adder.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 269,
+      "error": null,
+      "seconds": 2.591234521998558,
+      "n_yes": 2,
+      "gates": 11,
+      "hit": 11,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.arithmetic.mul.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/arithmetic/mul.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 4151,
+      "error": null,
+      "seconds": 165.51640858897008,
+      "n_yes": 2,
+      "gates": 35,
+      "hit": 35,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.tools.tlb-test.test_window.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/tools/tlb-test/test_window.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 2,
+      "error": null,
+      "seconds": 2.5124213480157778,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.tools.tlb-test.threshold.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/tools/tlb-test/threshold.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 12,
+      "error": null,
+      "seconds": 2.2670845319516957,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun1.aes.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun1/aes.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 2,
+      "error": null,
+      "seconds": 2.6538570500561036,
+      "n_yes": 2,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun1.gates.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun1/gates.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 2.013035648036748,
+      "n_yes": 0,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun1.search.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun1/search.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 5,
+      "error": null,
+      "seconds": 2.554063982970547,
+      "n_yes": 2,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun1.simon.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun1/simon.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 3,
+      "error": null,
+      "seconds": 2.0543611179455183,
+      "n_yes": 2,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun3.aes.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun3/aes.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 2,
+      "error": null,
+      "seconds": 2.5208545210189186,
+      "n_yes": 2,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun3.gates.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun3/gates.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 2.3575474999961443,
+      "n_yes": 0,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun3.search.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun3/search.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 5,
+      "error": null,
+      "seconds": 2.0102541249943897,
+      "n_yes": 2,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun3.simon.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun3/simon.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 2,
+      "error": null,
+      "seconds": 2.5237325860070996,
+      "n_yes": 2,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.aes.aes_block-10.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/aes/aes_block-10.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 2947,
+      "error": null,
+      "seconds": 140.94412077596644,
+      "n_yes": 2,
+      "gates": 36,
+      "hit": 36,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.aes.aes_round-16.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/aes/aes_round-16.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 821,
+      "error": null,
+      "seconds": 10.328009043994825,
+      "n_yes": 2,
+      "gates": 30,
+      "hit": 30,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.alu.ALU-2.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/alu/ALU-2.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 12,
+      "error": null,
+      "seconds": 0.3248735169763677,
+      "n_yes": 2,
+      "gates": 12,
+      "hit": 12,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.arithmetic.adder.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/arithmetic/adder.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 226,
+      "error": null,
+      "seconds": 0.8485882949898951,
+      "n_yes": 2,
+      "gates": 19,
+      "hit": 19,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_and.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_and.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.09451086004264653,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_mux.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_mux.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.0974349930183962,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_nand.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_nand.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.09504293598001823,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_not.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_not.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.09371250699041411,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_or.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_or.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.09839638398261741,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_xor.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_xor.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.1062746150419116,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_xor3.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_xor3.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.10474782501114532,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_xor4.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_xor4.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.09792451799148694,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.29320119897602126,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.sha1.sha1_2blocks-6.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/sha1/sha1_2blocks-6.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1450,
+      "error": null,
+      "seconds": 12.7467254960211,
+      "n_yes": 2,
+      "gates": 65,
+      "hit": 65,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.sha1.sha1_round.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/sha1/sha1_round.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 362,
+      "error": null,
+      "seconds": 1.8255562760168687,
+      "n_yes": 2,
+      "gates": 41,
+      "hit": 41,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.sha1.sha1_round_broken.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/sha1/sha1_round_broken.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 362,
+      "error": null,
+      "seconds": 1.6843698000302538,
+      "n_yes": 2,
+      "gates": 41,
+      "hit": 41,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.simon.simon32-14.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/simon/simon32-14.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 1242,
+      "error": null,
+      "seconds": 23.47834537102608,
+      "n_yes": 2,
+      "gates": 16,
+      "hit": 16,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.and_timing.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/and_timing.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 226,
+      "error": null,
+      "seconds": 0.6561636379919946,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_and.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_and.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 12,
+      "error": null,
+      "seconds": 0.06840972695499659,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_assign.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_assign.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 13,
+      "error": null,
+      "seconds": 0.06628682202426717,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_mux.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_mux.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 8,
+      "error": null,
+      "seconds": 0.06599704700056463,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_nand.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_nand.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 10,
+      "error": null,
+      "seconds": 0.06646417500451207,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_not.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_not.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 9,
+      "error": null,
+      "seconds": 0.06492372194770724,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_or.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_or.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 12,
+      "error": null,
+      "seconds": 0.07892837497638538,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_xor.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_xor.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 8,
+      "error": null,
+      "seconds": 0.075995591992978,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "neg.simd.o",
+      "elf": "/u/hthomare/weird-flow/results/negatives/neg.simd.o",
+      "family": "neg",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.033225236053112894,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "neg.crypto.o",
+      "elf": "/u/hthomare/weird-flow/results/negatives/neg.crypto.o",
+      "family": "neg",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.024979353009257466,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "neg.templates.o",
+      "elf": "/u/hthomare/weird-flow/results/negatives/neg.templates.o",
+      "family": "neg",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.04400296899257228,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "neg.inlined_libc.o",
+      "elf": "/u/hthomare/weird-flow/results/negatives/neg.inlined_libc.o",
+      "family": "neg",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.022190437011886388,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    }
+  ],
+  "run_b": "yes",
+  "run_b_rows": [
+    {
+      "elf_id": "flexo.circuits.gates.test.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/gates/test.elf",
+      "family": "flexo",
+      "live_llm": true,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 706.6931151419994,
+      "n_yes": 1,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.gates.test.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/gates/test.elf",
+      "family": "tlb",
+      "live_llm": true,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 69.38810048002051,
+      "n_yes": 0,
+      "gates": 9,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "gitm.fixtures.main_and.elf",
+      "elf": "/u/hthomare/weird-flow/tests/fixtures/gitm/main_and.elf",
+      "family": "gitm",
+      "live_llm": true,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 68.85667971102521,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.AES.aes_block.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/AES/aes_block.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 37,
+      "error": null,
+      "seconds": 14.448498487996403,
+      "n_yes": 2,
+      "gates": 36,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.AES.aes_round.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/AES/aes_round.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 8,
+      "error": null,
+      "seconds": 3.561219736991916,
+      "n_yes": 2,
+      "gates": 30,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.AES.sbox.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/AES/sbox.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 28,
+      "error": null,
+      "seconds": 0.4550227150321007,
+      "n_yes": 2,
+      "gates": 28,
+      "hit": 28,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.ALU.ALU.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/ALU/ALU.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 12,
+      "error": null,
+      "seconds": 0.1929104729788378,
+      "n_yes": 2,
+      "gates": 12,
+      "hit": 12,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.SHA1.sha1_2blocks.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/SHA1/sha1_2blocks.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 58,
+      "error": null,
+      "seconds": 5.457664970017504,
+      "n_yes": 2,
+      "gates": 65,
+      "hit": 63,
+      "recall": 0.9692307692307692,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.SHA1.sha1_round.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/SHA1/sha1_round.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 1.1834089679759927,
+      "n_yes": 0,
+      "gates": 41,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.Simon.simon25.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/Simon/simon25.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 5.212156919995323,
+      "n_yes": 0,
+      "gates": 15,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.Simon.simon32.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/Simon/simon32.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 7.3725897609838285,
+      "n_yes": 0,
+      "gates": 16,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.arithmetic.adder.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/arithmetic/adder.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 19,
+      "error": null,
+      "seconds": 0.9478316040476784,
+      "n_yes": 2,
+      "gates": 19,
+      "hit": 19,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.arithmetic.mul.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/arithmetic/mul.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 97,
+      "error": null,
+      "seconds": 16.874542673991527,
+      "n_yes": 2,
+      "gates": 105,
+      "hit": 104,
+      "recall": 0.9904761904761905,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "flexo.circuits.gates.and.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/flexo/circuits/gates/and.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.03725212998688221,
+      "n_yes": 0,
+      "gates": 1,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.AES.aes_block.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/AES/aes_block.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 32,
+      "error": null,
+      "seconds": 14.125272767967544,
+      "n_yes": 2,
+      "gates": 36,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.AES.aes_round.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/AES/aes_round.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 8,
+      "error": null,
+      "seconds": 3.74612592702033,
+      "n_yes": 2,
+      "gates": 30,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.AES.sbox.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/AES/sbox.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 28,
+      "error": null,
+      "seconds": 0.7134124590083957,
+      "n_yes": 2,
+      "gates": 28,
+      "hit": 28,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 12,
+      "error": null,
+      "seconds": 0.18669901601970196,
+      "n_yes": 2,
+      "gates": 12,
+      "hit": 12,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU10.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU10.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 46,
+      "error": null,
+      "seconds": 1.1820656790514477,
+      "n_yes": 2,
+      "gates": 53,
+      "hit": 50,
+      "recall": 0.9433962264150944,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU11.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU11.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 45,
+      "error": null,
+      "seconds": 1.2633696190314367,
+      "n_yes": 2,
+      "gates": 52,
+      "hit": 50,
+      "recall": 0.9615384615384616,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU12.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU12.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 45,
+      "error": null,
+      "seconds": 1.7391173799987882,
+      "n_yes": 2,
+      "gates": 52,
+      "hit": 49,
+      "recall": 0.9423076923076923,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU14.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU14.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 45,
+      "error": null,
+      "seconds": 1.583464419003576,
+      "n_yes": 2,
+      "gates": 52,
+      "hit": 50,
+      "recall": 0.9615384615384616,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU16.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU16.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 47,
+      "error": null,
+      "seconds": 1.8563056929851882,
+      "n_yes": 2,
+      "gates": 54,
+      "hit": 52,
+      "recall": 0.9629629629629629,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU24.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU24.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 56,
+      "error": null,
+      "seconds": 2.3634378780261613,
+      "n_yes": 2,
+      "gates": 62,
+      "hit": 61,
+      "recall": 0.9838709677419355,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU32.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU32.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 53,
+      "error": null,
+      "seconds": 3.060332726978231,
+      "n_yes": 2,
+      "gates": 59,
+      "hit": 58,
+      "recall": 0.9830508474576272,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU34.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU34.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 51,
+      "error": null,
+      "seconds": 3.4403105810051784,
+      "n_yes": 2,
+      "gates": 58,
+      "hit": 56,
+      "recall": 0.9655172413793104,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU36.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU36.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 53,
+      "error": null,
+      "seconds": 3.198202813975513,
+      "n_yes": 2,
+      "gates": 60,
+      "hit": 58,
+      "recall": 0.9666666666666667,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU40.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU40.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 53,
+      "error": null,
+      "seconds": 3.856563225039281,
+      "n_yes": 2,
+      "gates": 60,
+      "hit": 58,
+      "recall": 0.9666666666666667,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU48.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU48.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 53,
+      "error": null,
+      "seconds": 4.062583809019998,
+      "n_yes": 2,
+      "gates": 60,
+      "hit": 58,
+      "recall": 0.9666666666666667,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU8.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU8.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 47,
+      "error": null,
+      "seconds": 1.333947448991239,
+      "n_yes": 2,
+      "gates": 54,
+      "hit": 52,
+      "recall": 0.9629629629629629,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.ALU.ALU9.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/ALU/ALU9.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 45,
+      "error": null,
+      "seconds": 1.2112678410485387,
+      "n_yes": 2,
+      "gates": 52,
+      "hit": 50,
+      "recall": 0.9615384615384616,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.SHA1.sha1_2blocks.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/SHA1/sha1_2blocks.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 58,
+      "error": null,
+      "seconds": 5.014651013014372,
+      "n_yes": 2,
+      "gates": 65,
+      "hit": 63,
+      "recall": 0.9692307692307692,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.SHA1.sha1_round.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/SHA1/sha1_round.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 1.6477862159954384,
+      "n_yes": 0,
+      "gates": 41,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.Simon.simon25.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/Simon/simon25.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 5.679770830029156,
+      "n_yes": 0,
+      "gates": 15,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.Simon.simon32.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/Simon/simon32.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 6.803581840009429,
+      "n_yes": 0,
+      "gates": 16,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.arithmetic.adder.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/arithmetic/adder.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 19,
+      "error": null,
+      "seconds": 0.8389060089830309,
+      "n_yes": 2,
+      "gates": 19,
+      "hit": 19,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.arithmetic.mul.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/arithmetic/mul.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 97,
+      "error": null,
+      "seconds": 16.3682671529823,
+      "n_yes": 2,
+      "gates": 105,
+      "hit": 104,
+      "recall": 0.9904761904761905,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-DCache.circuits.gates.test.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-DCache/circuits/gates/test.elf",
+      "family": "dcache",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.170327688974794,
+      "n_yes": 0,
+      "gates": 8,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.AES.aes_block.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/AES/aes_block.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 16.453805914963596,
+      "n_yes": 0,
+      "gates": 17,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.AES.aes_round.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/AES/aes_round.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 5.6199095180490986,
+      "n_yes": 0,
+      "gates": 16,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.AES.sbox.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/AES/sbox.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 16,
+      "error": null,
+      "seconds": 0.3311401099781506,
+      "n_yes": 2,
+      "gates": 16,
+      "hit": 16,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 15,
+      "error": null,
+      "seconds": 0.19043773598968983,
+      "n_yes": 2,
+      "gates": 15,
+      "hit": 15,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU10.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU10.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 24,
+      "error": null,
+      "seconds": 1.105349516030401,
+      "n_yes": 2,
+      "gates": 30,
+      "hit": 29,
+      "recall": 0.9666666666666667,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU11.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU11.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 25,
+      "error": null,
+      "seconds": 1.1418765489943326,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 30,
+      "recall": 0.967741935483871,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU12.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU12.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 1.0641301210271195,
+      "n_yes": 0,
+      "gates": 33,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU14.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU14.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 27,
+      "error": null,
+      "seconds": 1.2108653759933077,
+      "n_yes": 2,
+      "gates": 33,
+      "hit": 32,
+      "recall": 0.9696969696969697,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU16.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU16.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 1.2970759209711105,
+      "n_yes": 0,
+      "gates": 33,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU24.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU24.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 26,
+      "error": null,
+      "seconds": 1.8879617300117388,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 30,
+      "recall": 0.967741935483871,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU32.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU32.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 26,
+      "error": null,
+      "seconds": 2.4972017660038546,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 30,
+      "recall": 0.967741935483871,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU34.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU34.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 3.0263298859936185,
+      "n_yes": 0,
+      "gates": 31,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU36.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU36.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 3.2182067219982855,
+      "n_yes": 0,
+      "gates": 31,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU40.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU40.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 3.63720659899991,
+      "n_yes": 0,
+      "gates": 31,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU48.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU48.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 3.8204945609904826,
+      "n_yes": 0,
+      "gates": 31,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU8.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU8.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 25,
+      "error": null,
+      "seconds": 0.5680640270002186,
+      "n_yes": 2,
+      "gates": 31,
+      "hit": 29,
+      "recall": 0.9354838709677419,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.ALU.ALU9.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/ALU/ALU9.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 26,
+      "error": null,
+      "seconds": 0.8058675670181401,
+      "n_yes": 2,
+      "gates": 32,
+      "hit": 31,
+      "recall": 0.96875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.SHA1.sha1_2blocks_composed.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/SHA1/sha1_2blocks_composed.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 24.476875649997965,
+      "n_yes": 0,
+      "gates": 24,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.SHA1.sha1_round_composed.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/SHA1/sha1_round_composed.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 29.672789235017262,
+      "n_yes": 0,
+      "gates": 24,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.Simon.simon25.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/Simon/simon25.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 10,
+      "error": null,
+      "seconds": 4.5159457429545,
+      "n_yes": 2,
+      "gates": 10,
+      "hit": 10,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.Simon.simon32.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/Simon/simon32.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 6.085514152015094,
+      "n_yes": 0,
+      "gates": 10,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.arithmetic.adder.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/arithmetic/adder.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.573881414020434,
+      "n_yes": 0,
+      "gates": 11,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.Flexo.Flexo-TLB.circuits.arithmetic.mul.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/Flexo/Flexo-TLB/circuits/arithmetic/mul.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 14.283655552950222,
+      "n_yes": 0,
+      "gates": 35,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.tools.tlb-test.test_window.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/tools/tlb-test/test_window.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 4.269266007002443,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tlb.tools.tlb-test.threshold.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tlb/tools/tlb-test/threshold.elf",
+      "family": "tlb",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 2.9492823890177533,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun1.aes.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun1/aes.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 2.954800723993685,
+      "n_yes": 0,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun1.gates.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun1/gates.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 2.827700940950308,
+      "n_yes": 0,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun1.search.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun1/search.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 2.4480791080277413,
+      "n_yes": 0,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun1.simon.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun1/simon.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 3.1220326920156367,
+      "n_yes": 0,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun3.aes.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun3/aes.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 2.423491390014533,
+      "n_yes": 0,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun3.gates.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun3/gates.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 3.214689993998036,
+      "n_yes": 0,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun3.search.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun3/search.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 2.4694245139835402,
+      "n_yes": 0,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "tae.elf.rerun3.simon.elf",
+      "elf": "/u/hthomare/weird-flow/third_party/tae/elf/rerun3/simon.elf",
+      "family": "tae",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 3.19528042699676,
+      "n_yes": 0,
+      "gates": 1024,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.aes.aes_block-10.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/aes/aes_block-10.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 37,
+      "error": null,
+      "seconds": 14.615329733002,
+      "n_yes": 2,
+      "gates": 36,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.aes.aes_round-16.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/aes/aes_round-16.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 8,
+      "error": null,
+      "seconds": 3.1408421309897676,
+      "n_yes": 2,
+      "gates": 30,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.alu.ALU-2.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/alu/ALU-2.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 12,
+      "error": null,
+      "seconds": 0.19022362999385223,
+      "n_yes": 2,
+      "gates": 12,
+      "hit": 12,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.arithmetic.adder.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/arithmetic/adder.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 19,
+      "error": null,
+      "seconds": 0.936655902012717,
+      "n_yes": 2,
+      "gates": 19,
+      "hit": 19,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_and.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_and.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.1647285489598289,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_mux.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_mux.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.1665288129588589,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_nand.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_nand.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.16176594397984445,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_not.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_not.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.17365665099350736,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_or.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_or.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.15658161701867357,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_xor.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_xor.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.46035985299386084,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_xor3.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_xor3.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.16804879199480638,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.gate_xor4.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates/gate_xor4.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.14930419001029804,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.gates.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/gates.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 7,
+      "error": null,
+      "seconds": 0.14976991899311543,
+      "n_yes": 2,
+      "gates": 8,
+      "hit": 7,
+      "recall": 0.875,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.sha1.sha1_2blocks-6.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/sha1/sha1_2blocks-6.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 58,
+      "error": null,
+      "seconds": 5.287821916979738,
+      "n_yes": 2,
+      "gates": 65,
+      "hit": 63,
+      "recall": 0.9692307692307692,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.sha1.sha1_round.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/sha1/sha1_round.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 1.2092414840008132,
+      "n_yes": 0,
+      "gates": 41,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.sha1.sha1_round_broken.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/sha1/sha1_round_broken.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 41,
+      "error": null,
+      "seconds": 1.3368477269541472,
+      "n_yes": 2,
+      "gates": 41,
+      "hit": 41,
+      "recall": 1.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.flexo.simon.simon32-14.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/flexo/simon/simon32-14.elf",
+      "family": "flexo",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 7.818345209991094,
+      "n_yes": 0,
+      "gates": 16,
+      "hit": 0,
+      "recall": 0.0,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.and_timing.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/and_timing.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 19,
+      "error": null,
+      "seconds": 0.6321958499611355,
+      "n_yes": 2,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_and.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_and.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.11187271401286125,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_assign.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_assign.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.10321336501510814,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_mux.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_mux.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.10030461399583146,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_nand.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_nand.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.11264820798533037,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_not.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_not.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.10485949798021466,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_or.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_or.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.1151288949768059,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "wemu.src.gates.gitm.main_xor.elf",
+      "elf": "/u/hthomare/weird-machines/artifacts/WeMu/src/gates/gitm/main_xor.elf",
+      "family": "gitm",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.11616149602923542,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "neg.simd.o",
+      "elf": "/u/hthomare/weird-flow/results/negatives/neg.simd.o",
+      "family": "neg",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.027057210041675717,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "neg.crypto.o",
+      "elf": "/u/hthomare/weird-flow/results/negatives/neg.crypto.o",
+      "family": "neg",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.033291518047917634,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "neg.templates.o",
+      "elf": "/u/hthomare/weird-flow/results/negatives/neg.templates.o",
+      "family": "neg",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.028904576029162854,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    },
+    {
+      "elf_id": "neg.inlined_libc.o",
+      "elf": "/u/hthomare/weird-flow/results/negatives/neg.inlined_libc.o",
+      "family": "neg",
+      "live_llm": false,
+      "ok": true,
+      "n_pairs": 0,
+      "error": null,
+      "seconds": 0.031831498024985194,
+      "n_yes": 0,
+      "gates": 0,
+      "hit": 0,
+      "recall": null,
+      "native": {
+        "skipped": true,
+        "reason": "set WF_NATIVE=1 to exec the ELF; parsers are unit-tested"
+      }
+    }
+  ],
+  "run_b_note": "Go: Flexo test/ALU/sbox and GITM show a DualGate-scale period, FFT line, and ~515 B two-family lag (see experiment/symmetry/measurements.json)."
+}
