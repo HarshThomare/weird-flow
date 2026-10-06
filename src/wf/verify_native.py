@@ -96,6 +96,9 @@ def parse_native(text: str, family: str) -> dict:
 
 def guess_family(path: Path, allowed: list[str]) -> str | None:
     p = str(path).lower()
+    # Always identify TAE so native exec is skipped even if it is not in allowed.
+    if "tae" in p:
+        return "tae"
     for fam in allowed:
         if fam == "tlb" and "tlb" in p:
             return "tlb"
@@ -105,8 +108,6 @@ def guess_family(path: Path, allowed: list[str]) -> str | None:
             return "flexo"
         if fam == "tae" and "tae" in p:
             return "tae"
-    if allowed:
-        return allowed[0]
     return None
 
 

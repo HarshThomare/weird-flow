@@ -17,6 +17,7 @@ NEG_DIR = ROOT / "experiment/repeat miner/negatives"
 CLANG = Path("/tmp/llvm-17/bin/clang-17")
 
 DEFAULT_MINER = {
+    "strategy": "diff",
     "n": 6,
     "abstract_regs": True,
     "abstract_imms": False,

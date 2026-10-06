@@ -48,6 +48,7 @@ def test_pipeline_flexo_mock(tmp_path: Path, monkeypatch):
     cfg = load_config(ROOT / "config" / "default.yml")
     cfg["models"]["judge"]["provider"] = "mock"
     cfg["models"]["decompile"]["provider"] = "mock"
+    cfg["dump_dir"] = str(tmp_path / "flexo-test")
     art = run_pipeline(FLEXO_TEST, cfg, ROOT)
     assert len(art.pairs) >= 1
     assert art.judgments and art.judgments[0].yes is True
@@ -55,6 +56,15 @@ def test_pipeline_flexo_mock(tmp_path: Path, monkeypatch):
     assert "wr_in" in art.c_source and "wr_out" in art.c_source
     native = art.verify.get("native") or {}
     assert native.get("skipped") is True
+    dump = Path(cfg["dump_dir"])
+    assert (dump / "00-load.json").is_file()
+    assert (dump / "01-mine.json").is_file()
+    assert (dump / "02-judge.json").is_file()
+    assert (dump / "04-emit.c").is_file()
+    assert (dump / "pipeline.json").is_file()
+    mine = json.loads((dump / "01-mine.json").read_text())
+    assert mine.get("strategy") == "diff"
+    assert mine.get("n_repeated_keys", 0) >= 1
 
 
 @pytest.mark.skipif(os.environ.get("WF_LIVE_LLM") != "1", reason="set WF_LIVE_LLM=1 to load Qwen3-8B")

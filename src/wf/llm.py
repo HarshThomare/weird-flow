@@ -62,10 +62,12 @@ class LocalHF:
         self.use_cuda = _cuda_ok()
         # Qwen3-8B weights are bf16. CPU bf16 is the 16GiB path; fp32 would be ~32GiB.
         dtype = torch.bfloat16
+        # First *visible* device only. Callers set CUDA_VISIBLE_DEVICES so we
+        # do not spread across GPUs that other jobs already occupy.
         kwargs = {
             "trust_remote_code": True,
             "low_cpu_mem_usage": True,
-            "device_map": "auto" if self.use_cuda else "cpu",
+            "device_map": {"": 0} if self.use_cuda else "cpu",
         }
         try:
             self.model = AutoModelForCausalLM.from_pretrained(model, dtype=dtype, **kwargs)

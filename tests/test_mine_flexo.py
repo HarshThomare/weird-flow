@@ -14,11 +14,12 @@ def test_flexo_test_elf_exists():
     assert FLEXO_TEST.is_file(), f"missing {FLEXO_TEST}"
 
 
-def test_miner_has_no_opcode_catalog():
-    src = Path(__file__).resolve().parents[1] / "src" / "wf" / "mine.py"
-    text = src.read_text()
-    for banned in ("is_trigger", "is_decode", "clflush", "rdtsc", "rdtscp", "ud2"):
-        assert banned not in text
+def test_locator_has_no_opcode_catalog():
+    root = Path(__file__).resolve().parents[1] / "src" / "wf"
+    for name in ("mine.py", "symmetry.py"):
+        text = (root / name).read_text()
+        for banned in ("is_trigger", "is_decode", "clflush", "rdtsc", "rdtscp", "ud2"):
+            assert banned not in text, f"{name} contains {banned}"
 
 
 def test_load_text_skips_symtab():

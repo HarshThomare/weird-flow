@@ -15,6 +15,7 @@ from pathlib import Path
 from elftools.elf.elffile import ELFFile
 
 from wf.artifact import PairRegion
+from wf.symmetry import locate as locate_symmetry
 
 EXEC = 0x4
 _MINER = None
@@ -270,7 +271,28 @@ def _disasm_window(insns: list, start: int, end: int, limit: int = 80) -> str:
     return "\n".join(lines)
 
 
-def mine_view(view: TextView, miner_cfg: dict, peer_groups: dict | None = None) -> list[PairRegion]:
+def _family_dump(fam: dict[str, list[str]], fspans: dict, groups: dict) -> list[dict]:
+    out = []
+    for fid, ks in fam.items():
+        spans = fspans.get(fid) or []
+        n_hits = sum(len(groups.get(k) or []) for k in ks)
+        out.append(
+            {
+                "id": fid,
+                "n_keys": len(ks),
+                "n_hits": n_hits,
+                "n_spans": len(spans),
+                "keys_head": ks[:8],
+                "spans": [{"start": a, "end": b} for a, b in spans[:256]],
+            }
+        )
+    out.sort(key=lambda r: -r["n_hits"])
+    return out[:32]
+
+
+def mine_view_ex(
+    view: TextView, miner_cfg: dict, peer_groups: dict | None = None
+) -> tuple[list[PairRegion], dict]:
     miner = _miner()
     n = int(miner_cfg.get("n", 6))
     abs_regs = bool(miner_cfg.get("abstract_regs", True))
@@ -281,6 +303,9 @@ def mine_view(view: TextView, miner_cfg: dict, peer_groups: dict | None = None) 
     jacc = float(miner_cfg.get("jaccard", 0.4))
     min_gap = int(miner_cfg.get("min_gap", 64))
     max_gap = int(miner_cfg.get("max_gap", 2048))
+    strategy = str(miner_cfg.get("strategy") or "diff").lower()
+    if strategy == "diffing":
+        strategy = "diff"
     rows = ngram_rows(view.insns, n, abs_regs, abs_imms, drop_nop)
     groups = miner.cluster(rows, min_count)
     if peer_groups is not None:
@@ -288,6 +313,53 @@ def mine_view(view: TextView, miner_cfg: dict, peer_groups: dict | None = None) 
         groups = {k: groups[k] for k in keep}
     fam = merge_families(groups, snap, jacc)
     fspans = family_spans(fam, groups)
+    ngram_keys = {k: len(v) for k, v in sorted(groups.items(), key=lambda kv: -len(kv[1]))}
+    dump: dict = {
+        "strategy": strategy,
+        "n_insns": len(view.insns),
+        "text_base": view.base,
+        "n_ngram_rows": len(rows),
+        "n_repeated_keys": len(groups),
+        "ngram_keys": ngram_keys,
+        "families": _family_dump(fam, fspans, groups),
+        "pair_spans": [],
+        "scores": [],
+    }
+    if strategy == "symmetry":
+        located = locate_symmetry(groups, view.insns, miner_cfg)
+        jacc_fams = dump.get("families")
+        dump.update(located.dump)
+        dump["strategy"] = "symmetry"
+        dump["jaccard_families"] = jacc_fams
+        dump["ngram_keys"] = ngram_keys
+        pairs = [
+            PairRegion(
+                start=int(p["start"]),
+                end=int(p["end"]),
+                family_a=str(p["family_a"]),
+                family_b=str(p["family_b"]),
+                n_matches=int(p["n_matches"]),
+                gap=int(p["gap"]),
+                disasm=_disasm_window(view.insns, int(p["start"]), int(p["end"])),
+            )
+            for p in located.pairs
+        ]
+        dump["pair_spans"] = [
+            {"start": p.start, "end": p.end, "family_a": p.family_a, "family_b": p.family_b, "gap": p.gap}
+            for p in pairs
+        ]
+        dump["scores"] = {
+            "period": dump.get("period"),
+            "autocorr_lag": dump.get("autocorr_lag"),
+            "autocorr_R": dump.get("autocorr_R"),
+            "fft_period": dump.get("fft_period"),
+            "fft_snr": dump.get("fft_snr"),
+            "xcorr_lag": dump.get("xcorr_lag"),
+            "xcorr_peak": dump.get("xcorr_peak"),
+            "n_pairs": len(pairs),
+        }
+        return pairs, dump
+
     ranked = pair_across_gaps(fspans, min_gap, max_gap, min_matches=min_count)
     pairs = []
     for row in ranked:
@@ -306,10 +378,28 @@ def mine_view(view: TextView, miner_cfg: dict, peer_groups: dict | None = None) 
                     disasm=_disasm_window(view.insns, a, b),
                 )
             )
+    dump["pair_spans"] = [
+        {"start": p.start, "end": p.end, "family_a": p.family_a, "family_b": p.family_b, "gap": p.gap}
+        for p in pairs
+    ]
+    dump["scores"] = [
+        {"family_a": r["family_a"], "family_b": r["family_b"], "n": r["n"], "mean_gap": (sum(r["gaps"]) / len(r["gaps"]) if r["gaps"] else 0)}
+        for r in ranked
+    ]
+    return pairs, dump
+
+
+def mine_view(view: TextView, miner_cfg: dict, peer_groups: dict | None = None) -> list[PairRegion]:
+    pairs, _dump = mine_view_ex(view, miner_cfg, peer_groups)
     return pairs
 
 
 def mine_path(path: Path, miner_cfg: dict) -> tuple[TextView, list[PairRegion]]:
+    view, pairs, _dump = mine_path_ex(path, miner_cfg)
+    return view, pairs
+
+
+def mine_path_ex(path: Path, miner_cfg: dict) -> tuple[TextView, list[PairRegion], dict]:
     view = load_text(path)
     peer_groups = None
     peer = miner_cfg.get("peer")
@@ -323,4 +413,7 @@ def mine_path(path: Path, miner_cfg: dict) -> tuple[TextView, list[PairRegion]]:
             bool(miner_cfg.get("drop_nop", True)),
         )
         peer_groups = _miner().cluster(rows, int(miner_cfg.get("min_count", 2)))
-    return view, mine_view(view, miner_cfg, peer_groups)
+    pairs, dump = mine_view_ex(view, miner_cfg, peer_groups)
+    dump["elf"] = str(view.path)
+    dump["arch"] = view.arch
+    return view, pairs, dump

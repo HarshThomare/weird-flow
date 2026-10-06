@@ -32,4 +32,4 @@ verify:
 prompts:
   judge: prompts/judge_jev.txt
   decompile: prompts/decompile_c.txt
-results_dir: results
+results_dir: results/run-diffing
