@@ -19,6 +19,7 @@ miner:
   jaccard: 0.4
   min_gap: 64
   max_gap: 2048
+  max_keys: 512
   peer: null
 emit:
   c: true

@@ -157,7 +157,7 @@ def pick_gpu() -> tuple[str | None, dict]:
         free = total - used
         rows.append({"index": idx, "used": used, "total": total, "util": util, "free": free})
     info["gpus"] = rows
-    need = 18000
+    need = 22000
     by_idx = {r["index"]: r for r in rows}
     if 2 in by_idx and by_idx[2]["free"] >= need:
         info["picked"] = 2
@@ -171,8 +171,10 @@ def pick_gpu() -> tuple[str | None, dict]:
             f"GPU 2 short of {need} MiB; using GPU {best['index']} with {best['free']} MiB free"
         )
         return str(best["index"]), info
-    info["reason"] = f"no GPU with >={need} MiB free; live LLM will use CPU if CUDA is false"
-    return None, info
+    info["reason"] = (
+        f"no GPU with >={need} MiB free (others occupy leftover); live LLM on CPU"
+    )
+    return "cpu", info
 
 
 def eval_pair_stats(path: Path, pairs) -> dict:
@@ -315,9 +317,12 @@ def main() -> int:
     print(f"corpus {len(elves)} ELFs ({len(negs)} negatives)", flush=True)
 
     gpu, gpu_info = pick_gpu()
-    if gpu is not None:
+    if gpu == "cpu":
+        os.environ["CUDA_VISIBLE_DEVICES"] = ""
+    elif gpu is not None:
         os.environ["CUDA_VISIBLE_DEVICES"] = gpu
     os.environ.setdefault("WF_LIVE_LLM", "1")
+    os.environ.setdefault("WF_LIVE_MAX_PAIRS", "2")
 
     torch_s = cuda_s = None
     cuda_ok = False
@@ -332,8 +337,9 @@ def main() -> int:
         print(f"torch import failed: {exc}", flush=True)
 
     live_policy = (
-        "Live local Qwen3-8B on Flexo test.elf + GITM main_and.elf + Flexo-TLB test.elf; "
-        "MockLLM for every other ELF. WF_LIVE_MAX_PAIRS unset for Flexo test, cap=2 for the other live ELFs."
+        "Live local Qwen3-8B on Flexo test.elf + GITM main_and.elf + Flexo-TLB test.elf "
+        "(WF_LIVE_MAX_PAIRS=2); MockLLM for every other ELF. CUDA only if a GPU has "
+        ">=22 GiB free; otherwise CPU so we do not crowd mp_train / other jobs."
     )
 
     def run_mode(name: str, cfg_path: Path, dest: Path) -> list[dict]:
@@ -345,10 +351,7 @@ def main() -> int:
         ordered = live_first + rest
         for i, (ident, path) in enumerate(ordered, 1):
             live = is_live(path)
-            if live and "flexo/circuits/gates/test.elf" not in str(path):
-                os.environ["WF_LIVE_MAX_PAIRS"] = "2"
-            elif live:
-                os.environ.pop("WF_LIVE_MAX_PAIRS", None)
+            os.environ["WF_LIVE_MAX_PAIRS"] = "2"
             print(f"[{name} {i}/{len(ordered)}] {ident} live={live}", flush=True)
             row = run_one(ident, path, cfg, dest / ident, live=live)
             rows.append(row)

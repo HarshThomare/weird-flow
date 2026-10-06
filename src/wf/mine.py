@@ -129,9 +129,15 @@ class _UF:
             self.p[rb] = ra
 
 
-def merge_families(groups: dict, snap: int, jaccard: float) -> dict[str, list[str]]:
-    """Keys whose occurrence sites match (sliding n-grams of one idiom)."""
-    keys = list(groups)
+def merge_families(groups: dict, snap: int, jaccard: float, max_keys: int = 512) -> dict[str, list[str]]:
+    """Keys whose occurrence sites match (sliding n-grams of one idiom).
+
+    Large binaries (unrolled AES, TAE) can have tens of thousands of repeated
+    keys; all-pairs Jaccard is then too slow. Keep the highest-copy keys.
+    """
+    keys = sorted(groups, key=lambda k: (-len(groups[k]), k))
+    if max_keys and len(keys) > max_keys:
+        keys = keys[:max_keys]
     if not keys:
         return {}
     sites = {
@@ -301,6 +307,7 @@ def mine_view_ex(
     min_count = int(miner_cfg.get("min_count", 2))
     snap = int(miner_cfg.get("snap", 16))
     jacc = float(miner_cfg.get("jaccard", 0.4))
+    max_keys = int(miner_cfg.get("max_keys", 512))
     min_gap = int(miner_cfg.get("min_gap", 64))
     max_gap = int(miner_cfg.get("max_gap", 2048))
     strategy = str(miner_cfg.get("strategy") or "diff").lower()
@@ -311,15 +318,19 @@ def mine_view_ex(
     if peer_groups is not None:
         keep = set(groups) & set(peer_groups)
         groups = {k: groups[k] for k in keep}
-    fam = merge_families(groups, snap, jacc)
+    fam = merge_families(groups, snap, jacc, max_keys=max_keys)
     fspans = family_spans(fam, groups)
-    ngram_keys = {k: len(v) for k, v in sorted(groups.items(), key=lambda kv: -len(kv[1]))}
+    ngram_keys = {
+        k: len(v)
+        for k, v in sorted(groups.items(), key=lambda kv: -len(kv[1]))[:2000]
+    }
     dump: dict = {
         "strategy": strategy,
         "n_insns": len(view.insns),
         "text_base": view.base,
         "n_ngram_rows": len(rows),
         "n_repeated_keys": len(groups),
+        "n_keys_for_families": min(len(groups), max_keys),
         "ngram_keys": ngram_keys,
         "families": _family_dump(fam, fspans, groups),
         "pair_spans": [],
