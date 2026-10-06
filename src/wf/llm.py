@@ -63,12 +63,14 @@ class LocalHF:
         # Qwen3-8B weights are bf16. CPU bf16 is the 16GiB path; fp32 would be ~32GiB.
         dtype = torch.bfloat16
         kwargs = {
-            "torch_dtype": dtype,
             "trust_remote_code": True,
             "low_cpu_mem_usage": True,
             "device_map": "auto" if self.use_cuda else "cpu",
         }
-        self.model = AutoModelForCausalLM.from_pretrained(model, **kwargs)
+        try:
+            self.model = AutoModelForCausalLM.from_pretrained(model, dtype=dtype, **kwargs)
+        except TypeError:
+            self.model = AutoModelForCausalLM.from_pretrained(model, torch_dtype=dtype, **kwargs)
         self.model.eval()
 
     def _device(self):
