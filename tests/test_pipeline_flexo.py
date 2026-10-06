@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import json
 import os
 from pathlib import Path
+
+import pytest
 
 from wf.judge import parse_judge_json
 from wf.pipeline import load_config, run_pipeline
@@ -53,3 +54,13 @@ def test_pipeline_flexo_mock(tmp_path: Path, monkeypatch):
     assert "wr_in" in art.c_source and "wr_out" in art.c_source
     native = art.verify.get("native") or {}
     assert native.get("skipped") is True
+
+
+@pytest.mark.skipif(os.environ.get("WF_LIVE_LLM") != "1", reason="set WF_LIVE_LLM=1 to load Qwen3-8B")
+def test_live_qwen_optional():
+    from wf.llm import make_llm
+
+    llm = make_llm({"provider": "local_hf", "model": "models/Qwen3-8B", "json_only": True})
+    raw = llm.complete('Reply JSON only: {"yes": false, "role": "pair", "forcing": {"state": "x", "value": 0, "how": "n"}, "window": "none", "substrate": "unknown", "confidence": 0.1, "span": [0, 1]}')
+    data = parse_judge_json(raw)
+    assert "yes" in data

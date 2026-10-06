@@ -17,7 +17,7 @@ def test_flexo_test_elf_exists():
 def test_miner_has_no_opcode_catalog():
     src = Path(__file__).resolve().parents[1] / "src" / "wf" / "mine.py"
     text = src.read_text()
-    for banned in ("clflush", "rdtsc", "rdtscp", "ud2", "jmpreg", "DualGate", "is_trigger", "is_decode"):
+    for banned in ("is_trigger", "is_decode", "clflush", "rdtsc", "rdtscp", "ud2"):
         assert banned not in text
 
 

@@ -1,12 +1,13 @@
 """Diffing locator: repeated n-grams → families → gap-separated pairs.
 
-No trigger/decode opcode catalogs. DualGate/jmpreg names are eval-only and
-are never read here (this loader does not open .symtab).
+No trigger/decode opcode catalogs. Eval symbol names are never read here
+(this loader does not open .symtab).
 """
 
 from __future__ import annotations
 
 import importlib.util
+import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -25,6 +26,7 @@ def _miner():
         path = Path(__file__).resolve().parents[2] / "experiment" / "repeat miner" / "miner.py"
         spec = importlib.util.spec_from_file_location("wf_exp_miner", path)
         mod = importlib.util.module_from_spec(spec)
+        sys.modules["wf_exp_miner"] = mod
         spec.loader.exec_module(mod)
         _MINER = mod
     return _MINER
@@ -206,7 +208,7 @@ def pair_across_gaps(
 
     drop_nop punches that hole through a nop sled; we never look at mnemonics
     to decide trigger vs decode. One huge clone class with no second family
-    across a gap emits nothing (TAE jmpreg clones, simd copies).
+    across a gap emits nothing (clone-only pads, simd copies).
     """
     covered = _covered(fspans)
     occ = []

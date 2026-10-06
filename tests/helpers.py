@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import bisect
 from pathlib import Path
 
 from elftools.elf.elffile import ELFFile
@@ -16,7 +15,6 @@ TAE_GATES = ROOT / "third_party/tae/elf/rerun1/gates.elf"
 GITM_AND = ROOT / "tests/fixtures/gitm/main_and.elf"
 NEG_DIR = ROOT / "experiment/repeat miner/negatives"
 CLANG = Path("/tmp/llvm-17/bin/clang-17")
-CLANGXX = Path("/tmp/llvm-17/bin/clang++-17")
 
 DEFAULT_MINER = {
     "n": 6,
