@@ -17,6 +17,7 @@ dependencies = [
 [project.optional-dependencies]
 llm = [
     "transformers>=4.40",
+    "accelerate>=0.26",
 ]
 
 [project.scripts]

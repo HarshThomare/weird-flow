@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 
@@ -57,10 +58,40 @@ def test_pipeline_flexo_mock(tmp_path: Path, monkeypatch):
 
 
 @pytest.mark.skipif(os.environ.get("WF_LIVE_LLM") != "1", reason="set WF_LIVE_LLM=1 to load Qwen3-8B")
-def test_live_qwen_optional():
+def test_live_qwen_flexo_judge_decompile():
+    """One Flexo pair: LLM1 JSON + LLM2 C on local Qwen3-8B (CPU if no CUDA)."""
     from wf.llm import make_llm
+    from wf.mine import mine_path
+    from tests.helpers import DEFAULT_MINER
 
-    llm = make_llm({"provider": "local_hf", "model": "models/Qwen3-8B", "json_only": True})
-    raw = llm.complete('Reply JSON only: {"yes": false, "role": "pair", "forcing": {"state": "x", "value": 0, "how": "n"}, "window": "none", "substrate": "unknown", "confidence": 0.1, "span": [0, 1]}')
-    data = parse_judge_json(raw)
+    os.environ.setdefault("WF_LIVE_MAX_PAIRS", "1")
+    _view, pairs = mine_path(FLEXO_TEST, DEFAULT_MINER)
+    assert pairs, "miner returned no pair regions"
+    pair = pairs[0]
+    spec = {"provider": "local_hf", "model": "models/Qwen3-8B", "json_only": True}
+    llm = make_llm(spec)
+    judge_tmpl = (ROOT / "prompts" / "judge_jev.txt").read_text()
+    judge_prompt = judge_tmpl.format(
+        start=pair.start,
+        end=pair.end,
+        family_a=pair.family_a,
+        family_b=pair.family_b,
+        disasm=pair.disasm or "(empty)",
+    )
+    raw_json = llm.complete(judge_prompt)
+    print("Qwen judge raw:\n", raw_json[:2000])
+    data = parse_judge_json(raw_json)
     assert "yes" in data
+
+    spec["json_only"] = False
+    llm.json_only = False
+    de_tmpl = (ROOT / "prompts" / "decompile_c.txt").read_text()
+    de_prompt = de_tmpl.format(
+        start=pair.start,
+        end=pair.end,
+        disasm=pair.disasm or "(empty)",
+        judge_json=json.dumps(data),
+    )
+    raw_c = llm.complete(de_prompt)
+    print("Qwen decompile raw:\n", raw_c[:2000])
+    assert raw_c.strip()

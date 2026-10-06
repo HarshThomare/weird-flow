@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 
 from wf.artifact import Artifact, Judgment, PairRegion
@@ -43,7 +44,11 @@ def _judgment(data: dict, raw: str, pair: PairRegion) -> Judgment:
 
 def judge_pairs(art: Artifact, llm: LLM, prompt_tmpl: str) -> list[Judgment]:
     out = []
-    for pair in art.pairs:
+    pairs = art.pairs
+    cap = os.environ.get("WF_LIVE_MAX_PAIRS")
+    if cap:
+        pairs = pairs[: max(1, int(cap))]
+    for pair in pairs:
         prompt = prompt_tmpl.format(
             start=pair.start,
             end=pair.end,

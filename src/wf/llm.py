@@ -41,30 +41,55 @@ class MockLLM:
         )
 
 
+def _cuda_ok() -> bool:
+    try:
+        import torch
+
+        return bool(torch.cuda.is_available())
+    except Exception:
+        return False
+
+
 class LocalHF:
+    """Qwen via transformers. CUDA if it works, else CPU (device_map=cpu)."""
+
     def __init__(self, model: str, json_only: bool = False):
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
-        path = model
         self.json_only = json_only
-        self.tok = AutoTokenizer.from_pretrained(path, trust_remote_code=True)
-        dtype = torch.float16 if torch.cuda.is_available() else torch.float32
-        self.model = AutoModelForCausalLM.from_pretrained(
-            path,
-            torch_dtype=dtype,
-            device_map="auto" if torch.cuda.is_available() else None,
-            trust_remote_code=True,
-        )
-        if not torch.cuda.is_available():
-            self.model = self.model.to("cpu")
+        self.tok = AutoTokenizer.from_pretrained(model, trust_remote_code=True)
+        self.use_cuda = _cuda_ok()
+        # Qwen3-8B weights are bf16. CPU bf16 is the 16GiB path; fp32 would be ~32GiB.
+        dtype = torch.bfloat16
+        kwargs = {
+            "torch_dtype": dtype,
+            "trust_remote_code": True,
+            "low_cpu_mem_usage": True,
+            "device_map": "auto" if self.use_cuda else "cpu",
+        }
+        self.model = AutoModelForCausalLM.from_pretrained(model, **kwargs)
+        self.model.eval()
+
+    def _device(self):
+        try:
+            return next(self.model.parameters()).device
+        except StopIteration:
+            import torch
+
+            return torch.device("cuda" if self.use_cuda else "cpu")
 
     def complete(self, prompt: str) -> str:
+        import torch
+
         messages = [{"role": "user", "content": prompt}]
         if hasattr(self.tok, "apply_chat_template"):
             try:
                 text = self.tok.apply_chat_template(
-                    messages, tokenize=False, add_generation_prompt=True, enable_thinking=False
+                    messages,
+                    tokenize=False,
+                    add_generation_prompt=True,
+                    enable_thinking=False,
                 )
             except TypeError:
                 text = self.tok.apply_chat_template(
@@ -73,10 +98,24 @@ class LocalHF:
         else:
             text = prompt
         inputs = self.tok(text, return_tensors="pt")
-        inputs = {k: v.to(self.model.device) for k, v in inputs.items()}
-        out = self.model.generate(**inputs, max_new_tokens=512, do_sample=False)
+        dev = self._device()
+        inputs = {k: v.to(dev) for k, v in inputs.items()}
+        jsonish = self.json_only or "JSON only" in prompt
+        default = 192 if jsonish else 384
+        max_new = int(os.environ.get("WF_MAX_NEW_TOKENS") or default)
+        pad = self.tok.eos_token_id
+        with torch.inference_mode():
+            out = self.model.generate(
+                **inputs,
+                max_new_tokens=max_new,
+                do_sample=False,
+                pad_token_id=pad,
+            )
         gen = out[0][inputs["input_ids"].shape[-1] :]
         return self.tok.decode(gen, skip_special_tokens=True)
+
+
+_HF: dict[str, LocalHF] = {}
 
 
 def make_llm(spec: dict) -> LLM:
@@ -92,5 +131,10 @@ def make_llm(spec: dict) -> LLM:
         path = Path(model)
         if not path.is_absolute():
             path = root / path
-        return LocalHF(str(path), json_only=json_only)
+        key = str(path)
+        if key not in _HF:
+            _HF[key] = LocalHF(key, json_only=json_only)
+        llm = _HF[key]
+        llm.json_only = json_only
+        return llm
     raise ValueError(f"unknown llm provider {provider}")
