@@ -1,0 +1,4 @@
+{
+  "discard_transient_writes_eax": 65535,
+  "btb_reads_disabled_eax": 65535
+}

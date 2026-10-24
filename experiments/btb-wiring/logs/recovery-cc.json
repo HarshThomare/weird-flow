@@ -1,0 +1,220 @@
+{
+  "elf": "/workspace/experiments/btb-wiring/build/wiring-cc.elf",
+  "functions_from": "symbols",
+  "jmpreg_base": "0x402000",
+  "nslots": 16,
+  "table_base": "0x403000",
+  "nentries": 256,
+  "functions": [
+    {
+      "name": "weird_c",
+      "start": "0x401000",
+      "end": "0x401056"
+    },
+    {
+      "name": "driver_c",
+      "start": "0x401060",
+      "end": "0x4010c7"
+    },
+    {
+      "name": "weird_neg_c",
+      "start": "0x4010d0",
+      "end": "0x4010f7"
+    },
+    {
+      "name": "driver_neg_c",
+      "start": "0x401100",
+      "end": "0x401124"
+    },
+    {
+      "name": "driver_opaque",
+      "start": "0x401130",
+      "end": "0x401176"
+    },
+    {
+      "name": "dummy_delay",
+      "start": "0x403500",
+      "end": "0x403506"
+    },
+    {
+      "name": "opaque_zero",
+      "start": "0x403506",
+      "end": "0x40350c"
+    },
+    {
+      "name": "oracle_probe",
+      "start": "0x40350c",
+      "end": "0x40350d"
+    },
+    {
+      "name": "create_window",
+      "start": "0x40350d",
+      "end": "0x403512"
+    }
+  ],
+  "sites": [
+    {
+      "pc": "0x401019",
+      "func": "weird_c",
+      "kind": "read",
+      "slot": 0,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x401026",
+      "func": "weird_c",
+      "kind": "read",
+      "slot": 0,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x401033",
+      "func": "weird_c",
+      "kind": "read",
+      "slot": 1,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x40104c",
+      "func": "weird_c",
+      "kind": "write",
+      "slot": 2,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x40107d",
+      "func": "driver_c",
+      "kind": "write",
+      "slot": 0,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x401099",
+      "func": "driver_c",
+      "kind": "write",
+      "slot": 1,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x4010b4",
+      "func": "driver_c",
+      "kind": "read",
+      "slot": 2,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x4010be",
+      "func": "driver_c",
+      "kind": "read",
+      "slot": 2,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x4010eb",
+      "func": "weird_neg_c",
+      "kind": "read",
+      "slot": 7,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x40111d",
+      "func": "driver_neg_c",
+      "kind": "write",
+      "slot": 0,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x401145",
+      "func": "driver_opaque",
+      "kind": "write",
+      "slot": 5,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x40116e",
+      "func": "driver_opaque",
+      "kind": "partial-read",
+      "slot": null,
+      "partial_base": 5,
+      "dynamic": [
+        "opaque_zero"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "slot": 0,
+      "write_pc": "0x40107d",
+      "read_pc": "0x401019",
+      "write_func": "driver_c",
+      "read_func": "weird_c",
+      "cross_function": true,
+      "via": "btb[0]"
+    },
+    {
+      "slot": 0,
+      "write_pc": "0x40107d",
+      "read_pc": "0x401026",
+      "write_func": "driver_c",
+      "read_func": "weird_c",
+      "cross_function": true,
+      "via": "btb[0]"
+    },
+    {
+      "slot": 1,
+      "write_pc": "0x401099",
+      "read_pc": "0x401033",
+      "write_func": "driver_c",
+      "read_func": "weird_c",
+      "cross_function": true,
+      "via": "btb[1]"
+    },
+    {
+      "slot": 2,
+      "write_pc": "0x40104c",
+      "read_pc": "0x4010b4",
+      "write_func": "weird_c",
+      "read_func": "driver_c",
+      "cross_function": true,
+      "via": "btb[2]"
+    },
+    {
+      "slot": 2,
+      "write_pc": "0x40104c",
+      "read_pc": "0x4010be",
+      "write_func": "weird_c",
+      "read_func": "driver_c",
+      "cross_function": true,
+      "via": "btb[2]"
+    }
+  ],
+  "cross_pairs": [
+    {
+      "write_func": "driver_c",
+      "read_func": "weird_c",
+      "slot": 0
+    },
+    {
+      "write_func": "driver_c",
+      "read_func": "weird_c",
+      "slot": 1
+    },
+    {
+      "write_func": "weird_c",
+      "read_func": "driver_c",
+      "slot": 2
+    }
+  ],
+  "unknown_mnemonics": []
+}

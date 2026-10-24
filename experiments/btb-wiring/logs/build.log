@@ -1,0 +1,3 @@
+$ gcc -no-pie -nostdlib -static -Wa,--noexecstack -Wl,-e,_start -o /workspace/experiments/btb-wiring/build/wiring-asm.elf /workspace/experiments/btb-wiring/fixture/wiring.S /workspace/experiments/btb-wiring/fixture/substrate.S
+$ g++ -std=c++17 -O2 -fno-pie -no-pie -nostdlib -fno-exceptions -fno-rtti -fno-asynchronous-unwind-tables -Wl,-e,driver_c -I/workspace/third_party/tae/include -o /workspace/experiments/btb-wiring/build/wiring-cc.elf /workspace/experiments/btb-wiring/fixture/wiring.cc /workspace/experiments/btb-wiring/fixture/substrate.S
+$ strip -s -o /workspace/experiments/btb-wiring/build/wiring-asm.stripped.elf /workspace/experiments/btb-wiring/build/wiring-asm.elf

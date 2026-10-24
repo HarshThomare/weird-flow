@@ -1,0 +1,94 @@
+{
+  "verdict": "PASS",
+  "kill_question": "Can cross-function dataflow through a non-destructive BTB weird register be recovered on one TAE-style program?",
+  "cpu": "Intel(R) Xeon(R) Processor",
+  "python": "3.12.3",
+  "wemu_present": false,
+  "checks": [
+    {
+      "name": "substrate",
+      "ok": true,
+      "detail": "slots=16 at 0x402000, entries=256 at 0x403000, via symbols"
+    },
+    {
+      "name": "asm cross-function pairs",
+      "ok": true,
+      "detail": "got [('driver', 'weird', 0), ('driver', 'weird', 1), ('weird', 'driver', 2), ('weird', 'driver', 4)]"
+    },
+    {
+      "name": "asm unknown mnemonics",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "stripped edges keep the same pcs",
+      "ok": true,
+      "detail": "stripped via call-targets, pcs match=True"
+    },
+    {
+      "name": "oracle returns the sum",
+      "ok": true,
+      "detail": "eax=0x33"
+    },
+    {
+      "name": "probe has no architectural copy of the inputs",
+      "ok": true,
+      "detail": "leaked=none, arch_channel=0, store_hit=True"
+    },
+    {
+      "name": "window resume squashes the transient sum",
+      "ok": true,
+      "detail": "resumes=1 rax=0 r12=0"
+    },
+    {
+      "name": "non-destructive double read of slot 0",
+      "ok": true,
+      "detail": "reads=2 slot0=17 slot4=17"
+    },
+    {
+      "name": "oracle transfers match recovered edges",
+      "ok": true,
+      "detail": "transfers=[('driver', 'weird', 0), ('driver', 'weird', 1), ('weird', 'driver', 2), ('weird', 'driver', 4)] slot2=51"
+    },
+    {
+      "name": "ablation: transient BTB writes discarded",
+      "ok": true,
+      "detail": "eax=0xffff"
+    },
+    {
+      "name": "ablation: BTB reads disabled",
+      "ok": true,
+      "detail": "eax=0xffff"
+    },
+    {
+      "name": "mismatched slots do not transfer",
+      "ok": true,
+      "detail": "eax=0xffff, negative pairs=[]"
+    },
+    {
+      "name": "compiler -O2 cross-function pairs",
+      "ok": true,
+      "detail": "got [('driver_c', 'weird_c', 0), ('driver_c', 'weird_c', 1), ('weird_c', 'driver_c', 2)]"
+    },
+    {
+      "name": "compiler unknown mnemonics",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "opaque index stays partial at base 5",
+      "ok": true,
+      "detail": "partials=1 slot5_writes=1 concrete_reads=0 dyn=['opaque_zero']"
+    },
+    {
+      "name": "compiler negative pair is not wired",
+      "ok": true,
+      "detail": "bad=[]"
+    }
+  ],
+  "diff_miner": {
+    "available": true,
+    "n_pairs": 0,
+    "note": "n-gram diff pairs are not BTB slot edges"
+  }
+}

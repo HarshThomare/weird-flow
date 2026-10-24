@@ -1,0 +1,223 @@
+{
+  "elf": "/workspace/experiments/btb-wiring/build/wiring-asm.elf",
+  "functions_from": "symbols",
+  "jmpreg_base": "0x402000",
+  "nslots": 16,
+  "table_base": "0x403000",
+  "nentries": 256,
+  "functions": [
+    {
+      "name": "driver",
+      "start": "0x401000",
+      "end": "0x40108c"
+    },
+    {
+      "name": "weird",
+      "start": "0x40108c",
+      "end": "0x401102"
+    },
+    {
+      "name": "driver_neg",
+      "start": "0x401102",
+      "end": "0x401134"
+    },
+    {
+      "name": "weird_neg",
+      "start": "0x401134",
+      "end": "0x401150"
+    },
+    {
+      "name": "_start",
+      "start": "0x401150",
+      "end": "0x40116a"
+    },
+    {
+      "name": "dummy_delay",
+      "start": "0x403500",
+      "end": "0x403506"
+    },
+    {
+      "name": "opaque_zero",
+      "start": "0x403506",
+      "end": "0x40350c"
+    },
+    {
+      "name": "oracle_probe",
+      "start": "0x40350c",
+      "end": "0x40350d"
+    },
+    {
+      "name": "create_window",
+      "start": "0x40350d",
+      "end": "0x403512"
+    }
+  ],
+  "sites": [
+    {
+      "pc": "0x401013",
+      "func": "driver",
+      "kind": "write",
+      "slot": 0,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x40102b",
+      "func": "driver",
+      "kind": "write",
+      "slot": 1,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x401072",
+      "func": "driver",
+      "kind": "read",
+      "slot": 2,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x401083",
+      "func": "driver",
+      "kind": "read",
+      "slot": 4,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x4010a1",
+      "func": "weird",
+      "kind": "read",
+      "slot": 0,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x4010b2",
+      "func": "weird",
+      "kind": "read",
+      "slot": 0,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x4010c3",
+      "func": "weird",
+      "kind": "read",
+      "slot": 1,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x4010e2",
+      "func": "weird",
+      "kind": "write",
+      "slot": 2,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x4010fb",
+      "func": "weird",
+      "kind": "write",
+      "slot": 4,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x401115",
+      "func": "driver_neg",
+      "kind": "write",
+      "slot": 0,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x40112e",
+      "func": "driver_neg",
+      "kind": "read",
+      "slot": 7,
+      "partial_base": null,
+      "dynamic": []
+    },
+    {
+      "pc": "0x401149",
+      "func": "weird_neg",
+      "kind": "read",
+      "slot": 7,
+      "partial_base": null,
+      "dynamic": []
+    }
+  ],
+  "edges": [
+    {
+      "slot": 0,
+      "write_pc": "0x401013",
+      "read_pc": "0x4010a1",
+      "write_func": "driver",
+      "read_func": "weird",
+      "cross_function": true,
+      "via": "btb[0]"
+    },
+    {
+      "slot": 0,
+      "write_pc": "0x401013",
+      "read_pc": "0x4010b2",
+      "write_func": "driver",
+      "read_func": "weird",
+      "cross_function": true,
+      "via": "btb[0]"
+    },
+    {
+      "slot": 1,
+      "write_pc": "0x40102b",
+      "read_pc": "0x4010c3",
+      "write_func": "driver",
+      "read_func": "weird",
+      "cross_function": true,
+      "via": "btb[1]"
+    },
+    {
+      "slot": 2,
+      "write_pc": "0x4010e2",
+      "read_pc": "0x401072",
+      "write_func": "weird",
+      "read_func": "driver",
+      "cross_function": true,
+      "via": "btb[2]"
+    },
+    {
+      "slot": 4,
+      "write_pc": "0x4010fb",
+      "read_pc": "0x401083",
+      "write_func": "weird",
+      "read_func": "driver",
+      "cross_function": true,
+      "via": "btb[4]"
+    }
+  ],
+  "cross_pairs": [
+    {
+      "write_func": "driver",
+      "read_func": "weird",
+      "slot": 0
+    },
+    {
+      "write_func": "driver",
+      "read_func": "weird",
+      "slot": 1
+    },
+    {
+      "write_func": "weird",
+      "read_func": "driver",
+      "slot": 2
+    },
+    {
+      "write_func": "weird",
+      "read_func": "driver",
+      "slot": 4
+    }
+  ],
+  "unknown_mnemonics": []
+}

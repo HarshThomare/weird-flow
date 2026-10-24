@@ -1,0 +1,487 @@
+
+/workspace/experiments/btb-wiring/build/wiring-asm.elf:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000401000 <driver>:
+  401000:	lea    rax,[rip+0x1ff9]        # 403000 <_Z12decode_tablev>
+  401007:	movzx  edx,di
+  40100a:	imul   edx,edx,0x5
+  40100d:	add    rdx,rax
+  401010:	mov    rbx,rdx
+  401013:	call   402000 <_Z7jmpreg0v>
+  401018:	lea    rax,[rip+0x1fe1]        # 403000 <_Z12decode_tablev>
+  40101f:	movzx  edx,si
+  401022:	imul   edx,edx,0x5
+  401025:	add    rdx,rax
+  401028:	mov    rbx,rdx
+  40102b:	call   402020 <jmpreg1>
+  401030:	xor    eax,eax
+  401032:	xor    ebx,ebx
+  401034:	xor    ecx,ecx
+  401036:	xor    edx,edx
+  401038:	xor    edi,edi
+  40103a:	xor    esi,esi
+  40103c:	xor    r8d,r8d
+  40103f:	xor    r9d,r9d
+  401042:	xor    r10d,r10d
+  401045:	xor    r11d,r11d
+  401048:	xor    r12d,r12d
+  40104b:	xor    r13d,r13d
+  40104e:	xor    r14d,r14d
+  401051:	xor    r15d,r15d
+  401054:	mov    QWORD PTR [rip+0x2fa1],0x0        # 404000 <arch_channel>
+  40105f:	call   40350c <oracle_probe>
+  401064:	call   40108c <weird>
+  401069:	xor    eax,eax
+  40106b:	lea    rbx,[rip+0x248e]        # 403500 <dummy_delay>
+  401072:	call   402040 <jmpreg2>
+  401077:	mov    r12d,eax
+  40107a:	xor    eax,eax
+  40107c:	lea    rbx,[rip+0x247d]        # 403500 <dummy_delay>
+  401083:	call   402080 <jmpreg4>
+  401088:	mov    eax,r12d
+  40108b:	ret
+
+000000000040108c <weird>:
+  40108c:	lea    rdi,[rip+0x6d]        # 401100 <end_weird>
+  401093:	call   40350d <create_window>
+  401098:	xor    eax,eax
+  40109a:	lea    rbx,[rip+0x245f]        # 403500 <dummy_delay>
+  4010a1:	call   402000 <_Z7jmpreg0v>
+  4010a6:	mov    r12d,eax
+  4010a9:	xor    eax,eax
+  4010ab:	lea    rbx,[rip+0x244e]        # 403500 <dummy_delay>
+  4010b2:	call   402000 <_Z7jmpreg0v>
+  4010b7:	mov    r13d,eax
+  4010ba:	xor    eax,eax
+  4010bc:	lea    rbx,[rip+0x243d]        # 403500 <dummy_delay>
+  4010c3:	call   402020 <jmpreg1>
+  4010c8:	add    eax,r13d
+  4010cb:	mov    r14d,eax
+  4010ce:	lea    rax,[rip+0x1f2b]        # 403000 <_Z12decode_tablev>
+  4010d5:	movzx  edx,r14w
+  4010d9:	imul   edx,edx,0x5
+  4010dc:	add    rdx,rax
+  4010df:	mov    rbx,rdx
+  4010e2:	call   402040 <jmpreg2>
+  4010e7:	lea    rax,[rip+0x1f12]        # 403000 <_Z12decode_tablev>
+  4010ee:	movzx  edx,r13w
+  4010f2:	imul   edx,edx,0x5
+  4010f5:	add    rdx,rax
+  4010f8:	mov    rbx,rdx
+  4010fb:	call   402080 <jmpreg4>
+
+0000000000401100 <end_weird>:
+  401100:	nop
+  401101:	ret
+
+0000000000401102 <driver_neg>:
+  401102:	lea    rax,[rip+0x1ef7]        # 403000 <_Z12decode_tablev>
+  401109:	movzx  edx,di
+  40110c:	imul   edx,edx,0x5
+  40110f:	add    rdx,rax
+  401112:	mov    rbx,rdx
+  401115:	call   402000 <_Z7jmpreg0v>
+  40111a:	xor    eax,eax
+  40111c:	xor    ebx,ebx
+  40111e:	xor    edi,edi
+  401120:	call   401134 <weird_neg>
+  401125:	xor    eax,eax
+  401127:	lea    rbx,[rip+0x23d2]        # 403500 <dummy_delay>
+  40112e:	call   4020e0 <jmpreg7>
+  401133:	ret
+
+0000000000401134 <weird_neg>:
+  401134:	lea    rdi,[rip+0x13]        # 40114e <end_neg>
+  40113b:	call   40350d <create_window>
+  401140:	xor    eax,eax
+  401142:	lea    rbx,[rip+0x23b7]        # 403500 <dummy_delay>
+  401149:	call   4020e0 <jmpreg7>
+
+000000000040114e <end_neg>:
+  40114e:	nop
+  40114f:	ret
+
+0000000000401150 <_start>:
+  401150:	mov    edi,0x11
+  401155:	mov    esi,0x22
+  40115a:	call   401000 <driver>
+  40115f:	mov    edi,0x11
+  401164:	call   401102 <driver_neg>
+  401169:	hlt
+  40116a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401174:	cs nop WORD PTR [rax+rax*1+0x0]
+  40117e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401188:	cs nop WORD PTR [rax+rax*1+0x0]
+  401192:	cs nop WORD PTR [rax+rax*1+0x0]
+  40119c:	cs nop WORD PTR [rax+rax*1+0x0]
+  4011a6:	cs nop WORD PTR [rax+rax*1+0x0]
+  4011b0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4011ba:	cs nop WORD PTR [rax+rax*1+0x0]
+  4011c4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4011ce:	cs nop WORD PTR [rax+rax*1+0x0]
+  4011d8:	cs nop WORD PTR [rax+rax*1+0x0]
+  4011e2:	cs nop WORD PTR [rax+rax*1+0x0]
+  4011ec:	cs nop WORD PTR [rax+rax*1+0x0]
+  4011f6:	cs nop WORD PTR [rax+rax*1+0x0]
+  401200:	cs nop WORD PTR [rax+rax*1+0x0]
+  40120a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401214:	cs nop WORD PTR [rax+rax*1+0x0]
+  40121e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401228:	cs nop WORD PTR [rax+rax*1+0x0]
+  401232:	cs nop WORD PTR [rax+rax*1+0x0]
+  40123c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401246:	cs nop WORD PTR [rax+rax*1+0x0]
+  401250:	cs nop WORD PTR [rax+rax*1+0x0]
+  40125a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401264:	cs nop WORD PTR [rax+rax*1+0x0]
+  40126e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401278:	cs nop WORD PTR [rax+rax*1+0x0]
+  401282:	cs nop WORD PTR [rax+rax*1+0x0]
+  40128c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401296:	cs nop WORD PTR [rax+rax*1+0x0]
+  4012a0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4012aa:	cs nop WORD PTR [rax+rax*1+0x0]
+  4012b4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4012be:	cs nop WORD PTR [rax+rax*1+0x0]
+  4012c8:	cs nop WORD PTR [rax+rax*1+0x0]
+  4012d2:	cs nop WORD PTR [rax+rax*1+0x0]
+  4012dc:	cs nop WORD PTR [rax+rax*1+0x0]
+  4012e6:	cs nop WORD PTR [rax+rax*1+0x0]
+  4012f0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4012fa:	cs nop WORD PTR [rax+rax*1+0x0]
+  401304:	cs nop WORD PTR [rax+rax*1+0x0]
+  40130e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401318:	cs nop WORD PTR [rax+rax*1+0x0]
+  401322:	cs nop WORD PTR [rax+rax*1+0x0]
+  40132c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401336:	cs nop WORD PTR [rax+rax*1+0x0]
+  401340:	cs nop WORD PTR [rax+rax*1+0x0]
+  40134a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401354:	cs nop WORD PTR [rax+rax*1+0x0]
+  40135e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401368:	cs nop WORD PTR [rax+rax*1+0x0]
+  401372:	cs nop WORD PTR [rax+rax*1+0x0]
+  40137c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401386:	cs nop WORD PTR [rax+rax*1+0x0]
+  401390:	cs nop WORD PTR [rax+rax*1+0x0]
+  40139a:	cs nop WORD PTR [rax+rax*1+0x0]
+  4013a4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4013ae:	cs nop WORD PTR [rax+rax*1+0x0]
+  4013b8:	cs nop WORD PTR [rax+rax*1+0x0]
+  4013c2:	cs nop WORD PTR [rax+rax*1+0x0]
+  4013cc:	cs nop WORD PTR [rax+rax*1+0x0]
+  4013d6:	cs nop WORD PTR [rax+rax*1+0x0]
+  4013e0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4013ea:	cs nop WORD PTR [rax+rax*1+0x0]
+  4013f4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4013fe:	cs nop WORD PTR [rax+rax*1+0x0]
+  401408:	cs nop WORD PTR [rax+rax*1+0x0]
+  401412:	cs nop WORD PTR [rax+rax*1+0x0]
+  40141c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401426:	cs nop WORD PTR [rax+rax*1+0x0]
+  401430:	cs nop WORD PTR [rax+rax*1+0x0]
+  40143a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401444:	cs nop WORD PTR [rax+rax*1+0x0]
+  40144e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401458:	cs nop WORD PTR [rax+rax*1+0x0]
+  401462:	cs nop WORD PTR [rax+rax*1+0x0]
+  40146c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401476:	cs nop WORD PTR [rax+rax*1+0x0]
+  401480:	cs nop WORD PTR [rax+rax*1+0x0]
+  40148a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401494:	cs nop WORD PTR [rax+rax*1+0x0]
+  40149e:	cs nop WORD PTR [rax+rax*1+0x0]
+  4014a8:	cs nop WORD PTR [rax+rax*1+0x0]
+  4014b2:	cs nop WORD PTR [rax+rax*1+0x0]
+  4014bc:	cs nop WORD PTR [rax+rax*1+0x0]
+  4014c6:	cs nop WORD PTR [rax+rax*1+0x0]
+  4014d0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4014da:	cs nop WORD PTR [rax+rax*1+0x0]
+  4014e4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4014ee:	cs nop WORD PTR [rax+rax*1+0x0]
+  4014f8:	cs nop WORD PTR [rax+rax*1+0x0]
+  401502:	cs nop WORD PTR [rax+rax*1+0x0]
+  40150c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401516:	cs nop WORD PTR [rax+rax*1+0x0]
+  401520:	cs nop WORD PTR [rax+rax*1+0x0]
+  40152a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401534:	cs nop WORD PTR [rax+rax*1+0x0]
+  40153e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401548:	cs nop WORD PTR [rax+rax*1+0x0]
+  401552:	cs nop WORD PTR [rax+rax*1+0x0]
+  40155c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401566:	cs nop WORD PTR [rax+rax*1+0x0]
+  401570:	cs nop WORD PTR [rax+rax*1+0x0]
+  40157a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401584:	cs nop WORD PTR [rax+rax*1+0x0]
+  40158e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401598:	cs nop WORD PTR [rax+rax*1+0x0]
+  4015a2:	cs nop WORD PTR [rax+rax*1+0x0]
+  4015ac:	cs nop WORD PTR [rax+rax*1+0x0]
+  4015b6:	cs nop WORD PTR [rax+rax*1+0x0]
+  4015c0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4015ca:	cs nop WORD PTR [rax+rax*1+0x0]
+  4015d4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4015de:	cs nop WORD PTR [rax+rax*1+0x0]
+  4015e8:	cs nop WORD PTR [rax+rax*1+0x0]
+  4015f2:	cs nop WORD PTR [rax+rax*1+0x0]
+  4015fc:	cs nop WORD PTR [rax+rax*1+0x0]
+  401606:	cs nop WORD PTR [rax+rax*1+0x0]
+  401610:	cs nop WORD PTR [rax+rax*1+0x0]
+  40161a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401624:	cs nop WORD PTR [rax+rax*1+0x0]
+  40162e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401638:	cs nop WORD PTR [rax+rax*1+0x0]
+  401642:	cs nop WORD PTR [rax+rax*1+0x0]
+  40164c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401656:	cs nop WORD PTR [rax+rax*1+0x0]
+  401660:	cs nop WORD PTR [rax+rax*1+0x0]
+  40166a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401674:	cs nop WORD PTR [rax+rax*1+0x0]
+  40167e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401688:	cs nop WORD PTR [rax+rax*1+0x0]
+  401692:	cs nop WORD PTR [rax+rax*1+0x0]
+  40169c:	cs nop WORD PTR [rax+rax*1+0x0]
+  4016a6:	cs nop WORD PTR [rax+rax*1+0x0]
+  4016b0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4016ba:	cs nop WORD PTR [rax+rax*1+0x0]
+  4016c4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4016ce:	cs nop WORD PTR [rax+rax*1+0x0]
+  4016d8:	cs nop WORD PTR [rax+rax*1+0x0]
+  4016e2:	cs nop WORD PTR [rax+rax*1+0x0]
+  4016ec:	cs nop WORD PTR [rax+rax*1+0x0]
+  4016f6:	cs nop WORD PTR [rax+rax*1+0x0]
+  401700:	cs nop WORD PTR [rax+rax*1+0x0]
+  40170a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401714:	cs nop WORD PTR [rax+rax*1+0x0]
+  40171e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401728:	cs nop WORD PTR [rax+rax*1+0x0]
+  401732:	cs nop WORD PTR [rax+rax*1+0x0]
+  40173c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401746:	cs nop WORD PTR [rax+rax*1+0x0]
+  401750:	cs nop WORD PTR [rax+rax*1+0x0]
+  40175a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401764:	cs nop WORD PTR [rax+rax*1+0x0]
+  40176e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401778:	cs nop WORD PTR [rax+rax*1+0x0]
+  401782:	cs nop WORD PTR [rax+rax*1+0x0]
+  40178c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401796:	cs nop WORD PTR [rax+rax*1+0x0]
+  4017a0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4017aa:	cs nop WORD PTR [rax+rax*1+0x0]
+  4017b4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4017be:	cs nop WORD PTR [rax+rax*1+0x0]
+  4017c8:	cs nop WORD PTR [rax+rax*1+0x0]
+  4017d2:	cs nop WORD PTR [rax+rax*1+0x0]
+  4017dc:	cs nop WORD PTR [rax+rax*1+0x0]
+  4017e6:	cs nop WORD PTR [rax+rax*1+0x0]
+  4017f0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4017fa:	cs nop WORD PTR [rax+rax*1+0x0]
+  401804:	cs nop WORD PTR [rax+rax*1+0x0]
+  40180e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401818:	cs nop WORD PTR [rax+rax*1+0x0]
+  401822:	cs nop WORD PTR [rax+rax*1+0x0]
+  40182c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401836:	cs nop WORD PTR [rax+rax*1+0x0]
+  401840:	cs nop WORD PTR [rax+rax*1+0x0]
+  40184a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401854:	cs nop WORD PTR [rax+rax*1+0x0]
+  40185e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401868:	cs nop WORD PTR [rax+rax*1+0x0]
+  401872:	cs nop WORD PTR [rax+rax*1+0x0]
+  40187c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401886:	cs nop WORD PTR [rax+rax*1+0x0]
+  401890:	cs nop WORD PTR [rax+rax*1+0x0]
+  40189a:	cs nop WORD PTR [rax+rax*1+0x0]
+  4018a4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4018ae:	cs nop WORD PTR [rax+rax*1+0x0]
+  4018b8:	cs nop WORD PTR [rax+rax*1+0x0]
+  4018c2:	cs nop WORD PTR [rax+rax*1+0x0]
+  4018cc:	cs nop WORD PTR [rax+rax*1+0x0]
+  4018d6:	cs nop WORD PTR [rax+rax*1+0x0]
+  4018e0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4018ea:	cs nop WORD PTR [rax+rax*1+0x0]
+  4018f4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4018fe:	cs nop WORD PTR [rax+rax*1+0x0]
+  401908:	cs nop WORD PTR [rax+rax*1+0x0]
+  401912:	cs nop WORD PTR [rax+rax*1+0x0]
+  40191c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401926:	cs nop WORD PTR [rax+rax*1+0x0]
+  401930:	cs nop WORD PTR [rax+rax*1+0x0]
+  40193a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401944:	cs nop WORD PTR [rax+rax*1+0x0]
+  40194e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401958:	cs nop WORD PTR [rax+rax*1+0x0]
+  401962:	cs nop WORD PTR [rax+rax*1+0x0]
+  40196c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401976:	cs nop WORD PTR [rax+rax*1+0x0]
+  401980:	cs nop WORD PTR [rax+rax*1+0x0]
+  40198a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401994:	cs nop WORD PTR [rax+rax*1+0x0]
+  40199e:	cs nop WORD PTR [rax+rax*1+0x0]
+  4019a8:	cs nop WORD PTR [rax+rax*1+0x0]
+  4019b2:	cs nop WORD PTR [rax+rax*1+0x0]
+  4019bc:	cs nop WORD PTR [rax+rax*1+0x0]
+  4019c6:	cs nop WORD PTR [rax+rax*1+0x0]
+  4019d0:	cs nop WORD PTR [rax+rax*1+0x0]
+  4019da:	cs nop WORD PTR [rax+rax*1+0x0]
+  4019e4:	cs nop WORD PTR [rax+rax*1+0x0]
+  4019ee:	cs nop WORD PTR [rax+rax*1+0x0]
+  4019f8:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a02:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a0c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a16:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a20:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a2a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a34:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a3e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a48:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a52:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a5c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a66:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a70:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a7a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a84:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a8e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401a98:	cs nop WORD PTR [rax+rax*1+0x0]
+  401aa2:	cs nop WORD PTR [rax+rax*1+0x0]
+  401aac:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ab6:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ac0:	cs nop WORD PTR [rax+rax*1+0x0]
+  401aca:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ad4:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ade:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ae8:	cs nop WORD PTR [rax+rax*1+0x0]
+  401af2:	cs nop WORD PTR [rax+rax*1+0x0]
+  401afc:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b06:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b10:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b1a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b24:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b2e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b38:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b42:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b4c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b56:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b60:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b6a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b74:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b7e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b88:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b92:	cs nop WORD PTR [rax+rax*1+0x0]
+  401b9c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ba6:	cs nop WORD PTR [rax+rax*1+0x0]
+  401bb0:	cs nop WORD PTR [rax+rax*1+0x0]
+  401bba:	cs nop WORD PTR [rax+rax*1+0x0]
+  401bc4:	cs nop WORD PTR [rax+rax*1+0x0]
+  401bce:	cs nop WORD PTR [rax+rax*1+0x0]
+  401bd8:	cs nop WORD PTR [rax+rax*1+0x0]
+  401be2:	cs nop WORD PTR [rax+rax*1+0x0]
+  401bec:	cs nop WORD PTR [rax+rax*1+0x0]
+  401bf6:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c00:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c0a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c14:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c1e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c28:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c32:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c3c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c46:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c50:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c5a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c64:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c6e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c78:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c82:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c8c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401c96:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ca0:	cs nop WORD PTR [rax+rax*1+0x0]
+  401caa:	cs nop WORD PTR [rax+rax*1+0x0]
+  401cb4:	cs nop WORD PTR [rax+rax*1+0x0]
+  401cbe:	cs nop WORD PTR [rax+rax*1+0x0]
+  401cc8:	cs nop WORD PTR [rax+rax*1+0x0]
+  401cd2:	cs nop WORD PTR [rax+rax*1+0x0]
+  401cdc:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ce6:	cs nop WORD PTR [rax+rax*1+0x0]
+  401cf0:	cs nop WORD PTR [rax+rax*1+0x0]
+  401cfa:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d04:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d0e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d18:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d22:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d2c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d36:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d40:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d4a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d54:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d5e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d68:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d72:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d7c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d86:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d90:	cs nop WORD PTR [rax+rax*1+0x0]
+  401d9a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401da4:	cs nop WORD PTR [rax+rax*1+0x0]
+  401dae:	cs nop WORD PTR [rax+rax*1+0x0]
+  401db8:	cs nop WORD PTR [rax+rax*1+0x0]
+  401dc2:	cs nop WORD PTR [rax+rax*1+0x0]
+  401dcc:	cs nop WORD PTR [rax+rax*1+0x0]
+  401dd6:	cs nop WORD PTR [rax+rax*1+0x0]
+  401de0:	cs nop WORD PTR [rax+rax*1+0x0]
+  401dea:	cs nop WORD PTR [rax+rax*1+0x0]
+  401df4:	cs nop WORD PTR [rax+rax*1+0x0]
+  401dfe:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e08:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e12:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e1c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e26:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e30:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e3a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e44:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e4e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e58:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e62:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e6c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e76:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e80:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e8a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e94:	cs nop WORD PTR [rax+rax*1+0x0]
+  401e9e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ea8:	cs nop WORD PTR [rax+rax*1+0x0]
+  401eb2:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ebc:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ec6:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ed0:	cs nop WORD PTR [rax+rax*1+0x0]
+  401eda:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ee4:	cs nop WORD PTR [rax+rax*1+0x0]
+  401eee:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ef8:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f02:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f0c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f16:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f20:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f2a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f34:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f3e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f48:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f52:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f5c:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f66:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f70:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f7a:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f84:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f8e:	cs nop WORD PTR [rax+rax*1+0x0]
+  401f98:	cs nop WORD PTR [rax+rax*1+0x0]
+  401fa2:	cs nop WORD PTR [rax+rax*1+0x0]
+  401fac:	cs nop WORD PTR [rax+rax*1+0x0]
+  401fb6:	cs nop WORD PTR [rax+rax*1+0x0]
+  401fc0:	cs nop WORD PTR [rax+rax*1+0x0]
+  401fca:	cs nop WORD PTR [rax+rax*1+0x0]
+  401fd4:	cs nop WORD PTR [rax+rax*1+0x0]
+  401fde:	cs nop WORD PTR [rax+rax*1+0x0]
+  401fe8:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ff2:	cs nop WORD PTR [rax+rax*1+0x0]
+  401ffc:	nop    DWORD PTR [rax+0x0]

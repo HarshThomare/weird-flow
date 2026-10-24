@@ -1,0 +1,172 @@
+{
+  "eax": 51,
+  "slots": {
+    "0": 17,
+    "1": 34,
+    "2": 51,
+    "3": null,
+    "4": 17,
+    "5": null,
+    "6": null,
+    "7": null
+  },
+  "log": [
+    {
+      "kind": "write",
+      "slot": 0,
+      "value": 17,
+      "func": "driver",
+      "transient": false,
+      "committed": true,
+      "pc": 4202496
+    },
+    {
+      "kind": "write",
+      "slot": 1,
+      "value": 34,
+      "func": "driver",
+      "transient": false,
+      "committed": true,
+      "pc": 4202528
+    },
+    {
+      "kind": "read",
+      "slot": 0,
+      "value": 17,
+      "func": "weird",
+      "transient": true,
+      "committed": true,
+      "pc": 4202496
+    },
+    {
+      "kind": "read",
+      "slot": 0,
+      "value": 17,
+      "func": "weird",
+      "transient": true,
+      "committed": true,
+      "pc": 4202496
+    },
+    {
+      "kind": "read",
+      "slot": 1,
+      "value": 34,
+      "func": "weird",
+      "transient": true,
+      "committed": true,
+      "pc": 4202528
+    },
+    {
+      "kind": "write",
+      "slot": 2,
+      "value": 51,
+      "func": "weird",
+      "transient": true,
+      "committed": true,
+      "pc": 4202560
+    },
+    {
+      "kind": "write",
+      "slot": 4,
+      "value": 17,
+      "func": "weird",
+      "transient": true,
+      "committed": true,
+      "pc": 4202624
+    },
+    {
+      "kind": "read",
+      "slot": 2,
+      "value": 51,
+      "func": "driver",
+      "transient": false,
+      "committed": true,
+      "pc": 4202560
+    },
+    {
+      "kind": "read",
+      "slot": 4,
+      "value": 17,
+      "func": "driver",
+      "transient": false,
+      "committed": true,
+      "pc": 4202624
+    }
+  ],
+  "transfers": [
+    [
+      "driver",
+      "weird",
+      0
+    ],
+    [
+      "driver",
+      "weird",
+      1
+    ],
+    [
+      "weird",
+      "driver",
+      2
+    ],
+    [
+      "weird",
+      "driver",
+      4
+    ]
+  ],
+  "probe": {
+    "regs": {
+      "rax": 0,
+      "rbx": 0,
+      "rcx": 0,
+      "rdx": 0,
+      "rsi": 0,
+      "rdi": 0,
+      "rbp": 0,
+      "rsp": 0,
+      "r8": 0,
+      "r9": 0,
+      "r10": 0,
+      "r11": 0,
+      "r12": 0,
+      "r13": 0,
+      "r14": 0,
+      "r15": 0
+    },
+    "stack": [
+      1
+    ],
+    "arch_channel": 0
+  },
+  "resumes": [
+    {
+      "pc": 4198656,
+      "regs": {
+        "rax": 0,
+        "rbx": 0,
+        "rcx": 0,
+        "rdx": 0,
+        "rsi": 0,
+        "rdi": 4198656,
+        "rbp": 0,
+        "rsp": 0,
+        "r8": 0,
+        "r9": 0,
+        "r10": 0,
+        "r11": 0,
+        "r12": 0,
+        "r13": 0,
+        "r14": 0,
+        "r15": 0
+      }
+    }
+  ],
+  "stores": [
+    [
+      4210688,
+      8,
+      0
+    ]
+  ]
+}
